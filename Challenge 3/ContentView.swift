@@ -12,8 +12,13 @@ struct ContentView: View {
         TabView {
             HomePage()
                 .tabItem {
-                    Image(systemName: "1.circle.fill")
-                    Text("Tab 1")
+                    ZStack{
+                        Image("tab1_evenbettAh")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width:5, height: 5)
+                        Text("Tab 1")
+                    }
                 }
 
             CalendarView()

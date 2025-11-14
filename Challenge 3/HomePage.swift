@@ -131,7 +131,7 @@ struct HomePage: View {
                         .font(.system(size: 55))
                         .background(Color(.systemGray6),
                                     in: RoundedRectangle(cornerRadius: 100))
-                        .offset(y: -70)
+                        .offset(y: -30)
                 }
             }
         }
