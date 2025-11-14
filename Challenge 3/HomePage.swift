@@ -102,9 +102,9 @@ struct HomePage: View {
                                 in: RoundedRectangle(cornerRadius: 100))
                     .offset(y: -70)
             }
-            Rectangle()
-                .frame(width: 404, height: 600)
-                .offset(y: 63)
+            //Rectangle()
+                //.frame(width: 404, height: 600)
+                //.offset(y: 63)
         }
         .fullScreenCover(isPresented: $showEmojiPicker) {
             EmojiGridPicker(selection: $selectedEmoji)
