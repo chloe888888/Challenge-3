@@ -9,10 +9,12 @@ import SwiftUI
 
 @main
 struct Challenge_3App: App {
+    @StateObject private var moodData = MoodData()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(moodData)   
         }
     }
 }
-

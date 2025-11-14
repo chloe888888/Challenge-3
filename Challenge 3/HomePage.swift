@@ -29,10 +29,15 @@ private let faceEmojis: [String] = [
     "🥱","🤒","🤕","🥵","🥶"
 ]
 
-
-
-
 struct HomePage: View {
+    @EnvironmentObject var moodData: MoodData
+
+    /*private let scene: EmojiJarScene = {
+        let s = EmojiJarScene()
+        s.scaleMode = .resizeFill
+        s.backgroundColor = .white  // change to .clear if you prefer
+        return s
+    }()*/
     @State private var currentDate = Date()
     @State private var mojiBucks = 100
     private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
@@ -70,28 +75,29 @@ struct HomePage: View {
                 .frame(width: 404, height: 5)
                 .offset(y: -240)
             
-                Text("What face emoji best describes how you are feeling today:")
-                    .font(.system(size: 24.5, weight: .medium))
-                    .offset(y: -190)
-                Button {
-                    showEmojiPicker = true
-                } label: {
-                    HStack {
-                        Text("Choose face emoji")
-                            .font(.system(size: 18))
-                            .foregroundColor(.primary)
-                        Text(selectedEmoji)
-                            .font(.system(size: 22))
-                    }
-                    .frame(width: 300, height: 40)
-                    .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.green.opacity(0.3), lineWidth: 2)
-                    )
+            Text("What face emoji best describes how you are feeling today:")
+                .font(.system(size: 24.5, weight: .medium))
+                .offset(y: -190)
+
+            Button {
+                showEmojiPicker = true
+            } label: {
+                HStack {
+                    Text("Choose face emoji")
+                        .font(.system(size: 18))
+                        .foregroundColor(.primary)
+                    Text(selectedEmoji)
+                        .font(.system(size: 22))
                 }
-                .buttonStyle(.plain)
-                .offset(y:-130)
+                .frame(width: 300, height: 40)
+                .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.green.opacity(0.3), lineWidth: 2)
+                )
+            }
+            .buttonStyle(.plain)
+            .offset(y:-130)
             
             Button {
                 print("Drop emoji ball")
@@ -102,22 +108,24 @@ struct HomePage: View {
                                 in: RoundedRectangle(cornerRadius: 100))
                     .offset(y: -70)
             }
-            //Rectangle()
-                //.frame(width: 404, height: 600)
-                //.offset(y: 63)
+            
         }
         .fullScreenCover(isPresented: $showEmojiPicker) {
-            EmojiGridPicker(selection: $selectedEmoji)
-                .interactiveDismissDisabled(true)
+            EmojiGridPicker(selection: $selectedEmoji) { emoji in
+                let day = Calendar.current.component(.day, from: currentDate)
+                moodData.selectedEmojis[day] = emoji
+            }
+            .interactiveDismissDisabled(true)
         }
         .onReceive(timer) { _ in currentDate = Date() }
         .onAppear { currentDate = Date() }
     }
 }
 
-
 private struct EmojiGridPicker: View {
     @Binding var selection: String
+    var onSelect: (String) -> Void
+
     @Environment(\.dismiss) private var dismiss
     private let columns = [GridItem(.adaptive(minimum: 56), spacing: 8)]
     
@@ -128,6 +136,7 @@ private struct EmojiGridPicker: View {
                     ForEach(faceEmojis, id: \.self) { emoji in
                         Button {
                             selection = emoji
+                            onSelect(emoji)
                             dismiss()
                         } label: {
                             ZStack {
@@ -157,7 +166,7 @@ private struct EmojiGridPicker: View {
     }
 }
 
-
 #Preview {
     HomePage()
+        .environmentObject(MoodData())
 }
