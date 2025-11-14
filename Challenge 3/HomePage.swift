@@ -34,6 +34,7 @@ private let faceEmojis: [String] = [
 struct HomePage: View {
     // SwiftData context to save moods
     @Environment(\.modelContext) private var modelContext
+    @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
 
     @State private var currentDate = Date()
     @State private var mojiBucks = 100
@@ -54,6 +55,33 @@ struct HomePage: View {
         let f = DateFormatter()
         f.dateFormat = "d MMM yyyy"
         return f.string(from: currentDate)
+    }
+
+    // 👇 NEW: rebuild the jar from saved entries
+    private func restoreJarFromHistory() {
+        let calendar = Calendar.current
+
+        // Clear any old label nodes so we don't double-spawn when tab is revisited
+        jarScene.clearAll()
+
+        // Wait a tick so SpriteKit has laid out the jar
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // 1) Drop one ball for every saved mood
+            for entry in entries {
+                jarScene.dropEmoji(entry.emoji)
+            }
+
+            // 2) If there's already a mood for today, hide the controls
+            if let todayEntry = entries.first(where: {
+                calendar.isDate($0.date, inSameDayAs: currentDate)
+            }) {
+                hasDroppedToday = true
+                selectedEmoji = todayEntry.emoji   // keep for reference if you want
+            } else {
+                hasDroppedToday = false
+                selectedEmoji = ""
+            }
+        }
     }
     
     var body: some View {
@@ -142,7 +170,10 @@ struct HomePage: View {
             .interactiveDismissDisabled(true)
         }
         .onReceive(timer) { _ in currentDate = Date() }
-        .onAppear { currentDate = Date() }
+        .onAppear {
+            currentDate = Date()
+            restoreJarFromHistory()    // 👈 rebuild bottle from saved moods
+        }
     }
 }
 
