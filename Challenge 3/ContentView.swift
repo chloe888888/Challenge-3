@@ -5,11 +5,9 @@
 //  Created by La Wun Eain on 7/11/25.
 //
 
-
 import SwiftUI
 
 struct ContentView: View {
-
     var body: some View {
         TabView {
             HomePage()
@@ -47,5 +45,4 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(MoodData())
 }

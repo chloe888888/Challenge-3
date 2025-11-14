@@ -7,6 +7,8 @@
 
 import SwiftUI
 import Combine
+import SpriteKit
+import SwiftData
 
 private let faceEmojis: [String] = [
     //1️⃣ Happy
@@ -30,20 +32,23 @@ private let faceEmojis: [String] = [
 ]
 
 struct HomePage: View {
-    @EnvironmentObject var moodData: MoodData
+    // SwiftData context to save moods
+    @Environment(\.modelContext) private var modelContext
 
-    /*private let scene: EmojiJarScene = {
-        let s = EmojiJarScene()
-        s.scaleMode = .resizeFill
-        s.backgroundColor = .white  // change to .clear if you prefer
-        return s
-    }()*/
     @State private var currentDate = Date()
     @State private var mojiBucks = 100
     private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
     
     @State private var selectedEmoji: String = ""
     @State private var showEmojiPicker = false
+    @State private var hasDroppedToday = false
+
+    // Jar scene lives as long as HomePage is on screen
+    @State private var jarScene: EmojiJarScene = {
+        let scene = EmojiJarScene(size: CGSize(width: 404, height: 500))
+        scene.scaleMode = .resizeFill
+        return scene
+    }()
     
     private var formattedDate: String {
         let f = DateFormatter()
@@ -53,6 +58,7 @@ struct HomePage: View {
     
     var body: some View {
         ZStack {
+            // ===== header =====
             Rectangle()
                 .fill(Color.appAccentGreen)
                 .frame(width: 404, height: 100)
@@ -74,46 +80,64 @@ struct HomePage: View {
                 .fill(Color.appAccentGreen)
                 .frame(width: 404, height: 5)
                 .offset(y: -240)
-            
-            Text("What face emoji best describes how you are feeling today:")
-                .font(.system(size: 24.5, weight: .medium))
-                .offset(y: -190)
 
-            Button {
-                showEmojiPicker = true
-            } label: {
-                HStack {
-                    Text("Choose face emoji")
-                        .font(.system(size: 18))
-                        .foregroundColor(.primary)
-                    Text(selectedEmoji)
-                        .font(.system(size: 22))
+            // ===== bottle / jar (back layer) =====
+            SpriteView(scene: jarScene, options: [.allowsTransparency])
+                .frame(width: 404, height: 500)
+                .offset(y: 140)   // adjust this to sit nicely below the emoji
+
+            // ===== controls (front layer) =====
+            if !hasDroppedToday {
+                Text("What face emoji best describes how you are feeling today:")
+                    .font(.system(size: 24.5, weight: .medium))
+                    .offset(y: -190)
+
+                Button {
+                    showEmojiPicker = true
+                } label: {
+                    HStack {
+                        Text("Choose face emoji")
+                            .font(.system(size: 18))
+                            .foregroundColor(.primary)
+                        Text(selectedEmoji)
+                            .font(.system(size: 22))
+                    }
+                    .frame(width: 300, height: 40)
+                    .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.green.opacity(0.3), lineWidth: 2)
+                    )
                 }
-                .frame(width: 300, height: 40)
-                .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.green.opacity(0.3), lineWidth: 2)
-                )
+                .buttonStyle(.plain)
+                .offset(y:-130)
+                
+                Button {
+                    // only drop if an emoji is chosen
+                    guard !selectedEmoji.isEmpty else { return }
+                    
+                    // 1️⃣ save to SwiftData
+                    let entry = MoodEntry(date: currentDate, emoji: selectedEmoji)
+                    modelContext.insert(entry)
+                    try? modelContext.save()
+                    
+                    // 2️⃣ drop one ball into the jar
+                    jarScene.dropEmoji(selectedEmoji)
+                    
+                    // 3️⃣ hide controls after first drop
+                    hasDroppedToday = true
+                } label: {
+                    Text(selectedEmoji)
+                        .font(.system(size: 55))
+                        .background(Color(.systemGray6),
+                                    in: RoundedRectangle(cornerRadius: 100))
+                        .offset(y: -70)
+                }
             }
-            .buttonStyle(.plain)
-            .offset(y:-130)
-            
-            Button {
-                print("Drop emoji ball")
-            } label: {
-                Text(selectedEmoji)
-                    .font(.system(size: 55))
-                    .background(Color(.systemGray6),
-                                in: RoundedRectangle(cornerRadius: 100))
-                    .offset(y: -70)
-            }
-            
         }
         .fullScreenCover(isPresented: $showEmojiPicker) {
             EmojiGridPicker(selection: $selectedEmoji) { emoji in
-                let day = Calendar.current.component(.day, from: currentDate)
-                moodData.selectedEmojis[day] = emoji
+                selectedEmoji = emoji   // saving happens when we drop
             }
             .interactiveDismissDisabled(true)
         }
@@ -121,6 +145,8 @@ struct HomePage: View {
         .onAppear { currentDate = Date() }
     }
 }
+
+// MARK: - Emoji picker used in the sheet
 
 private struct EmojiGridPicker: View {
     @Binding var selection: String
@@ -147,7 +173,8 @@ private struct EmojiGridPicker: View {
                                             .stroke(emoji == selection ? .blue : .gray.opacity(0.2),
                                                     lineWidth: 1)
                                     )
-                                Text(emoji).font(.system(size: 32))
+                                Text(emoji)
+                                    .font(.system(size: 32))
                             }
                             .frame(width: 56, height: 56)
                         }
@@ -168,5 +195,5 @@ private struct EmojiGridPicker: View {
 
 #Preview {
     HomePage()
-        .environmentObject(MoodData())
+        .modelContainer(for: MoodEntry.self, inMemory: true)
 }

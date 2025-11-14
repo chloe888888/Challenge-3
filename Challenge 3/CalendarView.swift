@@ -6,14 +6,28 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct CalendarView: View {
 
-    @EnvironmentObject var moodData: MoodData   
-    
+    @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
+
     let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     let calendar = Calendar.current
     let currentDate = Date()
+    
+    // Map day-of-month → emoji for the current month/year
+    private var emojiByDay: [Int: String] {
+        var dict: [Int: String] = [:]
+        for entry in entries {
+            if calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .month),
+               calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .year) {
+                let day = calendar.component(.day, from: entry.date)
+                dict[day] = entry.emoji   // last one wins if multiple entries
+            }
+        }
+        return dict
+    }
     
     var daysInMonth: [[Int?]] {
         let components = calendar.dateComponents([.year, .month], from: currentDate)
@@ -89,7 +103,7 @@ struct CalendarView: View {
                             let day = daysInMonth[weekIndex][dayIndex]
                             CalendarDayCell(
                                 day: day,
-                                emoji: day.flatMap { moodData.selectedEmojis[$0] }  // 👈 read from shared model
+                                emoji: day.flatMap { emojiByDay[$0] }
                             )
                         }
                     }
@@ -139,9 +153,7 @@ struct CalendarDayCell: View {
     }
 }
 
-struct CalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarView()
-            .environmentObject(MoodData())
-    }
+#Preview {
+    CalendarView()
+        .modelContainer(for: MoodEntry.self, inMemory: true)
 }

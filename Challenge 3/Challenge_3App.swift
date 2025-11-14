@@ -6,15 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Challenge_3App: App {
-    @StateObject private var moodData = MoodData()
-
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(moodData)   
         }
+        // 👇 this turns SwiftData on for MoodEntry
+        .modelContainer(for: MoodEntry.self)
     }
 }
