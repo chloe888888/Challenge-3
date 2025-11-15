@@ -16,15 +16,13 @@ struct CalendarView: View {
     let calendar = Calendar.current
     let currentDate = Date()
     
-    // Map day-of-month → emoji for the current month/year
     private var emojiByDay: [Int: String] {
         var dict: [Int: String] = [:]
         for entry in entries {
             if calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .month),
                calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .year) {
                 let day = calendar.component(.day, from: entry.date)
-                dict[day] = entry.emoji   // last one wins if multiple entries
-            }
+                dict[day] = entry.emoji            }
         }
         return dict
     }

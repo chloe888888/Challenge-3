@@ -39,7 +39,7 @@ struct ContentView: View {
                     Text("Tab 4")
                 }
 
-            Text("Tab 5")
+            StatisticsView()
                 .tabItem {
                     Image(systemName: "5.circle.fill")
                     Text("Tab 5")

@@ -44,7 +44,7 @@ struct HomePage: View {
     @State private var showEmojiPicker = false
     @State private var hasDroppedToday = false
 
-    // Jar scene lives as long as HomePage is on screen
+
     @State private var jarScene: EmojiJarScene = {
         let scene = EmojiJarScene(size: CGSize(width: 404, height: 500))
         scene.scaleMode = .resizeFill
@@ -57,26 +57,24 @@ struct HomePage: View {
         return f.string(from: currentDate)
     }
 
-    // 👇 NEW: rebuild the jar from saved entries
+
     private func restoreJarFromHistory() {
         let calendar = Calendar.current
 
-        // Clear any old label nodes so we don't double-spawn when tab is revisited
+
         jarScene.clearAll()
 
-        // Wait a tick so SpriteKit has laid out the jar
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // 1) Drop one ball for every saved mood
+            
             for entry in entries {
                 jarScene.dropEmoji(entry.emoji)
             }
 
-            // 2) If there's already a mood for today, hide the controls
             if let todayEntry = entries.first(where: {
                 calendar.isDate($0.date, inSameDayAs: currentDate)
             }) {
                 hasDroppedToday = true
-                selectedEmoji = todayEntry.emoji   // keep for reference if you want
+                selectedEmoji = todayEntry.emoji
             } else {
                 hasDroppedToday = false
                 selectedEmoji = ""
@@ -86,7 +84,7 @@ struct HomePage: View {
     
     var body: some View {
         ZStack {
-            // ===== header =====
+
             Rectangle()
                 .fill(Color.appAccentGreen)
                 .frame(width: 404, height: 100)
@@ -109,12 +107,11 @@ struct HomePage: View {
                 .frame(width: 404, height: 5)
                 .offset(y: -240)
 
-            // ===== bottle / jar (back layer) =====
             SpriteView(scene: jarScene, options: [.allowsTransparency])
                 .frame(width: 404, height: 500)
-                .offset(y: 140)   // adjust this to sit nicely below the emoji
+                .offset(y: 140)
 
-            // ===== controls (front layer) =====
+
             if !hasDroppedToday {
                 Text("What face emoji best describes how you are feeling today:")
                     .font(.system(size: 24.5, weight: .medium))
@@ -141,18 +138,14 @@ struct HomePage: View {
                 .offset(y:-130)
                 
                 Button {
-                    // only drop if an emoji is chosen
                     guard !selectedEmoji.isEmpty else { return }
                     
-                    // 1️⃣ save to SwiftData
                     let entry = MoodEntry(date: currentDate, emoji: selectedEmoji)
                     modelContext.insert(entry)
                     try? modelContext.save()
                     
-                    // 2️⃣ drop one ball into the jar
                     jarScene.dropEmoji(selectedEmoji)
                     
-                    // 3️⃣ hide controls after first drop
                     hasDroppedToday = true
                 } label: {
                     Text(selectedEmoji)
@@ -165,19 +158,18 @@ struct HomePage: View {
         }
         .fullScreenCover(isPresented: $showEmojiPicker) {
             EmojiGridPicker(selection: $selectedEmoji) { emoji in
-                selectedEmoji = emoji   // saving happens when we drop
+                selectedEmoji = emoji
             }
             .interactiveDismissDisabled(true)
         }
         .onReceive(timer) { _ in currentDate = Date() }
         .onAppear {
             currentDate = Date()
-            restoreJarFromHistory()    // 👈 rebuild bottle from saved moods
+            restoreJarFromHistory()   
         }
     }
 }
 
-// MARK: - Emoji picker used in the sheet
 
 private struct EmojiGridPicker: View {
     @Binding var selection: String

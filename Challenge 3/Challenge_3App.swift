@@ -14,7 +14,7 @@ struct Challenge_3App: App {
         WindowGroup {
             ContentView()
         }
-        // 👇 this turns SwiftData on for MoodEntry
+
         .modelContainer(for: MoodEntry.self)
     }
 }
