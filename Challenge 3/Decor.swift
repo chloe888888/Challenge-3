@@ -11,29 +11,55 @@ struct Decor: View {
     var body: some View {
         NavigationStack{
             ScrollView {
-                Button {
-                    print("Button Tapped!")
-                } label: {
-                    GeometryReader { geometry in
-                        Image("Decor_1")
-                            .resizable()
-                            .background(.appAccentGreen)
+                HStack{
+                    Button {
+                        print("Button Tapped!")
+                    } label: {
+                        
+                        VStack {
+                            ZStack{
+                                Color.appAccentGreen
+                                    .frame(maxWidth: .infinity)
+                                    .aspectRatio(1, contentMode: .fit)
+                                    .overlay{
+                                        Image("Decor_1")
+                                            .resizable()
+                                            .scaledToFill()
+                                    }
+                            }
                             .clipShape(Circle())
-                            .clipped()
-                            .scaledToFit()
-                            .padding()
-                            .frame(width: 200, height: 200)
+                            .padding(.horizontal)
+                            Text("$20")
+                        }
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor_2")
+                                                .resizable()
+                                                .scaledToFit()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$20")
+                            }
+                        }
                     }
+                    .navigationBarTitle("Decoration!")
                 }
-                
             }
-            .navigationBarTitle("Decoration!")
         }
-        
     }
-       
 }
-    
+
+
 
 #Preview {
     Decor()
