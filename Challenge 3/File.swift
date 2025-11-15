@@ -7,7 +7,7 @@
 
 import Foundation
 
-public var countrylist = [
+public var countryList = [
     "egydhujihnk",
     "evgdhuhdbjw"
 ]
