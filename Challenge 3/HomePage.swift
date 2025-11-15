@@ -86,17 +86,33 @@ struct HomePage: View {
         ZStack {
 
             Rectangle()
-                .fill(Color.appAccentGreen)
-                .frame(width: 404, height: 100)
-                .offset(y: -350)
+                .fill(Color(red: 0.7, green: 0.95, blue: 0.8))
+                .frame(width: 404, height: 150)
+                .offset(y: -380)
+                
             
             Text("How are you feeling?")
                 .font(.system(size: 40, weight: .medium))
+                .fontDesign(.rounded)
                 .offset(y: -355)
             
+            Rectangle()
+                .fill(Color.appAccentGreen)
+                .frame(width:200, height:60)
+                .cornerRadius(20)
+                .offset(y: -270)
+                .offset(x: -90)
+                
             Text(formattedDate)
                 .font(.system(size: 30, weight: .medium))
-                .offset(x:-100, y: -270)
+                .offset(x:-90, y: -270)
+            
+            Rectangle()
+                .fill(Color.appAccentGreen)
+                .frame(width:100, height:60)
+                .cornerRadius(20)
+                .offset(y: -270)
+                .offset(x: 110)
             
             Text("$\(mojiBucks)")
                 .font(.system(size: 30, weight: .medium))
@@ -104,7 +120,7 @@ struct HomePage: View {
             
             Rectangle()
                 .fill(Color.appAccentGreen)
-                .frame(width: 404, height: 5)
+                .frame(width: 404, height: 0)
                 .offset(y: -240)
 
             SpriteView(scene: jarScene, options: [.allowsTransparency])
