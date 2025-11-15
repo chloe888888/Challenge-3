@@ -1,0 +1,18 @@
+//
+//  InventoryView.swift
+//  Challenge 3
+//
+//  Created by Sam Tan on 15/11/25.
+//
+
+import SwiftUI
+
+struct InventoryView: View {
+    var body: some View {
+        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+    }
+}
+
+#Preview {
+    InventoryView()
+}
