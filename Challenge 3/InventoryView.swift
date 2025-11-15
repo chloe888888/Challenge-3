@@ -8,11 +8,34 @@
 import SwiftUI
 
 struct InventoryView: View {
+    private var listOfCountry = countryList
+    @State var searchText = ""
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            List {
+                ForEach(countries, id: \.self) { country in
+                    HStack {
+                        Text(country.description.capitalized)
+                        Spacer()
+                        Image(systemName: "star")
+                    }
+                    .padding()
+                }
+            }
+            .searchable(text: $searchText)
+            .navigationTitle("Gallary of Jar")
+        }
+    }
+    var countries: [String] {
+        let lcCountries = listOfCountry.map { $0.lowercased() }
+        return searchText == "" ? lcCountries : lcCountries.filter {
+            $0.contains(searchText.lowercased())
+        }
+    }
+}
+struct InventoryView_Previews: PreviewProvider {
+    static var previews: some View {
+        InventoryView()
     }
 }
 
-#Preview {
-    InventoryView()
-}
