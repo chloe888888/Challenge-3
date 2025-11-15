@@ -31,8 +31,9 @@ struct Decor: View {
                             .padding(.horizontal)
                             Text("$20")
                         }
+                    }
                         Button {
-                            print("Button Tapped!")
+                            print("Button ")
                         } label: {
                             
                             VStack {
@@ -51,7 +52,6 @@ struct Decor: View {
                                 Text("$20")
                             }
                         }
-                    }
                     .navigationBarTitle("Decoration!")
                 }
             }
