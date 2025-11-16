@@ -11,27 +11,28 @@ struct Decor: View {
     var body: some View {
         NavigationStack{
             ScrollView {
-                HStack{
-                    Button {
-                        print("Button Tapped!")
-                    } label: {
-                        
-                        VStack {
-                            ZStack{
-                                Color.appAccentGreen
-                                    .frame(maxWidth: .infinity)
-                                    .aspectRatio(1, contentMode: .fit)
-                                    .overlay{
-                                        Image("Decor_1")
-                                            .resizable()
-                                            .scaledToFill()
-                                    }
+                VStack {
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor_1")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$20")
                             }
-                            .clipShape(Circle())
-                            .padding(.horizontal)
-                            Text("$20")
                         }
-                    }
                         Button {
                             print("Button ")
                         } label: {
@@ -52,7 +53,50 @@ struct Decor: View {
                                 Text("$20")
                             }
                         }
-                    .navigationBarTitle("Decoration!")
+                    }
+                    HStack{
+                        Button {
+                            print("Button ")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor_3")
+                                                .resizable()
+                                                .scaledToFit()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$20")
+                            }
+                        }
+                        Button {
+                            print("Button ")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor_2")
+                                                .resizable()
+                                                .scaledToFit()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$20")
+                            }
+                        }
+                    }
+                        .navigationBarTitle("Decoration!")
                 }
             }
         }
