@@ -7,9 +7,11 @@
 
 import SpriteKit
 import CoreGraphics
+import SwiftUICore
 
 final class EmojiJarScene: SKScene {
 
+    var decorShop = Decor()
  
     private let jarWidthRatio:  CGFloat = 0.78
     private let jarHeightRatio: CGFloat = 0.56
@@ -206,4 +208,5 @@ final class EmojiJarScene: SKScene {
     func clearAll() {
         for node in children where node is SKLabelNode { node.removeFromParent() }
     }
+    
 }

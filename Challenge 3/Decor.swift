@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct Decor: View {
+    @State var decoration1Clicked = false
+    @State var decoration2Clicked = false
+    @State var decoration3Clicked = true
     var body: some View {
         NavigationStack{
             ScrollView {
@@ -15,6 +18,11 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration1Clicked = true
+                            
+                            decoration2Clicked = false
+                            decoration3Clicked = false
+                            //decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -35,6 +43,11 @@ struct Decor: View {
                         }
                         Button {
                             print("Button ")
+                            decoration2Clicked = true
+                            
+                            decoration1Clicked = false
+                            decoration3Clicked = false
+                           // decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -57,6 +70,11 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button ")
+                            decoration3Clicked = true
+                            
+                            decoration1Clicked = false
+                            decoration2Clicked = false
+                          //  decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -77,6 +95,10 @@ struct Decor: View {
                         }
                         Button {
                             print("Button ")
+                            decoration2Clicked = true
+                            decoration1Clicked = false
+                            decoration3Clicked = false
+                            
                         } label: {
                             
                             VStack {
@@ -96,7 +118,7 @@ struct Decor: View {
                             }
                         }
                     }
-                        .navigationBarTitle("Decoration!")
+                    .navigationBarTitle("Decoration!")
                 }
             }
         }

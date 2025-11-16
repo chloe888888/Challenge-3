@@ -51,6 +51,8 @@ struct HomePage: View {
         return scene
     }()
     
+    private var decorShop = Decor()
+    
     private var formattedDate: String {
         let f = DateFormatter()
         f.dateFormat = "d MMM yyyy"
@@ -81,6 +83,8 @@ struct HomePage: View {
             }
         }
     }
+    
+    
     
     var body: some View {
         ZStack {
@@ -170,6 +174,24 @@ struct HomePage: View {
                                     in: RoundedRectangle(cornerRadius: 100))
                         .offset(y: -30)
                 }
+                
+                if decorShop.decoration1Clicked == true{
+                    Image("Decor_1")
+                }
+                else if decorShop.decoration2Clicked == true {
+                    Image("Decor_2")
+                        .resizable()
+                        .frame(width: 140, height: 140)
+                        .offset(x: -120, y: 30)
+                }
+                else if decorShop.decoration3Clicked == true {
+                    Image("Decor_3")
+                        .resizable()
+                        .frame(width: 140, height: 140)
+                        .offset(x: -130, y: -25)
+                        .rotationEffect(.degrees(-25))
+                }
+               
             }
         }
         .fullScreenCover(isPresented: $showEmojiPicker) {
