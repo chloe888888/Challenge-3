@@ -85,7 +85,7 @@ struct Decor: View {
                                         .frame(maxWidth: .infinity)
                                         .aspectRatio(1, contentMode: .fit)
                                         .overlay{
-                                            Image("Decor_2")
+                                            Image("Decor_4")
                                                 .resizable()
                                                 .scaledToFit()
                                         }

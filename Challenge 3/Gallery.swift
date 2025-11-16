@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InventoryView: View {
+struct GalleryView: View {
     private var listOfCountry = countryList
     @State var searchText = ""
     var body: some View {
@@ -33,9 +33,9 @@ struct InventoryView: View {
         }
     }
 }
-struct InventoryView_Previews: PreviewProvider {
+struct GalleryVIew_Preview: PreviewProvider {
     static var previews: some View {
-        InventoryView()
+        GalleryView()
     }
 }
 
