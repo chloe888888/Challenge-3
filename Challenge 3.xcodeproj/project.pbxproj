@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		89DA65982EBD9594005E338E /* Challenge 3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Challenge 3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89DA65982EBD9594005E338E /* Challenge 3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Challenge 3.app"; path = "/Users/chloe/Downloads/Swift Accelarator/Challenge 3/build/Debug-iphoneos/Challenge 3.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				89DA659A2EBD9594005E338E /* Challenge 3 */,
-				89DA65992EBD9594005E338E /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		89DA65992EBD9594005E338E /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				89DA65982EBD9594005E338E /* Challenge 3.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,7 +86,7 @@
 			mainGroup = 89DA658F2EBD9594005E338E;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 89DA65992EBD9594005E338E /* Products */;
+			productRefGroup = 89DA658F2EBD9594005E338E;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
