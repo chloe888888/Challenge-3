@@ -23,7 +23,7 @@ struct GalleryView: View {
                 }
             }
             .searchable(text: $searchText)
-            .navigationTitle("Gallary of Jar")
+            .navigationTitle("Gallery of Jar")
         }
     }
     var countries: [String] {
@@ -33,7 +33,7 @@ struct GalleryView: View {
         }
     }
 }
-struct GalleryVIew_Preview: PreviewProvider {
+struct InventoryView_Previews: PreviewProvider {
     static var previews: some View {
         GalleryView()
     }

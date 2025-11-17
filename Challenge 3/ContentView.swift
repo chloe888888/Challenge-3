@@ -27,7 +27,7 @@ struct ContentView: View {
                     Text("Tab 2")
                 }
 
-            Text("Tab 3")
+            Decor()
                 .tabItem {
                     Image(systemName: "3.circle.fill")
                     Text("Tab 3")
