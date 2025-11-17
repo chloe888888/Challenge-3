@@ -220,7 +220,7 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("$5")
+                                    Text("$50")
                                 }
                             }
                     }
