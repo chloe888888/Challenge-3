@@ -140,20 +140,20 @@ struct HomePage: View {
                 Spacer()
             }
 
-            // ===== Jar (SpriteKit) =====
             SpriteView(scene: jarScene, options: [.allowsTransparency])
                 .frame(width: 404, height: 500)
-                .padding(.top, 220)   // push it under the header
+                .padding(.top, 220)
 
-            // ===== Controls + decorations (only before dropping today’s ball) =====
+           
             if !hasDroppedToday {
                 VStack(spacing: 16) {
-                    Text("What face emoji best describes how you are feeling today:")
-                           .font(.system(size: 18, weight: .medium))
-                           .multilineTextAlignment(.center)
-                           .frame(maxWidth: .infinity, alignment: .center)
-                           .padding(.horizontal, 32)
-                        
+                    Text("What face emoji best describes how you are feeling today?")
+                        .font(.system(size: 20, weight: .medium))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.horizontal, 30)
                     Button {
                         showEmojiPicker = true
                     } label: {
@@ -188,7 +188,6 @@ struct HomePage: View {
                                         in: RoundedRectangle(cornerRadius: 100))
                     }
 
-                    // decorations, same conditions you already had
                     Group {
                         if decorShop.decoration1Clicked {
                             Image("Decor_1")
