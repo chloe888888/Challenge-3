@@ -504,14 +504,14 @@ struct Decor: View {
                                             .frame(maxWidth: .infinity)
                                             .aspectRatio(1, contentMode: .fit)
                                             .overlay{
-                                                Image("Decor 17")
+                                                Image("Decor 20")
                                                     .resizable()
                                                     .scaledToFill()
                                             }
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("$300")
+                                    Text("$350")
                                 }
                             }
                     }
