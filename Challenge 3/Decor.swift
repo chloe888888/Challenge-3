@@ -10,6 +10,14 @@ import SwiftUI
 struct Decor: View {
     var body: some View {
         NavigationStack{
+            NavigationLink {
+                Inventory()
+            } label: {
+                Text ("Inventory ->")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
             ScrollView {
                 VStack {
                     HStack{
@@ -23,14 +31,14 @@ struct Decor: View {
                                         .frame(maxWidth: .infinity)
                                         .aspectRatio(1, contentMode: .fit)
                                         .overlay{
-                                            Image("Decor_1")
-                                                .resizable()
-                                                .scaledToFill()
+                                                Image("Decor_1.3")
+                                                    .resizable()
+                                                    .scaledToFill()
                                         }
                                 }
                                 .clipShape(Circle())
                                 .padding(.horizontal)
-                                Text("$20")
+                                Text("$10")
                             }
                         }
                         Button {
@@ -50,7 +58,7 @@ struct Decor: View {
                                 }
                                 .clipShape(Circle())
                                 .padding(.horizontal)
-                                Text("$20")
+                                Text("$10")
                             }
                         }
                     }
