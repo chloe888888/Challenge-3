@@ -224,6 +224,55 @@ struct Decor: View {
                                 }
                             }
                     }
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor_9")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$100")
+                            }
+                        }
+                            Button {
+                                print("Button Tapped!")
+                                decoration1Clicked = true
+                                
+                                decoration2Clicked = false
+                                decoration3Clicked = false
+                                decoration4Clicked = false
+                                decoration5Clicked = true
+                            } label: {
+                                
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor_7")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$50")
+                                }
+                            }
+                    }
+                    
                     .navigationBarTitle("Decoration!")
                 }
             }
