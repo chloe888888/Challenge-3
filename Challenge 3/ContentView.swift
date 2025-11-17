@@ -13,36 +13,33 @@ struct ContentView: View {
             HomePage()
                 .tabItem {
                     ZStack{
-                        Image("tab1_evenbettAh")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width:5, height: 5)
-                        Text("Tab 1")
+                        Image("tab1")
+                        Text("Home")
                     }
                 }
 
             CalendarView()
                 .tabItem {
-                    Image(systemName: "2.circle.fill")
-                    Text("Tab 2")
+                    Image("tab2")
+                    Text("Calendar")
                 }
 
             Decor()
                 .tabItem {
-                    Image(systemName: "3.circle.fill")
-                    Text("Tab 3")
+                    Image("tab3")
+                    Text("Decorations")
                 }
 
             Text("Tab 4")
                 .tabItem {
-                    Image(systemName: "4.circle.fill")
-                    Text("Tab 4")
+                    Image("tab4")
+                    Text("Gallery")
                 }
 
             StatisticsView()
                 .tabItem {
-                    Image(systemName: "5.circle.fill")
-                    Text("Tab 5")
+                    Image("tab5")
+                    Text("Statistics")
                 }
         }
     }

@@ -113,95 +113,80 @@ struct StatisticsView: View {
     // MARK: - UI
     
     var body: some View {
-        ZStack {
-            // background fills behind notch + tab bar
-            Color(red: 0.95, green: 0.99, blue: 0.97)
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                // ===== HEADER =====
-                ZStack(alignment: .bottomLeading) {
-                    Color(red: 0.7, green: 0.95, blue: 0.8)
-                        .ignoresSafeArea(edges: .top)
-                    
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("STATISTICS:")
-                            .font(.system(size: 36, weight: .bold))
-                            .foregroundColor(.black)
-                        
-                        Text(monthYearString)
-                            .font(.system(size: 24, weight: .medium))
-                            .foregroundColor(.black.opacity(0.7))
-                    }
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 20)
-                }
-                .frame(height: 160)
-                
-                // ===== CONTENT =====
-                VStack(spacing: 30) {
-                    Image(systemName: "triangle")
-                        .font(.system(size: 80))
-                        .foregroundColor(.black.opacity(0.1))
-                        .padding(.top, 30)
-                    
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("STATS")
-                            .font(.system(size: 28, weight: .bold))
-                            .padding(.horizontal, 20)
-                            .padding(.top, 20)
-                            .padding(.bottom, 15)
-                        
-                        ForEach(monthlyCounts, id: \.category) { item in
-                            StatRow(
-                                label: item.category,
-                                emoji: item.emoji,
-                                count: item.count
-                            )
-                        }
-                        .padding(.horizontal, 20)
-                        .padding(.bottom, 5)
-                    }
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
-                    )
-                    .padding(.horizontal, 30)
-                }
-                .padding(.bottom, 32)   // space above the tab bar
-                
-                Spacer()
-            }
-        }
-    }
-}
+           VStack(spacing: 0) {
+               VStack(alignment: .leading, spacing: 16) {
+                   Text("STATISTICS:")
+                       .font(.system(size: 36, weight: .bold))
+                       .foregroundColor(.black)
+                   
+                   Text(monthYearString)
+                       .font(.system(size: 24, weight: .medium))
+                       .foregroundColor(.black.opacity(0.7))
+               }
+               .frame(maxWidth: .infinity, alignment: .leading)
+               .padding(.horizontal, 30)
+               .padding(.vertical, 25)
+               .background(Color(red: 0.7, green: 0.95, blue: 0.8))
+               .padding(.bottom, 10)
+               
+               VStack(spacing: 40) {
+                   VStack(alignment: .leading, spacing: 0) {
+                       Text("STATS")
+                           .font(.system(size: 28, weight: .bold))
+                           .padding(.horizontal, 20)
+                           .padding(.top, 20)
+                           .padding(.bottom, 15)
+                       
+                       ForEach(monthlyCounts, id: \.category) { item in
+                           StatRow(
+                               label: item.category,
+                               emoji: item.emoji,
+                               count: item.count
+                           )
+                       }
+                       .padding(.horizontal, 20)
+                       .padding(.bottom, 20)
+                   }
+                   .background(Color.white)
+                   .overlay(
+                       RoundedRectangle(cornerRadius: 12)
+                           .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
+                   )
+                   .padding(.horizontal, 30)
+               }
+               
+               Spacer()
+           }
+           .frame(maxWidth: .infinity, maxHeight: .infinity)
+           .background(Color(red: 0.95, green: 0.99, blue: 0.97))
+       }
+   }
 
-struct StatRow: View {
-    let label: String
-    let emoji: String
-    let count: Int
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Text(label)
-                .font(.system(size: 22, weight: .regular))
-                .frame(width: 110, alignment: .leading)
-            
-            Rectangle()
-                .fill(Color.gray.opacity(0.3))
-                .frame(height: 2)
-                .frame(maxWidth: .infinity)
-            
-            Text("\(count)")
-                .font(.system(size: 26, weight: .bold))
-                .frame(width: 40, alignment: .trailing)
-        }
-        .padding(.vertical, 8)
-    }
-}
+   struct StatRow: View {
+       let label: String
+       let emoji: String
+       let count: Int
+       
+       var body: some View {
+           HStack(spacing: 12) {
+               Text(label)
+                   .font(.system(size: 22, weight: .regular))
+                   .frame(width: 110, alignment: .leading)
+               
+               Rectangle()
+                   .fill(Color.gray.opacity(0.3))
+                   .frame(height: 2)
+                   .frame(maxWidth: .infinity)
+               
+               Text("\(count)")
+                   .font(.system(size: 26, weight: .bold))
+                   .frame(width: 40, alignment: .trailing)
+           }
+           .padding(.vertical, 8)
+       }
+   }
 
-#Preview {
-    StatisticsView()
-        .modelContainer(for: MoodEntry.self, inMemory: true)
-}
+   #Preview {
+       StatisticsView()
+           .modelContainer(for: MoodEntry.self, inMemory: true)
+   }
