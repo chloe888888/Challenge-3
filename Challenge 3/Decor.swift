@@ -10,7 +10,9 @@ import SwiftUI
 struct Decor: View {
     @State var decoration1Clicked = false
     @State var decoration2Clicked = false
-    @State var decoration3Clicked = true
+    @State var decoration3Clicked = false
+    @State var decoration4Clicked = false
+    @State var decoration5Clicked = true
     var body: some View {
         NavigationStack{
             NavigationLink {
@@ -30,7 +32,7 @@ struct Decor: View {
                             
                             decoration2Clicked = false
                             decoration3Clicked = false
-                            //decoration4Clicked = false
+                            decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -55,7 +57,7 @@ struct Decor: View {
                             
                             decoration1Clicked = false
                             decoration3Clicked = false
-                           // decoration4Clicked = false
+                            decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -82,7 +84,7 @@ struct Decor: View {
                             
                             decoration1Clicked = false
                             decoration2Clicked = false
-                          //  decoration4Clicked = false
+                            decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -124,6 +126,59 @@ struct Decor: View {
                                 .padding(.horizontal)
                                 Text("$20")
                             }
+                            }
+                        }
+                    VStack {
+                        Button {
+                            print("Button Tapped!")
+                            decoration1Clicked = false
+                            decoration2Clicked = false
+                            decoration3Clicked = false
+                            decoration5Clicked = false
+                            decoration4Clicked = true
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor 5")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$10")
+                        }
+                        Button {
+                            print("Button Tapped!")
+                            decoration1Clicked = true
+                            
+                            decoration2Clicked = false
+                            decoration3Clicked = false
+                            decoration4Clicked = false
+                            decoration5Clicked = true
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor 6")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$5")
+                            }
+                        }
                         }
                     }
                     .navigationBarTitle("Decoration!")
