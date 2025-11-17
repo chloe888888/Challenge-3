@@ -13,8 +13,8 @@ final class EmojiJarScene: SKScene {
 
     var decorShop = Decor()
  
-    private let jarWidthRatio:  CGFloat = 0.78
-    private let jarHeightRatio: CGFloat = 0.56
+    private let jarWidthRatio:  CGFloat = 0.70
+    private let jarHeightRatio: CGFloat = 0.60
     private let jarBottomInset: CGFloat = 92
 
     private let mouthWidthFactor: CGFloat = 0.90

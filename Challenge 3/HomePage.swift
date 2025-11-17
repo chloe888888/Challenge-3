@@ -14,23 +14,23 @@ import SwiftData
 private let faceEmojis: [String] = [
     // 1️⃣ Happy
     "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇",
-
+    
     // 2️⃣ Sad
     "😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕",
-
+    
     // 3️⃣ Angry
     "😤","😠","😡","🤬","😒","🙄","😏","🤨","😑","😐","🫤","😬","🫨",
-
+    
     // 4️⃣ Love
     "🥰","😍","🤩","😘","😗","☺️","😙","😚","🥲","🤗","😋",
     "😛","😝","😜","🤪","🤠","😎","🥸","🤓","🧐",
-
+    
     // 5️⃣ Calm
     "😶","😴","😪","😮‍💨","😌","🫥",
-
+    
     // 6️⃣ Fear
     "😱","😨","😰","😳","😵","😵‍💫","😶‍🌫️","🫢","🫣","🤐","🤫",
-
+    
     // 7️⃣ Disgusted
     "🤢","🤮","🤧","💩","🤥","🤡"
 ]
@@ -39,49 +39,49 @@ struct HomePage: View {
     // SwiftData context + saved moods
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
-
+    
     // Basic state
     @State private var currentDate = Date()
     @State private var mojiBucks = 100
     private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
-
+    
     // Emoji selection & UI
     @State private var selectedEmoji: String = ""
     @State private var showEmojiPicker = false
     @State private var hasDroppedToday = false
-
+    
     // SpriteKit jar
     @State private var jarScene: EmojiJarScene = {
         let scene = EmojiJarScene(size: CGSize(width: 404, height: 500))
         scene.scaleMode = .resizeFill
         return scene
     }()
-
+    
     // NOTE: this is still how you’re checking decorations.
     // (Even though it doesn’t “sync” with the Decor view’s @State,
     // I’m keeping it because you’re using these flags.)
     private var decorShop = Decor()
-
+    
     // MARK: - Helpers
-
+    
     private var formattedDate: String {
         let f = DateFormatter()
         f.dateFormat = "d MMM yyyy"
         return f.string(from: currentDate)
     }
-
+    
     /// Rebuild jar from all previous MoodEntry rows, and detect if today already has one.
     private func restoreJarFromHistory() {
         let calendar = Calendar.current
-
+        
         jarScene.clearAll()
-
+        
         // tiny delay so SpriteKit has its size
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             for entry in entries {
                 jarScene.dropEmoji(entry.emoji)
             }
-
+            
             if let todayEntry = entries.first(where: {
                 calendar.isDate($0.date, inSameDayAs: currentDate)
             }) {
@@ -93,20 +93,20 @@ struct HomePage: View {
             }
         }
     }
-
+    
     // MARK: - UI
-
+    
     var body: some View {
         ZStack(alignment: .top) {
             Color.white.ignoresSafeArea()
-
+            
             // ===== Header (green bar with title + date/money) =====
             VStack(spacing: 0) {
                 VStack(spacing: 16) {
                     Text("How are you feeling?")
                         .font(.system(size: 40, weight: .medium))
                         .fontDesign(.rounded)
-
+                    
                     HStack(spacing: 24) {
                         // Date capsule
                         Text(formattedDate)
@@ -117,9 +117,9 @@ struct HomePage: View {
                                 RoundedRectangle(cornerRadius: 18)
                                     .fill(Color.appAccentGreen)
                             )
-
+                        
                         Spacer()
-
+                        
                         // Money capsule
                         Text("$\(mojiBucks)")
                             .font(.system(size: 24, weight: .medium))
@@ -136,24 +136,24 @@ struct HomePage: View {
                 .padding(.bottom, 12)
                 .frame(maxWidth: .infinity)
                 .background(Color.appAccentGreen)
-
+                
                 Spacer()
             }
-
+            
             // ===== Jar (SpriteKit) =====
             SpriteView(scene: jarScene, options: [.allowsTransparency])
                 .frame(width: 404, height: 500)
                 .padding(.top, 220)   // push it under the header
-
+            
             // ===== Controls + decorations (only before dropping today’s ball) =====
             if !hasDroppedToday {
                 VStack(spacing: 16) {
                     Text("What face emoji best describes how you are feeling today:")
-                           .font(.system(size: 18, weight: .medium))
-                           .multilineTextAlignment(.center)
-                           .frame(maxWidth: .infinity, alignment: .center)
-                           .padding(.horizontal, 32)
-                        
+                        .font(.system(size: 18, weight: .medium))
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.horizontal, 32)
+                    
                     Button {
                         showEmojiPicker = true
                     } label: {
@@ -161,7 +161,7 @@ struct HomePage: View {
                             Text("Choose face emoji")
                                 .font(.system(size: 18))
                                 .foregroundColor(.primary)
-
+                            
                             Text(selectedEmoji)
                                 .font(.system(size: 22))
                         }
@@ -170,15 +170,15 @@ struct HomePage: View {
                         .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
                     }
                     .buttonStyle(.plain)
-
+                    
                     // drop button (big emoji)
                     Button {
                         guard !selectedEmoji.isEmpty else { return }
-
+                        
                         let entry = MoodEntry(date: currentDate, emoji: selectedEmoji)
                         modelContext.insert(entry)
                         try? modelContext.save()
-
+                        
                         jarScene.dropEmoji(selectedEmoji)
                         hasDroppedToday = true
                     } label: {
@@ -187,52 +187,128 @@ struct HomePage: View {
                             .background(Color(.systemGray6),
                                         in: RoundedRectangle(cornerRadius: 100))
                     }
-
+                    
                     // decorations, same conditions you already had
-                    Group {
-                        if decorShop.decoration1Clicked {
-                            Image("Decor_1")
-                        } else if decorShop.decoration2Clicked {
-                            Image("Decor_2")
-                                .resizable()
-                                .frame(width: 140, height: 140)
-                                .offset(x: -120, y: 30)
-                        } else if decorShop.decoration3Clicked {
-                            Image("Decor_3")
-                                .resizable()
-                                .frame(width: 140, height: 140)
-                                .offset(x: -130, y: -25)
-                                .rotationEffect(.degrees(-25))
-                        } else if decorShop.decoration4Clicked {
-                            Image("Decor_4.2")
-                                .resizable()
-                                .frame(width: 140, height: 140)
-                                .offset(x: -120, y: 30)
-                            Image("Decor_4.3")
-                        } else if decorShop.decoration5Clicked {
-                            Image("Decor_5.2")
-                                .resizable()
-                                .frame(width: 140, height: 140)
-                                .offset(x: -120, y: 30)
-                            Image("Decor_5.3")
-                        } else if decorShop.decoration6Clicked {
-                            Image("Decor_6.2")
-                                .resizable()
-                                .frame(width: 140, height: 140)
-                                .offset(x: -120, y: 30)
-                            Image("Decor_6.3")
-                        } else if decorShop.decoration7Clicked {
-                            Image("Decor_7.2")
-                                .resizable()
-                                .frame(width: 140, height: 140)
-                                .offset(x: -120, y: 30)
-                            Image("Decor_7.3")
-                        } else if decorShop.decoration8Clicked {
-                            Image("Decor_8.2")
-                                .resizable()
-                                .frame(width: 140, height: 140)
-                                .offset(x: -120, y: 30)
-                            Image("Decor_8.3")
+                    GeometryReader { geometry in
+                        Group {
+                            if decorShop.decoration1Clicked {
+                                Image("Decor_1")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            } else if decorShop.decoration2Clicked {
+                                Image("Decor_1.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            } else if decorShop.decoration3Clicked {
+                                Image("Decor_2.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            } else if decorShop.decoration4Clicked {
+                                Image("Decor_2.3")
+                                    .resizable()
+                                    .frame(width: 140, height: 140)
+                                    .offset(x: -120, y: 30)
+                                Image("Decor_3.2")
+                            } else if decorShop.decoration5Clicked {
+                                Image("Decor_3.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_4.2")
+                            } else if decorShop.decoration6Clicked {
+                                Image("Decor_4.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_5.3")
+                            } else if decorShop.decoration7Clicked {
+                                Image("Decor_5.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_6")
+                            } else if decorShop.decoration8Clicked {
+                                Image("Decor_7.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_7.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            } else if decorShop.decoration8Clicked {
+                                Image("Decor_8.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_8.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            } else if decorShop.decoration8Clicked {
+                                Image("Decor 9")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor 10")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            } else if decorShop.decoration8Clicked {
+                                Image("Decor 11")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor 12")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.78,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            }
                         }
                     }
                 }
@@ -261,10 +337,10 @@ struct HomePage: View {
 struct EmojiGridPicker: View {
     @Binding var selection: String
     var onSelect: (String) -> Void
-
+    
     @Environment(\.dismiss) private var dismiss
     private let columns = [GridItem(.adaptive(minimum: 56), spacing: 8)]
-
+    
     var body: some View {
         NavigationStack {
             ScrollView {
