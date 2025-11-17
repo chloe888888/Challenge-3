@@ -131,11 +131,6 @@ struct Decor: View {
                     VStack {
                         Button {
                             print("Button Tapped!")
-                            decoration1Clicked = false
-                            decoration2Clicked = false
-                            decoration3Clicked = false
-                            decoration5Clicked = false
-                            decoration4Clicked = true
                         } label: {
                             
                             VStack {
@@ -152,35 +147,63 @@ struct Decor: View {
                                 .clipShape(Circle())
                                 .padding(.horizontal)
                                 Text("$10")
-                        }
-                        Button {
-                            print("Button Tapped!")
-                            decoration1Clicked = true
-                            
-                            decoration2Clicked = false
-                            decoration3Clicked = false
-                            decoration4Clicked = false
-                            decoration5Clicked = true
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor 6")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
+                            }
+                            Button {
+                                print("Button Tapped!")
+                                decoration1Clicked = true
+                                
+                                decoration2Clicked = false
+                                decoration3Clicked = false
+                                decoration4Clicked = false
+                                decoration5Clicked = true
+                            } label: {
+                                
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor 6")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$5")
                                 }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$5")
+                            }
+                        }
+                        VStack {
+                            Button {
+                                print("Button Tapped!")
+                                decoration1Clicked = true
+                                
+                                decoration2Clicked = false
+                                decoration3Clicked = false
+                                decoration4Clicked = false
+                                decoration5Clicked = false
+                            } label: {
+                                
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor 7")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$5")
+                                }
                             }
                         }
                         }
-                    }
                     .navigationBarTitle("Decoration!")
                 }
             }
