@@ -268,7 +268,7 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("100")
+                                    Text("$100")
                                 }
                             }
                     }
@@ -316,7 +316,7 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("150")
+                                    Text("$150")
                                 }
                             }
                     }
@@ -364,7 +364,7 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("200")
+                                    Text("$200")
                                 }
                             }
                     }
@@ -412,7 +412,103 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("200")
+                                    Text("$200")
+                                }
+                            }
+                    }
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor 18")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$200")
+                            }
+                        }
+                            Button {
+                                print("Button Tapped!")
+                                decoration1Clicked = true
+
+                                decoration2Clicked = false
+                                decoration3Clicked = false
+                                decoration4Clicked = false
+                                decoration5Clicked = true
+                            } label: {
+
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor 17")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$300")
+                                }
+                            }
+                    }
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor 19")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$250")
+                            }
+                        }
+                            Button {
+                                print("Button Tapped!")
+                                decoration1Clicked = true
+
+                                decoration2Clicked = false
+                                decoration3Clicked = false
+                                decoration4Clicked = false
+                                decoration5Clicked = true
+                            } label: {
+
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor 17")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$300")
                                 }
                             }
                     }
