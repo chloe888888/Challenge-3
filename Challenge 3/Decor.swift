@@ -146,7 +146,7 @@ struct Decor: View {
                                 }
                                 .clipShape(Circle())
                                 .padding(.horizontal)
-                                Text("$10")
+                                Text("$20")
                             }
                         }
                             Button {
@@ -172,18 +172,39 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("$5")
+                                    Text("$20")
                                 }
                             }
                     }
-                        HStack {
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor_8")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$50")
+                            }
+                        }
                             Button {
                                 print("Button Tapped!")
                                 decoration1Clicked = true
+                                
                                 decoration2Clicked = false
                                 decoration3Clicked = false
                                 decoration4Clicked = false
-                                decoration5Clicked = false
+                                decoration5Clicked = true
                             } label: {
                                 
                                 VStack {
@@ -202,7 +223,7 @@ struct Decor: View {
                                     Text("$5")
                                 }
                             }
-                        }
+                    }
                     .navigationBarTitle("Decoration!")
                 }
             }
