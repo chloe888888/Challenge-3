@@ -24,6 +24,10 @@ struct Decor: View {
     @State var decoration14Clicked = false
     @State var decoration15Clicked = false
     @State var decoration16Clicked = false
+    @State var decoration17Clicked = false
+    @State var decoration18Clicked = false
+    @State var decoration19Clicked = false
+    @State var decoration20Clicked = false
     var body: some View {
         NavigationStack{
             NavigationLink {
@@ -470,6 +474,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration19Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -490,12 +497,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
-
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration20Clicked = true
+                                
+                                decoration1Clicked = false
                             } label: {
 
                                 VStack {
