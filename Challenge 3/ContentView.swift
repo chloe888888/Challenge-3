@@ -36,7 +36,7 @@ struct ContentView: View {
                     Text("Gallery")
                 }
 
-            StatisticsView(month: Date())
+          //  StatisticsView(month: Date())
                 .tabItem {
                     Image("tab5")
                     Text("Statistics")

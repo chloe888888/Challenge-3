@@ -199,8 +199,15 @@ struct HomePage: View {
                                         y: geometry.size.height * 0.25
                                     )
                                     .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                            } else if decorShop.decoration2Clicked {
                                 Image("Decor_1.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.height * 0.12,
+                                        y: geometry.size.height * 0.25
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            } else if decorShop.decoration2Clicked {
+                                Image("Decor_2.2")
                                     .resizable()
                                     .position(
                                         x: geometry.size.height * 0.78,
@@ -208,10 +215,10 @@ struct HomePage: View {
                                     )
                                     .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
                             } else if decorShop.decoration3Clicked {
-                                Image("Decor_2.2")
+                                Image("Decor_2.3")
                                     .resizable()
                                     .position(
-                                        x: geometry.size.height * 0.78,
+                                        x: geometry.size.height * 0.12,
                                         y: geometry.size.height * 0.25
                                     )
                                     .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
