@@ -93,36 +93,14 @@ struct HomePage: View {
     var body: some View {
         NavigationStack{
             ZStack {
-                
-                Rectangle()
-                    .fill(Color(red: 0.7, green: 0.95, blue: 0.8))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                Rectangle()
-                    .fill(Color.appAccentGreen)
-                    .frame(width:200, height:60)
-                    .cornerRadius(20)
-                    .offset(y: -270)
-                    .offset(x: -90)
-                
-                Text(formattedDate)
-                    .font(.system(size: 30, weight: .medium))
-                    .offset(x:-90, y: -270)
-                
-                Rectangle()
-                    .fill(Color.appAccentGreen)
-                    .frame(width:100, height:60)
-                    .cornerRadius(20)
-                    .offset(y: -270)
-                    .offset(x: 110)
-                
-                Text("$\(mojiBucks)")
-                    .font(.system(size: 30, weight: .medium))
-                    .offset(x:110, y: -270)
-                
-                Rectangle()
-                    .fill(Color.appAccentGreen)
-                    .frame(width: 404, height: 0)
-                    .offset(y: -240)
+                GeometryReader { geometry in
+                    Text(formattedDate)
+                        .font(.system(size: 30, weight: .medium))
+                        .padding()
+                    Text("$\(mojiBucks)")
+                        .font(.system(size: 30, weight: .medium))
+                        .padding()
+                    }
                 
                 SpriteView(scene: jarScene, options: [.allowsTransparency])
                     .frame(width: 404, height: 500)
@@ -138,18 +116,16 @@ struct HomePage: View {
                         showEmojiPicker = true
                     } label: {
                         HStack {
-                            Text("Choose face emoji")
-                                .font(.system(size: 18))
-                                .foregroundColor(.primary)
-                            Text(selectedEmoji)
-                                .font(.system(size: 22))
+                            ZStack{
+                                Text("Choose face emoji")
+                                    .padding()
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.primary)
+                                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.appAccentGreen))
+                            }
+                                Text(selectedEmoji)
+                                    .font(.system(size: 22))
                         }
-                        .frame(width: 300, height: 40)
-                        .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.green.opacity(0.3), lineWidth: 2)
-                        )
                     }
                     .buttonStyle(.plain)
                     .offset(y:-130)
