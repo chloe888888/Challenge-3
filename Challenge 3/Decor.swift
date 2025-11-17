@@ -426,6 +426,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration18Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -446,12 +449,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
-
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration17Clicked = true
+                                
+                                decoration1Clicked = false
                             } label: {
 
                                 VStack {
