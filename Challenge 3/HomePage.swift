@@ -164,6 +164,36 @@ struct HomePage: View {
                             .offset(x: -130, y: -25)
                             .rotationEffect(.degrees(-25))
                     }
+                } else if decorShop.decoration4Clicked {
+                                Image("Decor_4.2")
+                                    .resizable()
+                                    .frame(width: 140, height: 140)
+                                    .offset(x: -120, y: 30)
+                                Image("Decor_4.3")
+                            } else if decorShop.decoration5Clicked {
+                                Image("Decor_5.2")
+                                    .resizable()
+                                    .frame(width: 140, height: 140)
+                                    .offset(x: -120, y: 30)
+                                Image("Decor_5.3")
+                            } else if decorShop.decoration6Clicked {
+                                Image("Decor_6.2")
+                                    .resizable()
+                                    .frame(width: 140, height: 140)
+                                    .offset(x: -120, y: 30)
+                                Image("Decor_6.3")
+                            } else if decorShop.decoration7Clicked {
+                                Image("Decor_7.2")
+                                    .resizable()
+                                    .frame(width: 140, height: 140)
+                                    .offset(x: -120, y: 30)
+                                Image("Decor_7.3")
+                            } else if decorShop.decoration8Clicked {
+                                Image("Decor_8.2")
+                                    .resizable()
+                                    .frame(width: 140, height: 140)
+                                    .offset(x: -120, y: 30)
+                                Image("Decor_8.3")
                     
                 }
             }
