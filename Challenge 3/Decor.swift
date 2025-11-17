@@ -23,6 +23,7 @@ struct Decor: View {
     @State var decoration13Clicked = false
     @State var decoration14Clicked = false
     @State var decoration15Clicked = false
+    @State var decoration16Clicked = false
     var body: some View {
         NavigationStack{
             NavigationLink {
@@ -157,6 +158,8 @@ struct Decor: View {
                             Button {
                                 print("Button Tapped!")
                                 decoration6Clicked = true
+                                
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -179,6 +182,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration8Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -199,12 +205,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration7Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -227,6 +230,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration9Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -247,12 +253,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration10Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -275,6 +278,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration11Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -295,12 +301,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration12Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -323,6 +326,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration13Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -343,12 +349,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration14Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -371,6 +374,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration15Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -391,12 +397,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
-
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration16Clicked = true
+                                
+                                decoration1Clicked = false
                             } label: {
 
                                 VStack {
