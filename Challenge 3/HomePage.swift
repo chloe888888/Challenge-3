@@ -39,7 +39,7 @@ struct HomePage: View {
     // SwiftData context to save moods
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
-
+    
     @State private var currentDate = Date()
     @State private var mojiBucks = 100
     private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
@@ -47,8 +47,8 @@ struct HomePage: View {
     @State private var selectedEmoji: String = ""
     @State private var showEmojiPicker = false
     @State private var hasDroppedToday = false
-
-
+    
+    
     @State private var jarScene: EmojiJarScene = {
         let scene = EmojiJarScene(size: CGSize(width: 404, height: 500))
         scene.scaleMode = .resizeFill
@@ -62,20 +62,20 @@ struct HomePage: View {
         f.dateFormat = "d MMM yyyy"
         return f.string(from: currentDate)
     }
-
-
+    
+    
     private func restoreJarFromHistory() {
         let calendar = Calendar.current
-
-
+        
+        
         jarScene.clearAll()
-
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             
             for entry in entries {
                 jarScene.dropEmoji(entry.emoji)
             }
-
+            
             if let todayEntry = entries.first(where: {
                 calendar.isDate($0.date, inSameDayAs: currentDate)
             }) {
@@ -91,126 +91,97 @@ struct HomePage: View {
     
     
     var body: some View {
-        ZStack {
-
-            Rectangle()
-                .fill(Color(red: 0.7, green: 0.95, blue: 0.8))
-                .frame(width: 404, height: 150)
-                .offset(y: -380)
-                
-            
-            Text("How are you feeling?")
-                .font(.system(size: 40, weight: .medium))
-                .fontDesign(.rounded)
-                .offset(y: -355)
-            
-            Rectangle()
-                .fill(Color.appAccentGreen)
-                .frame(width:200, height:60)
-                .cornerRadius(20)
-                .offset(y: -270)
-                .offset(x: -90)
-                
-            Text(formattedDate)
-                .font(.system(size: 30, weight: .medium))
-                .offset(x:-90, y: -270)
-            
-            Rectangle()
-                .fill(Color.appAccentGreen)
-                .frame(width:100, height:60)
-                .cornerRadius(20)
-                .offset(y: -270)
-                .offset(x: 110)
-            
-            Text("$\(mojiBucks)")
-                .font(.system(size: 30, weight: .medium))
-                .offset(x:110, y: -270)
-            
-            Rectangle()
-                .fill(Color.appAccentGreen)
-                .frame(width: 404, height: 0)
-                .offset(y: -240)
-
-            SpriteView(scene: jarScene, options: [.allowsTransparency])
-                .frame(width: 404, height: 500)
-                .offset(y: 140)
-
-
-            if !hasDroppedToday {
-                Text("What face emoji best describes how you are feeling today:")
-                    .font(.system(size: 24.5, weight: .medium))
-                    .offset(y: -190)
-
-                Button {
-                    showEmojiPicker = true
-                } label: {
-                    HStack {
-                        Text("Choose face emoji")
-                            .font(.system(size: 18))
-                            .foregroundColor(.primary)
-                        Text(selectedEmoji)
-                            .font(.system(size: 22))
+        NavigationStack{
+            ZStack {
+                GeometryReader { geometry in
+                    Text(formattedDate)
+                        .font(.system(size: 30, weight: .medium))
+                        .padding()
+                    Text("$\(mojiBucks)")
+                        .font(.system(size: 30, weight: .medium))
+                        .padding()
                     }
-                    .frame(width: 300, height: 40)
-                    .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.green.opacity(0.3), lineWidth: 2)
-                    )
-                }
-                .buttonStyle(.plain)
-                .offset(y:-130)
                 
-                Button {
-                    guard !selectedEmoji.isEmpty else { return }
-                    
-                    let entry = MoodEntry(date: currentDate, emoji: selectedEmoji)
-                    modelContext.insert(entry)
-                    try? modelContext.save()
-                    
-                    jarScene.dropEmoji(selectedEmoji)
-                    
-                    hasDroppedToday = true
-                } label: {
-                    Text(selectedEmoji)
-                        .font(.system(size: 55))
-                        .background(Color(.systemGray6),
-                                    in: RoundedRectangle(cornerRadius: 100))
-                        .offset(y: -30)
-                }
+                SpriteView(scene: jarScene, options: [.allowsTransparency])
+                    .frame(width: 404, height: 500)
+                    .offset(y: 140)
                 
-                if decorShop.decoration1Clicked == true{
-                    Image("Decor_1")
+                
+                if !hasDroppedToday {
+                    Text("What face emoji best describes how you are feeling today:")
+                        .font(.system(size: 24.5, weight: .medium))
+                        .offset(y: -190)
+                    
+                    Button {
+                        showEmojiPicker = true
+                    } label: {
+                        HStack {
+                            ZStack{
+                                Text("Choose face emoji")
+                                    .padding()
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.primary)
+                                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.appAccentGreen))
+                            }
+                                Text(selectedEmoji)
+                                    .font(.system(size: 22))
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .offset(y:-130)
+                    
+                    Button {
+                        guard !selectedEmoji.isEmpty else { return }
+                        
+                        let entry = MoodEntry(date: currentDate, emoji: selectedEmoji)
+                        modelContext.insert(entry)
+                        try? modelContext.save()
+                        
+                        jarScene.dropEmoji(selectedEmoji)
+                        
+                        hasDroppedToday = true
+                    } label: {
+                        Text(selectedEmoji)
+                            .font(.system(size: 55))
+                            .background(Color(.systemGray6),
+                                        in: RoundedRectangle(cornerRadius: 100))
+                            .offset(y: -30)
+                    }
+                    
+                    if decorShop.decoration1Clicked == true{
+                        Image("Decor_1")
+                    }
+                    else if decorShop.decoration2Clicked == true {
+                        Image("Decor_2")
+                            .resizable()
+                            .frame(width: 140, height: 140)
+                            .offset(x: -120, y: 30)
+                    }
+                    else if decorShop.decoration3Clicked == true {
+                        Image("Decor_3")
+                            .resizable()
+                            .frame(width: 140, height: 140)
+                            .offset(x: -130, y: -25)
+                            .rotationEffect(.degrees(-25))
+                    }
+                    
                 }
-                else if decorShop.decoration2Clicked == true {
-                    Image("Decor_2")
-                        .resizable()
-                        .frame(width: 140, height: 140)
-                        .offset(x: -120, y: 30)
-                }
-                else if decorShop.decoration3Clicked == true {
-                    Image("Decor_3")
-                        .resizable()
-                        .frame(width: 140, height: 140)
-                        .offset(x: -130, y: -25)
-                        .rotationEffect(.degrees(-25))
-                }
-               
             }
-        }
-        .fullScreenCover(isPresented: $showEmojiPicker) {
-            EmojiGridPicker(selection: $selectedEmoji) { emoji in
-                selectedEmoji = emoji
+            .fullScreenCover(isPresented: $showEmojiPicker) {
+                EmojiGridPicker(selection: $selectedEmoji) { emoji in
+                    selectedEmoji = emoji
+                }
+                .interactiveDismissDisabled(true)
             }
-            .interactiveDismissDisabled(true)
-        }
-        .onReceive(timer) { _ in currentDate = Date() }
-        .onAppear {
-            currentDate = Date()
-            restoreJarFromHistory()   
+            .onReceive(timer) { _ in currentDate = Date() }
+            .onAppear {
+                currentDate = Date()
+                restoreJarFromHistory()
+            }
+            .navigationTitle("How are you feeling?")
         }
     }
-}
+    }
 
 
 private struct EmojiGridPicker: View {
