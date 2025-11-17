@@ -64,57 +64,59 @@ struct CalendarView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Calendar")
-                    .font(.system(size: 48, weight: .bold))
-                    .fontDesign(.rounded)
-                Text(monthYearString)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.black.opacity(0.7))
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 30)
-            .padding(.vertical, 25)
-            .background(Color(red: 0.7, green: 0.95, blue: 0.8))
-            
-
+        NavigationStack {
             VStack(spacing: 0) {
-
-                HStack(spacing: 0) {
-                    ForEach(daysOfWeek, id: \.self) { day in
-                        Text(day)
-                            .font(.system(size: 16, weight: .semibold))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(Color.white)
-                            .overlay(
-                                Rectangle()
-                                    .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 2)
-                            )
-                    }
-                }
                 
-                ForEach(0..<daysInMonth.count, id: \.self) { weekIndex in
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Calendar")
+                        .font(.system(size: 48, weight: .bold))
+                        .fontDesign(.rounded)
+                    Text(monthYearString)
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(.black.opacity(0.7))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 30)
+                .padding(.vertical, 25)
+                .background(Color(red: 0.7, green: 0.95, blue: 0.8))
+                
+                
+                VStack(spacing: 0) {
+                    
                     HStack(spacing: 0) {
-                        ForEach(0..<7) { dayIndex in
-                            let day = daysInMonth[weekIndex][dayIndex]
-                            CalendarDayCell(
-                                day: day,
-                                emoji: day.flatMap { emojiByDay[$0] }
-                            )
+                        ForEach(daysOfWeek, id: \.self) { day in
+                            Text(day)
+                                .font(.system(size: 16, weight: .semibold))
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 50)
+                                .background(Color.white)
+                                .overlay(
+                                    Rectangle()
+                                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 2)
+                                )
+                        }
+                    }
+                    
+                    ForEach(0..<daysInMonth.count, id: \.self) { weekIndex in
+                        HStack(spacing: 0) {
+                            ForEach(0..<7) { dayIndex in
+                                let day = daysInMonth[weekIndex][dayIndex]
+                                CalendarDayCell(
+                                    day: day,
+                                    emoji: day.flatMap { emojiByDay[$0] }
+                                )
+                            }
                         }
                     }
                 }
+                .background(Color.white)
+                .padding(20)
+                
+                Spacer()
             }
-            .background(Color.white)
-            .padding(20)
-            
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(red: 0.95, green: 0.99, blue: 0.97))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(red: 0.95, green: 0.99, blue: 0.97))
     }
 }
 
