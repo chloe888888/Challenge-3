@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		89A1B7DD2ECAAB6600A875BA /* Challenge 3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Challenge 3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCBD65902ECAB6C1003D8753 /* Challenge 3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Challenge 3.app"; path = "/Users/lawuneain/Documents/Challenge-3/build/Debug-iphoneos/Challenge 3.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
