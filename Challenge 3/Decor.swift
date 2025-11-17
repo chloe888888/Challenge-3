@@ -8,11 +8,22 @@
 import SwiftUI
 
 struct Decor: View {
-    @State var decoration1Clicked = false
+    @State var decoration1Clicked = true
     @State var decoration2Clicked = false
     @State var decoration3Clicked = false
     @State var decoration4Clicked = false
-    @State var decoration5Clicked = true
+    @State var decoration5Clicked = false
+    @State var decoration6Clicked = false
+    @State var decoration7Clicked = false
+    @State var decoration8Clicked = false
+    @State var decoration9Clicked = false
+    @State var decoration10Clicked = false
+    @State var decoration11Clicked = false
+    @State var decoration12Clicked = false
+    @State var decoration13Clicked = false
+    @State var decoration14Clicked = false
+    @State var decoration15Clicked = false
+    @State var decoration16Clicked = false
     var body: some View {
         NavigationStack{
             NavigationLink {
@@ -29,10 +40,6 @@ struct Decor: View {
                         Button {
                             print("Button Tapped!")
                             decoration1Clicked = true
-                            
-                            decoration2Clicked = false
-                            decoration3Clicked = false
-                            decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -56,8 +63,6 @@ struct Decor: View {
                             decoration2Clicked = true
                             
                             decoration1Clicked = false
-                            decoration3Clicked = false
-                            decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -83,8 +88,6 @@ struct Decor: View {
                             decoration3Clicked = true
                             
                             decoration1Clicked = false
-                            decoration2Clicked = false
-                            decoration4Clicked = false
                         } label: {
                             
                             VStack {
@@ -105,9 +108,9 @@ struct Decor: View {
                         }
                         Button {
                             print("Button ")
-                            decoration2Clicked = true
+                            decoration4Clicked = true
+                            
                             decoration1Clicked = false
-                            decoration3Clicked = false
                             
                         } label: {
                             
@@ -131,6 +134,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration5Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -151,12 +157,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration6Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -179,6 +182,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration8Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -199,12 +205,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration7Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -227,6 +230,9 @@ struct Decor: View {
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration9Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -247,12 +253,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration10Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -268,13 +271,16 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("100")
+                                    Text("$100")
                                 }
                             }
                     }
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration11Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -295,12 +301,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration12Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -316,13 +319,16 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("150")
+                                    Text("$150")
                                 }
                             }
                     }
                     HStack{
                         Button {
                             print("Button Tapped!")
+                            decoration13Clicked = true
+                            
+                            decoration1Clicked = false
                         } label: {
                             
                             VStack {
@@ -343,12 +349,9 @@ struct Decor: View {
                         }
                             Button {
                                 print("Button Tapped!")
-                                decoration1Clicked = true
+                                decoration14Clicked = true
                                 
-                                decoration2Clicked = false
-                                decoration3Clicked = false
-                                decoration4Clicked = false
-                                decoration5Clicked = true
+                                decoration1Clicked = false
                             } label: {
                                 
                                 VStack {
@@ -364,7 +367,151 @@ struct Decor: View {
                                     }
                                     .clipShape(Circle())
                                     .padding(.horizontal)
-                                    Text("200")
+                                    Text("$200")
+                                }
+                            }
+                    }
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                            decoration15Clicked = true
+                            
+                            decoration1Clicked = false
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor 15")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$200")
+                            }
+                        }
+                            Button {
+                                print("Button Tapped!")
+                                decoration16Clicked = true
+                                
+                                decoration1Clicked = false
+                            } label: {
+
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor 16")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$200")
+                                }
+                            }
+                    }
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor 18")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$200")
+                            }
+                        }
+                            Button {
+                                print("Button Tapped!")
+                                decoration1Clicked = true
+
+                                decoration2Clicked = false
+                                decoration3Clicked = false
+                                decoration4Clicked = false
+                                decoration5Clicked = true
+                            } label: {
+
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor 17")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$300")
+                                }
+                            }
+                    }
+                    HStack{
+                        Button {
+                            print("Button Tapped!")
+                        } label: {
+                            
+                            VStack {
+                                ZStack{
+                                    Color.appAccentGreen
+                                        .frame(maxWidth: .infinity)
+                                        .aspectRatio(1, contentMode: .fit)
+                                        .overlay{
+                                            Image("Decor 19")
+                                                .resizable()
+                                                .scaledToFill()
+                                        }
+                                }
+                                .clipShape(Circle())
+                                .padding(.horizontal)
+                                Text("$250")
+                            }
+                        }
+                            Button {
+                                print("Button Tapped!")
+                                decoration1Clicked = true
+
+                                decoration2Clicked = false
+                                decoration3Clicked = false
+                                decoration4Clicked = false
+                                decoration5Clicked = true
+                            } label: {
+
+                                VStack {
+                                    ZStack{
+                                        Color.appAccentGreen
+                                            .frame(maxWidth: .infinity)
+                                            .aspectRatio(1, contentMode: .fit)
+                                            .overlay{
+                                                Image("Decor 17")
+                                                    .resizable()
+                                                    .scaledToFill()
+                                            }
+                                    }
+                                    .clipShape(Circle())
+                                    .padding(.horizontal)
+                                    Text("$300")
                                 }
                             }
                     }
