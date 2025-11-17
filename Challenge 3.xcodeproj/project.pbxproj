@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		89DA65982EBD9594005E338E /* Challenge 3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "Challenge 3.app"; path = "/Users/chloe/Downloads/Swift Accelarator/Challenge 3/build/Debug-iphoneos/Challenge 3.app"; sourceTree = "<absolute>"; };
+		CCBD65902ECAB6C1003D8753 /* Challenge 3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Challenge 3.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,6 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				89DA659A2EBD9594005E338E /* Challenge 3 */,
+				CCBD65902ECAB6C1003D8753 /* Challenge 3.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,7 +59,7 @@
 			packageProductDependencies = (
 			);
 			productName = "Challenge 3";
-			productReference = 89DA65982EBD9594005E338E /* Challenge 3.app */;
+			productReference = CCBD65902ECAB6C1003D8753 /* Challenge 3.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
