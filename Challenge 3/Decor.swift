@@ -139,7 +139,7 @@ struct Decor: View {
                                         .frame(maxWidth: .infinity)
                                         .aspectRatio(1, contentMode: .fit)
                                         .overlay{
-                                            Image("Decor 5")
+                                            Image("Decor_5")
                                                 .resizable()
                                                 .scaledToFill()
                                         }
@@ -164,7 +164,7 @@ struct Decor: View {
                                             .frame(maxWidth: .infinity)
                                             .aspectRatio(1, contentMode: .fit)
                                             .overlay{
-                                                Image("Decor 6")
+                                                Image("Decor_6")
                                                     .resizable()
                                                     .scaledToFill()
                                             }
