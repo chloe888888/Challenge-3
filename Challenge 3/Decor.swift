@@ -235,14 +235,14 @@ struct Decor: View {
                                         .frame(maxWidth: .infinity)
                                         .aspectRatio(1, contentMode: .fit)
                                         .overlay{
-                                            Image("Decor_9")
+                                            Image("Decor 9")
                                                 .resizable()
                                                 .scaledToFill()
                                         }
                                 }
                                 .clipShape(Circle())
                                 .padding(.horizontal)
-                                Text("$100")
+                                Text("$60")
                             }
                         }
                             Button {
