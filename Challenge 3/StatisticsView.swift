@@ -140,94 +140,54 @@ struct StatisticsView: View {
     // MARK: - UI
 
     var body: some View {
-        ZStack {
-            // background fills behind notch + tab bar
-            Color(red: 0.95, green: 0.99, blue: 0.97)
-                .ignoresSafeArea()
-
-            VStack(spacing: 0) {
-
-                // ===== HEADER =====
-                ZStack(alignment: .bottomLeading) {
-                    Color(red: 0.7, green: 0.95, blue: 0.8)
-                        .ignoresSafeArea(edges: .top)
-
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("STATISTICS:")
-                            .font(.system(size: 36, weight: .bold))
-                            .foregroundColor(.black)
-
-                        Text(monthYearString)
-                            .font(.system(size: 24, weight: .medium))
-                            .foregroundColor(.black.opacity(0.7))
-                    }
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 20)
-                }
-                .frame(height: 160)
-
-                // ===== CONTENT =====
-                VStack(spacing: 30) {
-
-                    // Top jar (dominant emotion) or triangle placeholder
-                    if let top = dominantEmotion {
-                        Image(jarImageName(for: top.category))
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 120, height: 120)
-                            .padding(.top, 30)
-                    } else {
-                        Image(systemName: "triangle")
-                            .font(.system(size: 80))
-                            .foregroundColor(.black.opacity(0.1))
-                            .padding(.top, 30)
-                    }
-
-                    // Stats card
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("STATS")
-                            .font(.system(size: 28, weight: .bold))
-                            .padding(.horizontal, 20)
-                            .padding(.top, 20)
-                            .padding(.bottom, 15)
-
-                        // Main rows
-                        ForEach(monthlyCounts, id: \.category) { item in
-                            StatRow(
-                                label: item.category,
-                                emoji: item.emoji,
-                                count: item.count
-                            )
-                        }
-
-                        // Extra row: most this month
-                        if let top = dominantEmotion {
-                            Divider()
-                                .padding(.vertical, 10)
-
-                            StatRow(
-                                label: "most: \(top.category)",
-                                emoji: top.emoji,
-                                count: top.count
-                            )
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 5)
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
-                    )
-                    .padding(.horizontal, 30)
-                }
-                .padding(.bottom, 32)   // space above the tab bar
-
-                Spacer()
-            }
-        }
-    }
-}
+               VStack(spacing: 0) {
+                   VStack(alignment: .leading, spacing: 16) {
+                       Text("STATISTICS:")
+                           .font(.system(size: 36, weight: .bold))
+                           .foregroundColor(.black)
+                       
+                       Text(monthYearString)
+                           .font(.system(size: 24, weight: .medium))
+                           .foregroundColor(.black.opacity(0.7))
+                   }
+                   .frame(maxWidth: .infinity, alignment: .leading)
+                   .padding(.horizontal, 30)
+                   .padding(.vertical, 25)
+                   .background(Color(red: 0.7, green: 0.95, blue: 0.8))
+                   .padding(.bottom, 10)
+                   
+                   VStack(spacing: 40) {
+                       VStack(alignment: .leading, spacing: 0) {
+                           Text("STATS")
+                               .font(.system(size: 28, weight: .bold))
+                               .padding(.horizontal, 20)
+                               .padding(.top, 20)
+                               .padding(.bottom, 15)
+                           
+                           ForEach(monthlyCounts, id: \.category) { item in
+                               StatRow(
+                                   label: item.category,
+                                   emoji: item.emoji,
+                                   count: item.count
+                               )
+                           }
+                           .padding(.horizontal, 20)
+                           .padding(.bottom, 20)
+                       }
+                       .background(Color.white)
+                       .overlay(
+                           RoundedRectangle(cornerRadius: 12)
+                               .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
+                       )
+                       .padding(.horizontal, 30)
+                   }
+                   
+                   Spacer()
+               }
+               .frame(maxWidth: .infinity, maxHeight: .infinity)
+               .background(Color(red: 0.95, green: 0.99, blue: 0.97))
+           }
+       }
 
 // MARK: - Row view
 

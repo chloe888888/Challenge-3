@@ -30,14 +30,6 @@ struct Decor: View {
     @State var decoration20Clicked = false
     var body: some View {
         NavigationStack{
-            NavigationLink {
-                Inventory()
-            } label: {
-                Text ("Inventory ->")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-            }
             ScrollView {
                 VStack {
                     HStack{
