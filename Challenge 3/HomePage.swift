@@ -223,13 +223,13 @@ struct HomePage: View {
                                     )
                                     .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
                             } else if decorShop.decoration4Clicked {
-                                Image("Decor_2.3")
+                                Image("Decor_3.2")
                                     .resizable()
                                     .frame(width: 140, height: 140)
                                     .offset(x: -120, y: 30)
-                                Image("Decor_3.2")
-                            } else if decorShop.decoration5Clicked {
                                 Image("Decor_3.3")
+                            } else if decorShop.decoration5Clicked {
+                                Image("Decor_4.2")
                                     .resizable()
                                     .position(
                                         x: geometry.size.height * 0.78,
