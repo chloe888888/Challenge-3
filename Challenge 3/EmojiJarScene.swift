@@ -26,7 +26,7 @@ final class EmojiJarScene: SKScene {
     private let flatFraction: CGFloat = 0.60
 
     
-    private let emojiRadius: CGFloat = 28
+    private let emojiRadius: CGFloat = 25
     private var  emojiFontSize: CGFloat { emojiRadius / 0.52 }
 
     
@@ -161,9 +161,9 @@ final class EmojiJarScene: SKScene {
 
         
         addRimGuide(from: CGPoint(x: cx - mouthHalf, y: topY),
-                    to:   CGPoint(x: cx - mouthHalf + 10, y: topY - 10))
+                    to:   CGPoint(x: cx - mouthHalf - 12, y: topY + 12))
         addRimGuide(from: CGPoint(x: cx + mouthHalf, y: topY),
-                    to:   CGPoint(x: cx + mouthHalf - 10, y: topY - 10))
+                    to:   CGPoint(x: cx + mouthHalf + 12, y: topY + 12))
     }
 
     private func addRimGuide(from a: CGPoint, to b: CGPoint) {
@@ -189,7 +189,7 @@ final class EmojiJarScene: SKScene {
         label.zPosition = 10
 
         let cx = size.width / 2
-        let band = max(4, mouthHalf - emojiRadius + 12)
+        let band = max(4, (mouthHalf - emojiRadius) * 0.2)
         let spawnX = cx + CGFloat.random(in: -band...band)
         let spawnY = topY + emojiRadius + 6
         label.position = CGPoint(x: spawnX, y: spawnY)

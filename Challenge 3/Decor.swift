@@ -7,519 +7,227 @@
 
 import SwiftUI
 
+struct Decoration: Identifiable {
+    let id: Int
+    let imageName: String
+    let price: Int
+}
+
+private let allDecorations: [Decoration] = [
+    .init(id: 1,  imageName: "Decor_1.3", price: 10),
+    .init(id: 2,  imageName: "Decor_2",   price: 10),
+    .init(id: 3,  imageName: "Decor_3",   price: 20),
+    .init(id: 4,  imageName: "Decor_4",   price: 20),
+    .init(id: 5,  imageName: "Decor_5",   price: 20),
+    .init(id: 6,  imageName: "Decor_6",   price: 20),
+    .init(id: 7,  imageName: "Decor_7",   price: 50),
+    .init(id: 8,  imageName: "Decor_8",   price: 50),
+    .init(id: 9,  imageName: "Decor 9",   price: 60),
+    .init(id: 10, imageName: "Decor 10",  price: 100),
+    .init(id: 11, imageName: "Decor 11",  price: 150),
+    .init(id: 12, imageName: "Decor 12",  price: 150),
+    .init(id: 13, imageName: "Decor 13",  price: 200),
+    .init(id: 14, imageName: "Decor 14",  price: 200),
+    .init(id: 15, imageName: "Decor 15",  price: 200),
+    .init(id: 16, imageName: "Decor 16",  price: 200),
+    .init(id: 17, imageName: "Decor 17",  price: 300),
+    .init(id: 18, imageName: "Decor 18",  price: 200),
+    .init(id: 19, imageName: "Decor 19",  price: 250),
+    .init(id: 20, imageName: "Decor 20",  price: 350)
+]
+
+enum DecorButtonState {
+    case buy
+    case equip
+    case equipped
+}
+
 struct Decor: View {
-    @State var decoration1Clicked = true
-    @State var decoration2Clicked = false
-    @State var decoration3Clicked = false
-    @State var decoration4Clicked = false
-    @State var decoration5Clicked = false
-    @State var decoration6Clicked = false
-    @State var decoration7Clicked = false
-    @State var decoration8Clicked = false
-    @State var decoration9Clicked = false
-    @State var decoration10Clicked = false
-    @State var decoration11Clicked = false
-    @State var decoration12Clicked = false
-    @State var decoration13Clicked = false
-    @State var decoration14Clicked = false
-    @State var decoration15Clicked = false
-    @State var decoration16Clicked = false
-    @State var decoration17Clicked = false
-    @State var decoration18Clicked = false
-    @State var decoration19Clicked = false
-    @State var decoration20Clicked = false
+    @AppStorage("mojiBucks") private var mojiBucks: Int = 100
+    @AppStorage("selectedDecoration") private var selectedDecoration: Int = 1
+    @AppStorage("ownedDecorations") private var ownedDecorationsRaw: String = "1"   // "1,2,5"
+    
+    private let columns = [
+        GridItem(.flexible(), spacing: 24),
+        GridItem(.flexible(), spacing: 24)
+    ]
+    
     var body: some View {
-        NavigationStack{
-            ScrollView {
-                VStack {
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration1Clicked = true
-                        } label: {
+        NavigationStack {
+            ZStack {
+                Color(red: 0.95, green: 0.99, blue: 0.97)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    ZStack(alignment: .bottomLeading) {
+                        Color.appAccentGreen
+                            .ignoresSafeArea(edges: .top)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Decorations!")
+                                .font(.system(size: 40, weight: .bold))
+                                .foregroundColor(.black)
                             
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                                Image("Decor_1.3")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$10")
-                            }
+                            Text("Jarmoji Store")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.black.opacity(0.7))
+                            
+                            Text("Balance: $\(mojiBucks)")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.black)
                         }
-                        Button {
-                            print("Button ")
-                            decoration2Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor_2")
-                                                .resizable()
-                                                .scaledToFit()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$10")
-                            }
-                        }
+                        .padding(.horizontal, 24)
+                        .padding(.bottom, 18)
                     }
-                    HStack{
-                        Button {
-                            print("Button ")
-                            decoration3Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor_3")
-                                                .resizable()
-                                                .scaledToFit()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$20")
-                            }
-                        }
-                        Button {
-                            print("Button ")
-                            decoration4Clicked = true
-                            
-                            decoration1Clicked = false
-                            
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor_4")
-                                                .resizable()
-                                                .scaledToFit()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$20")
-                            }
-                        }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration5Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor_5")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$20")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration6Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-                                
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor_6")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$20")
-                                }
-                            }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration8Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor_8")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$50")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration7Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-                                
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor_7")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$50")
-                                }
-                            }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration9Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor 9")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$60")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration10Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-                                
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor 10")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$100")
-                                }
-                            }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration11Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor 11")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$150")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration12Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-                                
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor 12")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$150")
-                                }
-                            }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration13Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor 13")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$200")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration14Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-                                
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor 14")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$200")
-                                }
-                            }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration15Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor 15")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$200")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration16Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor 16")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$200")
-                                }
-                            }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration18Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor 18")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$200")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration17Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor 17")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$300")
-                                }
-                            }
-                    }
-                    HStack{
-                        Button {
-                            print("Button Tapped!")
-                            decoration19Clicked = true
-                            
-                            decoration1Clicked = false
-                        } label: {
-                            
-                            VStack {
-                                ZStack{
-                                    Color.appAccentGreen
-                                        .frame(maxWidth: .infinity)
-                                        .aspectRatio(1, contentMode: .fit)
-                                        .overlay{
-                                            Image("Decor 19")
-                                                .resizable()
-                                                .scaledToFill()
-                                        }
-                                }
-                                .clipShape(Circle())
-                                .padding(.horizontal)
-                                Text("$250")
-                            }
-                        }
-                            Button {
-                                print("Button Tapped!")
-                                decoration20Clicked = true
-                                
-                                decoration1Clicked = false
-                            } label: {
-
-                                VStack {
-                                    ZStack{
-                                        Color.appAccentGreen
-                                            .frame(maxWidth: .infinity)
-                                            .aspectRatio(1, contentMode: .fit)
-                                            .overlay{
-                                                Image("Decor 20")
-                                                    .resizable()
-                                                    .scaledToFill()
-                                            }
-                                    }
-                                    .clipShape(Circle())
-                                    .padding(.horizontal)
-                                    Text("$350")
-                                }
-                            }
-                    }
+                    .frame(height: 150)
                     
-                    .navigationBarTitle("Decoration!")
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 24) {
+                            ForEach(allDecorations) { decoration in
+                                let state = buttonState(for: decoration)
+                                
+                                DecorItemCard(
+                                    decoration: decoration,
+                                    state: state,
+                                    onTap: {
+                                        handleTap(on: decoration, state: state)
+                                    }
+                                )
+                            }
+                        }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 24)
+                        .padding(.bottom, 40)
+                    }
                 }
             }
+            .navigationTitle("")
+            .navigationBarHidden(true)
+        }
+    }
+    
+    private func isOwned(_ id: Int) -> Bool {
+        let ids = ownedDecorationsRaw
+            .split(separator: ",")
+            .compactMap { Int($0) }
+        return ids.contains(id)
+    }
+    
+    private func markOwned(_ id: Int) {
+        var set = Set(
+            ownedDecorationsRaw
+                .split(separator: ",")
+                .compactMap { Int($0) }
+        )
+        set.insert(id)
+        let sorted = set.sorted()
+        ownedDecorationsRaw = sorted
+            .map(String.init)
+            .joined(separator: ",")
+    }
+    
+    private func buttonState(for decoration: Decoration) -> DecorButtonState {
+        if decoration.id == selectedDecoration {
+            return .equipped
+        } else if isOwned(decoration.id) {
+            return .equip
+        } else {
+            return .buy
+        }
+    }
+    
+    private func handleTap(on decoration: Decoration, state: DecorButtonState) {
+        switch state {
+        case .buy:
+            guard mojiBucks >= decoration.price else { return }
+            mojiBucks -= decoration.price
+            markOwned(decoration.id)
+            
+        case .equip:
+            selectedDecoration = decoration.id
+            
+        case .equipped:
+            break
         }
     }
 }
 
-
+struct DecorItemCard: View {
+    let decoration: Decoration
+    let state: DecorButtonState
+    let onTap: () -> Void
+    
+    private var buttonTitle: String {
+        switch state {
+        case .buy:      return "Buy"
+        case .equip:    return "Equip"
+        case .equipped: return "Equipped"
+        }
+    }
+    
+    private var buttonColors: (bg: Color, border: Color, text: Color) {
+        switch state {
+        case .buy:
+            return (bg: Color.white,
+                    border: Color.green.opacity(0.8),
+                    text: Color.green)
+        case .equip:
+            return (bg: Color.yellow.opacity(0.15),
+                    border: Color.yellow.opacity(0.5),
+                    text: Color.orange)
+        case .equipped:
+            return (bg: Color.appAccentGreen,
+                    border: Color.appAccentGreen,
+                    text: Color.green)
+        }
+    }
+    
+    var body: some View {
+        VStack(spacing: 10) {
+            ZStack {
+                Circle()
+                    .fill(Color.white)
+                    .overlay(
+                        Circle()
+                            .stroke(Color.appAccentGreen.opacity(0.4), lineWidth: 4)
+                    )
+                    .frame(width: 120, height: 120)
+                
+                Image(decoration.imageName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 90, height: 90)
+            }
+            
+            Text("$\(decoration.price)")
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(.black)
+            
+            Button(action: onTap) {
+                Text(buttonTitle)
+                    .font(.system(size: 18, weight: .semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(buttonColors.bg)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(buttonColors.border, lineWidth: 2)
+                    )
+                    .foregroundColor(buttonColors.text)
+            }
+            .disabled(state == .equipped)
+        }
+        .padding(12)
+        .background(
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.white)
+                .shadow(color: .black.opacity(0.05), radius: 6, x: 0, y: 3)
+        )
+    }
+}
 
 #Preview {
     Decor()
