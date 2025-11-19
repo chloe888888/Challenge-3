@@ -4,9 +4,7 @@
 //
 //  Created by La Wun Eain on 7/11/25.
 //
-
 import SwiftUI
-
 struct ContentView: View {
     var body: some View {
         TabView {
@@ -17,25 +15,21 @@ struct ContentView: View {
                         Text("Home")
                     }
                 }
-
             CalendarView()
                 .tabItem {
                     Image("tab2")
                     Text("Calendar")
                 }
-
             Decor()
                 .tabItem {
                     Image("tab3")
                     Text("Decorations")
                 }
-
             GalleryView()
                     .tabItem {
                     Image("tab4")
                     Text("Gallery")
                 }
-
             StatisticsView(month: Date())
                 .tabItem {
                     Image("tab5")
@@ -44,7 +38,9 @@ struct ContentView: View {
         }
     }
 }
-
 #Preview {
     ContentView()
 }
+
+
+

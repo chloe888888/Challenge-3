@@ -7,57 +7,48 @@
 
 import SwiftUI
 import SwiftData
-
 struct GalleryView: View {
     @Query(sort: \MonthlyJar.month, order: .reverse) private var jars: [MonthlyJar]
-
     @State private var searchText = ""
-
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-
     private func jarImageName(for category: String) -> String {
         switch category {
-        case "happy":     return "jar_happy"
-        case "sad":       return "jar_sad"
-        case "angry":     return "jar_angry"
-        case "love":      return "jar_love"
-        case "calm":      return "jar_calm"
-        case "fear":      return "jar_fear"
-        case "disgusted": return "jar_disgusted"
-        default:          return "jar_happy"
+        case "happy":     return "Jar_Happy"
+        case "sad":       return "Jar_Sad"
+        case "angry":     return "Jar_Angry"
+        case "love":      return "Jar_Love"
+        case "calm":      return "Jar_calm"
+        case "fear":      return "Jar_Fear"
+        case "disgusted": return "Jar_Disgusted"
+        default:          return "Jar_Happy"
         }
     }
-
     private var filteredJars: [MonthlyJar] {
         guard !searchText.isEmpty else { return jars }
         return jars.filter { jar in
             jar.label.lowercased().contains(searchText.lowercased())
         }
     }
-
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(red: 0.95, green: 0.99, blue: 0.97)
                     .ignoresSafeArea()
-
                 VStack(spacing: 0) {
                     // Header
                     ZStack(alignment: .bottomLeading) {
                         Color(red: 0.7, green: 0.95, blue: 0.8)
                             .ignoresSafeArea(edges: .top)
-
                         Text("Gallery of Jar")
                             .font(.system(size: 36, weight: .bold))
                             .padding(.horizontal, 20)
                             .padding(.bottom, 14)
                     }
                     .frame(height: 120)
-
                     // Search + grid card
                     VStack(spacing: 16) {
                         // Search bar
@@ -72,7 +63,6 @@ struct GalleryView: View {
                         )
                         .padding(.horizontal, 16)
                         .padding(.top, 10)
-
                         // Jars grid
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 24) {
@@ -85,7 +75,6 @@ struct GalleryView: View {
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 80, height: 80)
-
                                             Text(jar.label)
                                                 .font(.system(size: 12, weight: .medium))
                                                 .foregroundColor(.black)
@@ -105,15 +94,14 @@ struct GalleryView: View {
                     )
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
-
                     Spacer()
                 }
             }
         }
     }
 }
-
 #Preview {
     GalleryView()
         .modelContainer(for: [MoodEntry.self, MonthlyJar.self], inMemory: true)
 }
+

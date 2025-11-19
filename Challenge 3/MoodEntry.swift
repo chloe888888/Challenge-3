@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftData
-
 @Model
 class MoodEntry {
     var date: Date
@@ -18,3 +17,5 @@ class MoodEntry {
         self.emoji = emoji
     }
 }
+
+
