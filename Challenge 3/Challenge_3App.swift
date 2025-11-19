@@ -14,7 +14,6 @@ struct Challenge_3App: App {
         WindowGroup {
             ContentView()
         }
-
-        .modelContainer(for: MoodEntry.self)
+        .modelContainer(for: [MoodEntry.self, MonthlyJar.self])
     }
 }

@@ -14,7 +14,12 @@ struct CalendarView: View {
 
     let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     let calendar = Calendar.current
-    let currentDate = Date()
+    @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
+
+    var currentDate: Date {
+        Date(timeIntervalSince1970: demoCurrentDate)
+    }
+
     
     private var emojiByDay: [Int: String] {
         var dict: [Int: String] = [:]

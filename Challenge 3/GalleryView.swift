@@ -10,15 +10,15 @@ import SwiftData
 
 struct GalleryView: View {
     @Query(sort: \MonthlyJar.month, order: .reverse) private var jars: [MonthlyJar]
-
+    
     @State private var searchText = ""
-
+    
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-
+    
     private func jarImageName(for category: String) -> String {
         switch category {
         case "happy":     return "jar_happy"
@@ -31,36 +31,34 @@ struct GalleryView: View {
         default:          return "jar_happy"
         }
     }
-
+    
     private var filteredJars: [MonthlyJar] {
         guard !searchText.isEmpty else { return jars }
         return jars.filter { jar in
             jar.label.lowercased().contains(searchText.lowercased())
         }
     }
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
                 Color(red: 0.95, green: 0.99, blue: 0.97)
                     .ignoresSafeArea()
-
+                
                 VStack(spacing: 0) {
-                    // Header
                     ZStack(alignment: .bottomLeading) {
                         Color(red: 0.7, green: 0.95, blue: 0.8)
                             .ignoresSafeArea(edges: .top)
-
+                        
                         Text("Gallery of Jar")
                             .font(.system(size: 36, weight: .bold))
                             .padding(.horizontal, 20)
                             .padding(.bottom, 14)
                     }
                     .frame(height: 120)
-
-                    // Search + grid card
+                    
                     VStack(spacing: 16) {
-                        // Search bar
+                        
                         HStack {
                             Image(systemName: "magnifyingglass")
                             TextField("Search…", text: $searchText)
@@ -72,24 +70,34 @@ struct GalleryView: View {
                         )
                         .padding(.horizontal, 16)
                         .padding(.top, 10)
-
-                        // Jars grid
+                        
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 24) {
                                 ForEach(filteredJars) { jar in
                                     NavigationLink {
                                         StatisticsView(month: jar.month)
                                     } label: {
-                                        VStack(spacing: 6) {
-                                            Image(jarImageName(for: jar.dominantCategory))
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 80, height: 80)
+                                        GeometryReader { geometry in
+                                            VStack(spacing: 6) {
+                                                ZStack {
+                                                    Image(jarImageName(for: jar.dominantCategory))
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .frame(width: 150, height: 150)
+                                                        .frame(width: geometry.size.width * 0.55)
+                                                        .offset(y: -geometry.size.height * 0.35)
 
-                                            Text(jar.label)
-                                                .font(.system(size: 12, weight: .medium))
-                                                .foregroundColor(.black)
+                                                    Text(jar.label)
+                                                        .font(.system(size: 20, weight: .medium))
+                                                        .foregroundColor(.black)
+                                                        .offset(y: geometry.size.height * 0.10)
+                                                }
+                                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                            }
                                         }
+                                        .frame(height: 170)   
+
+                                        
                                     }
                                     .buttonStyle(.plain)
                                 }
@@ -105,7 +113,7 @@ struct GalleryView: View {
                     )
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
-
+                    
                     Spacer()
                 }
             }

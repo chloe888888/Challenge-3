@@ -11,14 +11,12 @@ import SwiftData
 @Model
 final class MonthlyJar {
     var month: Date
-
+    var label: String
     var dominantCategory: String
 
-    var label: String
-
-    init(month: Date, dominantCategory: String, label: String) {
+    init(month: Date, label: String, dominantCategory: String) {
         self.month = month
-        self.dominantCategory = dominantCategory
         self.label = label
+        self.dominantCategory = dominantCategory
     }
 }

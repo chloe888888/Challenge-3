@@ -10,38 +10,41 @@ import Combine
 import SpriteKit
 import SwiftData
 
-// All face emojis used in the picker
 private let faceEmojis: [String] = [
     // 1️⃣ Happy
-    "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇",
+    "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡",
     
     // 2️⃣ Sad
-    "😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕",
+    "😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕","😶‍🌫️",
     
     // 3️⃣ Angry
-    "😤","😠","😡","🤬","😒","🙄","😏","🤨","😑","😐","🫤","😬","🫨",
+    "😤","😠","😡","🤬","😒","🙄","🤨","😑","😐","🫤","😬","🫨",
     
     // 4️⃣ Love
     "🥰","😍","🤩","😘","😗","☺️","😙","😚","🥲","🤗","😋",
-    "😛","😝","😜","🤪","🤠","😎","🥸","🤓","🧐",
+    "😛","😝","😜","🤪","🥸","🤓","🧐",
     
     // 5️⃣ Calm
     "😶","😴","😪","😮‍💨","😌","🫥",
     
     // 6️⃣ Fear
-    "😱","😨","😰","😳","😵","😵‍💫","😶‍🌫️","🫢","🫣","🤐","🤫",
+    "😱","😨","😰","😳","😵","😵‍💫","🫢","🫣","🤐","🤫",
     
     // 7️⃣ Disgusted
-    "🤢","🤮","🤧","💩","🤥","🤡"
+    "🤢","🤮","🤧","🤥",
 ]
 
 struct HomePage: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     
-    @State private var currentDate = Date()
-    @AppStorage("mojiBucks") private var mojiBucks: Int = 100
-    private let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
+    @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
+    @AppStorage("jarBucks") private var jarBucks: Int = 100
+
+    private var currentDate: Date {
+        Date(timeIntervalSince1970: demoCurrentDate)
+    }
+
     
     @State private var selectedEmoji: String = ""
     @State private var showEmojiPicker = false
@@ -67,11 +70,16 @@ struct HomePage: View {
         jarScene.clearAll()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            for entry in entries {
+            let monthEntries = entries.filter {
+                calendar.isDate($0.date, equalTo: currentDate, toGranularity: .month) &&
+                calendar.isDate($0.date, equalTo: currentDate, toGranularity: .year)
+            }
+            
+            for entry in monthEntries {
                 jarScene.dropEmoji(entry.emoji)
             }
             
-            if let todayEntry = entries.first(where: {
+            if let todayEntry = monthEntries.first(where: {
                 calendar.isDate($0.date, inSameDayAs: currentDate)
             }) {
                 hasDroppedToday = true
@@ -82,7 +90,7 @@ struct HomePage: View {
             }
         }
     }
-    
+
     var body: some View {
         ZStack(alignment: .top) {
             Color.white.ignoresSafeArea()
@@ -105,7 +113,7 @@ struct HomePage: View {
                         
                         Spacer()
                         
-                        Text("$\(mojiBucks)")
+                        Text("$\(jarBucks)")
                             .font(.system(size: 24, weight: .medium))
                             .padding(.horizontal, 20)
                             .padding(.vertical, 10)
@@ -387,6 +395,8 @@ struct HomePage: View {
                         modelContext.insert(entry)
                         try? modelContext.save()
                         
+                        jarBucks += 5
+                        
                         jarScene.dropEmoji(selectedEmoji)
                         hasDroppedToday = true
                     } label: {
@@ -407,11 +417,13 @@ struct HomePage: View {
             }
             .interactiveDismissDisabled(true)
         }
-        .onReceive(timer) { _ in
-            currentDate = Date()
-        }
         .onAppear {
-            currentDate = Date()
+            restoreJarFromHistory()
+        }
+        .onChange(of: entries) { _ in
+            restoreJarFromHistory()
+        }
+        .onChange(of: demoCurrentDate) { _ in
             restoreJarFromHistory()
         }
     }

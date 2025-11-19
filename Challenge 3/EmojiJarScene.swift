@@ -20,7 +20,7 @@ final class EmojiJarScene: SKScene {
     private let mouthWidthFactor: CGFloat = 0.90
     private let neckDrop: CGFloat       = 16
     private let shoulderDrop: CGFloat   = 28
-    private let shoulderCurveOut: CGFloat = 34
+    private let shoulderCurveOut: CGFloat = 52
 
     
     private let flatFraction: CGFloat = 0.60
@@ -161,9 +161,10 @@ final class EmojiJarScene: SKScene {
 
         
         addRimGuide(from: CGPoint(x: cx - mouthHalf, y: topY),
-                    to:   CGPoint(x: cx - mouthHalf - 12, y: topY + 12))
+                    to:   CGPoint(x: cx - mouthHalf - 20, y: topY + 20))
         addRimGuide(from: CGPoint(x: cx + mouthHalf, y: topY),
-                    to:   CGPoint(x: cx + mouthHalf + 12, y: topY + 12))
+                    to:   CGPoint(x: cx + mouthHalf + 20, y: topY + 20))
+    
     }
 
     private func addRimGuide(from a: CGPoint, to b: CGPoint) {
@@ -189,9 +190,9 @@ final class EmojiJarScene: SKScene {
         label.zPosition = 10
 
         let cx = size.width / 2
-        let band = max(4, (mouthHalf - emojiRadius) * 0.2)
+        let band = max(4, (mouthHalf - emojiRadius) * 0.08)
         let spawnX = cx + CGFloat.random(in: -band...band)
-        let spawnY = topY + emojiRadius + 6
+        let spawnY = topY - emojiRadius - 4
         label.position = CGPoint(x: spawnX, y: spawnY)
         addChild(label)
 
@@ -202,7 +203,9 @@ final class EmojiJarScene: SKScene {
         label.physicsBody?.linearDamping = ballLinDamp
         label.physicsBody?.angularDamping = ballAngDamp
 
-        label.physicsBody?.applyImpulse(CGVector(dx: CGFloat.random(in: -2...2), dy: -1))
+        label.physicsBody?.applyImpulse(
+            CGVector(dx: CGFloat.random(in: -0.3...0.3), dy: -0.5)
+        )
     }
 
     func clearAll() {
