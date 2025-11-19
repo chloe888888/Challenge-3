@@ -33,7 +33,8 @@ private let allDecorations: [Decoration] = [
     .init(id: 17, imageName: "Decor 17",  price: 0),
     .init(id: 18, imageName: "Decor 18",  price: 0),
     .init(id: 19, imageName: "Decor 19",  price: 0),
-    .init(id: 20, imageName: "Decor 20",  price: 0)
+    .init(id: 20, imageName: "Decor 20",  price: 0),
+    .init(id: 21, imageName: "Decor 21",  price: 0)
 ]
 
 enum DecorButtonState {

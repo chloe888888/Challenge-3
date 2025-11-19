@@ -344,6 +344,14 @@ struct HomePage: View {
                                     y: geometry.size.height * 0.76
                                 )
                                 .frame(maxWidth: .maximum(120, 120), maxHeight: .maximum(130, 130))
+                        case 21:
+                            Image("Decor 21")
+                                .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.52,
+                                    y: geometry.size.height * 0.72
+                                )
+                                .frame(maxWidth: .maximum(240, 240), maxHeight: .maximum(230, 230))
                         default:
                             EmptyView()
                         }
