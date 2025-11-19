@@ -282,18 +282,43 @@ struct HomePage: View {
                         case 16:
                             Image("Decor 16")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.25,
+                                    y: geometry.size.height * 0.74
+                                )
+                                .frame(maxWidth: .maximum(160, 160), maxHeight: .maximum(170, 170))
                         case 17:
                             Image("Decor 17")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.86,
+                                    y: geometry.size.height *  0.32
+                                )
+                                .frame(maxWidth: .maximum(140, 140), maxHeight: .maximum(150, 150))
                         case 18:
                             Image("Decor 18")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.74,
+                                    y: geometry.size.height *  0.74
+                                )
+                                .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(170, 170))
                         case 19:
                             Image("Decor 19")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.76,
+                                    y: geometry.size.height *  0.74
+                                )
+                                .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(170, 170))
                         case 20:
                             Image("Decor 20")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.25,
+                                    y: geometry.size.height * 0.76
+                                )
+                                .frame(maxWidth: .maximum(120, 120), maxHeight: .maximum(130, 130))
                         default:
                             EmptyView()
                         }
