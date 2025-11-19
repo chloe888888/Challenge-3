@@ -145,7 +145,7 @@ struct StatisticsView: View {
                     .padding(.horizontal, 20)
 
                     if let best = dominantEmotion {
-                        StatRow(label: "appears most",
+                        StatRow(label: "appears most: \(best.category)",
                                 emoji: best.emoji,
                                 count: best.count)
                             .padding(.horizontal, 20)
