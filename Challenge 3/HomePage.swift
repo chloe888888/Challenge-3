@@ -222,8 +222,8 @@ struct HomePage: View {
                             Image("Decor_7.2")
                                 .resizable()
                                 .position(
-                                    x: geometry.size.width * 0.86,
-                                    y: geometry.size.height * 0.46
+                                    x: geometry.size.width * 0.87,
+                                    y: geometry.size.height * 0.48
                                 )
                                 .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
                             Image("Decor_7.3")
@@ -267,18 +267,43 @@ struct HomePage: View {
                         case 11:
                             Image("Decor 11")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.23,
+                                    y: geometry.size.height * 0.35
+                                )
+                                .frame(maxWidth: .maximum(100, 100), maxHeight: .maximum(100, 100))
                         case 12:
                             Image("Decor 12")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.23,
+                                    y: geometry.size.height * 0.65
+                                )
+                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
                         case 13:
                             Image("Decor 13")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.50,
+                                    y: geometry.size.height * 0.84
+                                )
+                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
                         case 14:
                             Image("Decor 14")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.78,
+                                    y: geometry.size.height * 0.33
+                                )
+                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
                         case 15:
                             Image("Decor 15")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.20,
+                                    y: geometry.size.height * 0.72
+                                )
+                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
                         case 16:
                             Image("Decor 16")
                                 .resizable()
