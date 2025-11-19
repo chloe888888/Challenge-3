@@ -14,26 +14,26 @@ struct Decoration: Identifiable {
 }
 
 private let allDecorations: [Decoration] = [
-    .init(id: 1,  imageName: "Decor_1.3", price: 10),
-    .init(id: 2,  imageName: "Decor_2",   price: 10),
-    .init(id: 3,  imageName: "Decor_3",   price: 20),
-    .init(id: 4,  imageName: "Decor_4",   price: 20),
-    .init(id: 5,  imageName: "Decor_5",   price: 20),
-    .init(id: 6,  imageName: "Decor_6",   price: 20),
-    .init(id: 7,  imageName: "Decor_7",   price: 50),
-    .init(id: 8,  imageName: "Decor_8",   price: 50),
-    .init(id: 9,  imageName: "Decor 9",   price: 60),
-    .init(id: 10, imageName: "Decor 10",  price: 100),
-    .init(id: 11, imageName: "Decor 11",  price: 150),
-    .init(id: 12, imageName: "Decor 12",  price: 150),
-    .init(id: 13, imageName: "Decor 13",  price: 200),
-    .init(id: 14, imageName: "Decor 14",  price: 200),
-    .init(id: 15, imageName: "Decor 15",  price: 200),
-    .init(id: 16, imageName: "Decor 16",  price: 200),
-    .init(id: 17, imageName: "Decor 17",  price: 300),
-    .init(id: 18, imageName: "Decor 18",  price: 200),
-    .init(id: 19, imageName: "Decor 19",  price: 250),
-    .init(id: 20, imageName: "Decor 20",  price: 350)
+    .init(id: 1,  imageName: "Decor_1.3", price: 0),
+    .init(id: 2,  imageName: "Decor_2",   price: 0),
+    .init(id: 3,  imageName: "Decor_3",   price: 0),
+    .init(id: 4,  imageName: "Decor_4",   price: 0),
+    .init(id: 5,  imageName: "Decor_5",   price: 0),
+    .init(id: 6,  imageName: "Decor_6",   price: 0),
+    .init(id: 7,  imageName: "Decor_7",   price: 0),
+    .init(id: 8,  imageName: "Decor_8",   price: 0),
+    .init(id: 9,  imageName: "Decor 9",   price: 0),
+    .init(id: 10, imageName: "Decor 10",  price: 0),
+    .init(id: 11, imageName: "Decor 11",  price: 0),
+    .init(id: 12, imageName: "Decor 12",  price: 0),
+    .init(id: 13, imageName: "Decor 13",  price: 0),
+    .init(id: 14, imageName: "Decor 14",  price: 0),
+    .init(id: 15, imageName: "Decor 15",  price: 0),
+    .init(id: 16, imageName: "Decor 16",  price: 0),
+    .init(id: 17, imageName: "Decor 17",  price: 0),
+    .init(id: 18, imageName: "Decor 18",  price: 0),
+    .init(id: 19, imageName: "Decor 19",  price: 0),
+    .init(id: 20, imageName: "Decor 20",  price: 0)
 ]
 
 enum DecorButtonState {

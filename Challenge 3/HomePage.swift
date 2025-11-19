@@ -259,6 +259,11 @@ struct HomePage: View {
                         case 10:
                             Image("Decor 10")
                                 .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.80,
+                                    y: geometry.size.height * 0.75
+                                )
+                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
                         case 11:
                             Image("Decor 11")
                                 .resizable()
