@@ -1,9 +1,4 @@
-//
-//  MoodEntry.swift
-//  Challenge 3
-//
-//  Created by Shivani on 14/11/25.
-//
+
 
 import Foundation
 import SwiftData

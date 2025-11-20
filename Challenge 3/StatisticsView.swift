@@ -1,228 +1,183 @@
+//
+//  StatisticsView.swift
+//  Challenge 3
+//
+//  Created by La Wun Eain on 18/11/25.
+//
+
 import SwiftUI
 import SwiftData
 
 struct StatisticsView: View {
+
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     @Environment(\.modelContext) private var modelContext
-    @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
+
 
     @State var month: Date
-    var showNextMonthButton: Bool = true      // 👈 NEW
+    let followDemoDate: Bool
 
-    // happy
-    private let happyEmojis: Set<String> = [
-        "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡","😋","😛","😝","😜","🤪","🥸","🤓"
-    ]
-    // sad
-    private let sadEmojis: Set<String> = [
-        "😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕","😶‍🌫️"
-    ]
-    // angry
-    private let angryEmojis: Set<String> = [
-        "😤","😠","😡","🤬","😒","🙄","🤨","😑","😐","🫤"
-    ]
-    // love
-    private let loveEmojis: Set<String> = [
-        "🥰","😍","🤩","😘","😗","☺️","😙","😚","🥲","🤗"
-    ]
-    // calm
-    private let calmEmojis: Set<String> = [
-        "😶","😴","😪","😮‍💨","😌","🫥",
-    ]
-    // fear
-    private let fearEmojis: Set<String> = [
-        "😱","😨","😰","😳","😵","😵‍💫","🫢","🫣","🤐","🤫","🫨"
-    ]
-    // disgusted
-    private let disgustedEmojis: Set<String> = [
-        "🤢","🤮","🤧","🤥","🧐",
-    ]
+    @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
 
-    // MARK: - Stats for this month
-    private var monthlyCounts: [(category: String, count: Int, emoji: String)] {
-        let calendar = Calendar.current
-        let monthEntries = entries.filter {
-            calendar.isDate($0.date, equalTo: month, toGranularity: .month) &&
-            calendar.isDate($0.date, equalTo: month, toGranularity: .year)
+    private var calendar: Calendar { Calendar.current }
+
+
+    private var demoMonthStart: Date {
+        let d = Date(timeIntervalSince1970: demoCurrentDate)
+        return calendar.date(from: calendar.dateComponents([.year, .month], from: d)) ?? d
+    }
+
+    private var previousDemoMonthStart: Date {
+        calendar.date(byAdding: .month, value: -1, to: demoMonthStart)!
+    }
+
+    private var currentMonthStart: Date {
+        calendar.date(from: calendar.dateComponents([.year, .month], from: month)) ?? month
+    }
+
+    private var monthTitle: String {
+        let f = DateFormatter()
+        f.dateFormat = "MMM yyyy"
+        return f.string(from: currentMonthStart).uppercased()
+    }
+
+
+    private var canGoLeft: Bool {
+        currentMonthStart > previousDemoMonthStart
+    }
+
+    private var canGoRight: Bool {
+        currentMonthStart < demoMonthStart
+    }
+
+    private func goLeft() {
+        guard canGoLeft else { return }
+        if let newMonth = calendar.date(byAdding: .month, value: -1, to: currentMonthStart) {
+            month = newMonth
         }
-        var counts: [String: Int] = [
-            "happy": 0,
-            "sad": 0,
-            "angry": 0,
-            "love": 0,
-            "calm": 0,
-            "fear": 0,
-            "disgusted": 0
-        ]
+    }
+
+    private func goRight() {
+        guard canGoRight else { return }
+        if let newMonth = calendar.date(byAdding: .month, value: 1, to: currentMonthStart) {
+            month = newMonth
+        }
+    }
+
+    private func syncIfNeeded() {
+        guard followDemoDate else { return }
+        let demo = demoMonthStart
+        if !calendar.isDate(demo, equalTo: month, toGranularity: .month) {
+            month = demo
+        }
+    }
+
+
+    private var monthEntries: [MoodEntry] {
+        entries.filter {
+            calendar.isDate($0.date, equalTo: currentMonthStart, toGranularity: .month)
+        }
+    }
+
+    private let groups: [String: Set<String>] = [
+        "happy": ["😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡"],
+        "sad": ["😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕","😶‍🌫️"],
+        "angry": ["😤","😠","😡","🤬","😒","🙄","🤨","😑","😐","🫤","😬","🫨"],
+        "love": ["🥰","😍","🤩","😘","😗","☺️","😙","😚","🥲","🤗","😋","😛","😝","😜","🤪","🥸","🤓","🧐"],
+        "calm": ["😶","😴","😪","😮‍💨","😌","🫥","😑","😐","🫤"],
+        "fear": ["😱","😨","😰","😳","😵","😵‍💫","🫢","🫣","🤐","🤫"],
+        "disgusted": ["🤢","🤮","🤧","🤥"]
+    ]
+
+    private var counts: [String: Int] {
+        var c = ["happy":0,"sad":0,"angry":0,"love":0,"calm":0,"fear":0,"disgusted":0]
+
         for entry in monthEntries {
-            let emoji = entry.emoji
-            if happyEmojis.contains(emoji) {
-                counts["happy", default: 0] += 1
-            } else if sadEmojis.contains(emoji) {
-                counts["sad", default: 0] += 1
-            } else if angryEmojis.contains(emoji) {
-                counts["angry", default: 0] += 1
-            } else if loveEmojis.contains(emoji) {
-                counts["love", default: 0] += 1
-            } else if calmEmojis.contains(emoji) {
-                counts["calm", default: 0] += 1
-            } else if fearEmojis.contains(emoji) {
-                counts["fear", default: 0] += 1
-            } else if disgustedEmojis.contains(emoji) {
-                counts["disgusted", default: 0] += 1
+            for (cat, set) in groups {
+                if set.contains(entry.emoji) { c[cat]! += 1 }
             }
         }
-        return [
-            ("happy",     counts["happy"]!,     "😊"),
-            ("sad",       counts["sad"]!,       "😢"),
-            ("angry",     counts["angry"]!,     "😠"),
-            ("love",      counts["love"]!,      "🥰"),
-            ("calm",      counts["calm"]!,      "😌"),
-            ("fear",      counts["fear"]!,      "😨"),
-            ("disgusted", counts["disgusted"]!, "🤢")
+        return c
+    }
+
+    private var dominant: (String, Int, String)? {
+        let icons: [String: String] = [
+            "happy":"😊","sad":"😢","angry":"😠","love":"🥰",
+            "calm":"😌","fear":"😨","disgusted":"🤢"
         ]
-    }
 
-    private var dominantEmotion: (category: String, count: Int, emoji: String)? {
-        guard let best = monthlyCounts.max(by: { $0.count < $1.count }),
-              best.count > 0 else {
-            return nil
+        let best = counts.max(by: {$0.value < $1.value})
+        if let (category, count) = best, count > 0 {
+            return (category, count, icons[category]!)
         }
-        return best
+        return nil
     }
 
-    private var monthYearString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMM yyyy"
-        return formatter.string(from: month).uppercased()
-    }
-
-    // MARK: - Helpers
-
-    private func saveCurrentMonthJarIfNeeded() {
-        guard let best = dominantEmotion else { return }
-
-        let calendar = Calendar.current
-        let monthStart = calendar.date(
-            from: calendar.dateComponents([.year, .month], from: month)
-        ) ?? month
-
-        // avoid duplicate MonthlyJar for the same month
-        let descriptor = FetchDescriptor<MonthlyJar>()
-        if let existing = try? modelContext.fetch(descriptor).first(
-            where: { calendar.isDate($0.month, equalTo: monthStart, toGranularity: .month) }
-        ) {
-            _ = existing
-            return
-        }
-        let jar = MonthlyJar(
-            month: monthStart,
-            label: monthYearString,
-            dominantCategory: best.category
-        )
-        modelContext.insert(jar)
-        try? modelContext.save()
-    }
-
-    private func goToNextMonth() {
-        let calendar = Calendar.current
-        
-        if let next = calendar.date(byAdding: .month, value: 1, to: month),
-           let startOfNext = calendar.date(from: calendar.dateComponents([.year, .month], from: next)) {
-            
-            month = startOfNext
-            demoCurrentDate = startOfNext.timeIntervalSince1970
-        }
-    }
-
-    // MARK: - UI
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Header
-                VStack(alignment: .leading, spacing: 16) {
-                    Text(monthYearString)
-                        .font(.system(size: 24, weight: .medium))
-                        .foregroundColor(.black.opacity(0.6))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 15)
-                        .background(Color(red: 0.7, green: 0.95, blue: 0.8))
-                        .padding(.bottom, 50)
-                }
 
-                // STATS box
-                VStack(spacing: 40) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text("STATS")
-                            .font(.system(size: 28, weight: .bold))
-                            .padding(.horizontal, 20)
-                            .padding(.top, 20)
-                            .padding(.bottom, 15)
-
-                        ForEach(monthlyCounts, id: \.category) { item in
-                            StatRow(label: item.category,
-                                    emoji: item.emoji,
-                                    count: item.count)
-                        }
-                        .padding(.horizontal, 20)
-
-                        if let best = dominantEmotion {
-                            StatRow(label: "Most: \(best.category)",
-                                    emoji: best.emoji,
-                                    count: best.count)
-                            .padding(.horizontal, 20)
-                            .padding(.top, 8)
-                            .padding(.bottom, 20)
-                        } else {
-                            HStack {
-                                Text("Most")
-                                    .font(.system(size: 22))
-                                    .foregroundColor(.gray)
-                                Spacer()
-                                Text("—")
-                                    .font(.system(size: 22))
-                                    .foregroundColor(.gray)
-                            }
-                            .padding(.horizontal, 20)
-                            .padding(.top, 8)
-                            .padding(.bottom, 20)
-                        }
+                HStack {
+                    Button(action: goLeft) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 22, weight: .bold))
                     }
-                    .background(Color.white)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
-                    )
-                    .padding(.horizontal, 30)
-                }
+                    .disabled(!canGoLeft)
+                    .opacity(canGoLeft ? 1 : 0.2)
 
-                // 👇 Only show this when we *want* to navigate months
-                if showNextMonthButton {
-                    Button {
-                        saveCurrentMonthJarIfNeeded()
-                        goToNextMonth()
-                    } label: {
-                        Text("Go to next month")
-                            .font(.system(size: 16, weight: .semibold))
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 8)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color(red: 0.7, green: 0.95, blue: 0.8))
-                            )
-                            .foregroundColor(.black)
+                    Spacer()
+
+                    Text(monthTitle)
+                        .font(.system(size: 26, weight: .semibold))
+
+                    Spacer()
+
+                    Button(action: goRight) {
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 22, weight: .bold))
                     }
-                    .padding(.top, 24)
+                    .disabled(!canGoRight)
+                    .opacity(canGoRight ? 1 : 0.2)
                 }
+                .padding(.horizontal, 32)
+                .padding(.vertical, 14)
+                .background(Color(red: 0.7, green: 0.95, blue: 0.8))
+
+                Spacer()
+
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("STATS")
+                        .font(.system(size: 28, weight: .bold))
+                        .padding(.bottom, 4)
+
+                    StatRow(label: "happy", emoji: "😊", count: counts["happy"]!)
+                    StatRow(label: "sad", emoji: "😢", count: counts["sad"]!)
+                    StatRow(label: "angry", emoji: "😠", count: counts["angry"]!)
+                    StatRow(label: "love", emoji: "🥰", count: counts["love"]!)
+                    StatRow(label: "calm", emoji: "😌", count: counts["calm"]!)
+                    StatRow(label: "fear", emoji: "😨", count: counts["fear"]!)
+                    StatRow(label: "disgusted", emoji: "🤢", count: counts["disgusted"]!)
+
+                    if let best = dominant {
+                        StatRow(label: "Most: \(best.0)", emoji: best.2, count: best.1)
+                            .padding(.top, 6)
+                    }
+                }
+                .padding(20)
+                .background(Color.white)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
+                )
+                .padding(.horizontal, 32)
 
                 Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(red: 0.95, green: 0.99, blue: 0.97))
-            .navigationBarTitle("Statistics")
         }
+        .onAppear { syncIfNeeded() }
+        .onChange(of: demoCurrentDate) { _ in syncIfNeeded() }
     }
 }
 
@@ -230,24 +185,20 @@ struct StatRow: View {
     let label: String
     let emoji: String
     let count: Int
+
     var body: some View {
-        HStack(spacing: 12) {
+        HStack {
             Text(label)
-                .font(.system(size: 22, weight: .regular))
+                .font(.system(size: 22))
                 .frame(width: 150, alignment: .leading)
+
             Rectangle()
                 .fill(Color.gray.opacity(0.3))
                 .frame(height: 2)
-                .frame(maxWidth: .infinity)
-            Text("\(count)")
-                .font(.system(size: 26, weight: .bold))
-                .frame(width: 40, alignment: .trailing)
-        }
-        .padding(.vertical, 8)
-    }
-}
 
-#Preview {
-    StatisticsView(month: Date())
-        .modelContainer(for: [MoodEntry.self, MonthlyJar.self], inMemory: true)
+            Text("\(count)")
+                .font(.system(size: 24, weight: .bold))
+                .frame(width: 40)
+        }
+    }
 }

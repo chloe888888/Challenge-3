@@ -1,9 +1,4 @@
-//
-//  Challenge_3App.swift
-//  Challenge 3
-//
-//  Created by Chloe Lin on 7/11/25.
-//
+
 
 import SwiftUI
 import SwiftData
