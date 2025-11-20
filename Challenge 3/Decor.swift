@@ -70,6 +70,7 @@ struct Decor: View {
                     .foregroundColor(.black.opacity(0.7))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20)
+                    .padding(.vertical, 5)
                     
             }
             .background(Color(red: 0.7, green: 0.95, blue: 0.8))
@@ -94,7 +95,6 @@ struct Decor: View {
                 }
             }
             .navigationTitle("Decorations")
-                .navigationBarTitleDisplayMode(.inline)
                 .toolbarBackground(.hidden, for: .navigationBar)
         }
 
