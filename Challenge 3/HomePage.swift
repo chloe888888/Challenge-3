@@ -38,7 +38,7 @@ struct HomePage: View {
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
-    @AppStorage("jarBucks") private var jarBucks: Int = 100
+    @AppStorage("mojiBucks") private var mojiBucks: Int = 100
     private var currentDate: Date {
         Date(timeIntervalSince1970: demoCurrentDate)
     }
@@ -109,7 +109,7 @@ struct HomePage: View {
                         
                         Spacer()
                         
-                        Text("$\(jarBucks)")
+                        Text("$\(mojiBucks)")
                             .font(.system(size: 24, weight: .medium))
                             .padding(.horizontal, 20)
                             .padding(.vertical, 10)
