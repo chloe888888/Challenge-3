@@ -43,14 +43,11 @@ struct GalleryView: View {
                     ZStack(alignment: .bottomLeading) {
                         Color(red: 0.7, green: 0.95, blue: 0.8)
                             .ignoresSafeArea(edges: .top)
-                        Text("Gallery of Jar")
-                            .font(.system(size: 36, weight: .bold))
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, 14)
+                            .padding(.bottom, 50)
                     }
                     .frame(height: 120)
                     // Search + grid card
-                    VStack(spacing: 16) {
+                    VStack {
                         // Search bar
                         HStack {
                             Image(systemName: "magnifyingglass")
@@ -60,6 +57,7 @@ struct GalleryView: View {
                         .background(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                
                         )
                         .padding(.horizontal, 16)
                         .padding(.top, 10)
@@ -93,10 +91,11 @@ struct GalleryView: View {
                             .stroke(Color(red: 0.7, green: 0.95, blue: 0.8), lineWidth: 3)
                     )
                     .padding(.horizontal, 16)
-                    .padding(.top, 16)
+                    .padding(.bottom, 50)
                     Spacer()
                 }
             }
+            .navigationBarTitle("Gallery")
         }
     }
 }

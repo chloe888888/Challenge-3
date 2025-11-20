@@ -55,6 +55,19 @@ struct Decor: View {
 
     var body: some View {
         NavigationStack {
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("Jarmoji Store")
+                    .font(.subheadline)
+                    .foregroundColor(.black.opacity(0.7))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+                
+                Text("Balance: $\(mojiBucks)")
+                    .font(.subheadline)
+                    .foregroundColor(.black.opacity(0.7))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 20)
+            }
             ZStack {
                 Color(red: 0.95, green: 0.99, blue: 0.97)
                     .ignoresSafeArea()
@@ -76,21 +89,7 @@ struct Decor: View {
                     .padding(.bottom, 40)
                 }
             }
-            .navigationTitle("Decorations!")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    VStack(alignment: .trailing, spacing: 2) {
-                        Text("Jarmoji Store")
-                            .font(.subheadline)
-                            .foregroundColor(.black.opacity(0.7))
-
-                        Text("Balance: $\(mojiBucks)")
-                            .font(.subheadline)
-                            .foregroundColor(.black)
-                    }
-                }
-            }
+            .navigationTitle("Decorations")
         }
     }
 

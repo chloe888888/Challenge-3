@@ -168,14 +168,14 @@ struct StatisticsView: View {
                         .foregroundColor(.black.opacity(0.7))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 15)
                         .background(Color(red: 0.7, green: 0.95, blue: 0.8))
                         .padding(.bottom, 50)
                 }
                 // STATS box
                 VStack(spacing: 40) {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Stats")
+                        Text("STATS")
                             .font(.system(size: 28, weight: .bold))
                             .padding(.horizontal, 20)
                             .padding(.top, 20)
