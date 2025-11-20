@@ -7,9 +7,8 @@
 
 import SpriteKit
 import CoreGraphics
-import SwiftUICore
+
 final class EmojiJarScene: SKScene {
-    var decorShop = Decor()
     
     private let jarWidthRatio:  CGFloat = 0.70
     private let jarHeightRatio: CGFloat = 0.60
@@ -18,11 +17,7 @@ final class EmojiJarScene: SKScene {
     private let neckDrop: CGFloat       = 16
     private let shoulderDrop: CGFloat   = 28
     private let shoulderCurveOut: CGFloat = 52
-<<<<<<< HEAD
 
-=======
->>>>>>> main
-    
     private let flatFraction: CGFloat = 0.60
     
     private let emojiRadius: CGFloat = 25
@@ -43,14 +38,17 @@ final class EmojiJarScene: SKScene {
     private var didSetup = false
     private var physicsNode: SKShapeNode?
     private var outlineNode: SKShapeNode?
+    
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         configureIfNeeded()
     }
+    
     override func didChangeSize(_ oldSize: CGSize) {
         super.didChangeSize(oldSize)
         rebuildJar()
     }
+    
     private func configureIfNeeded() {
         guard !didSetup else { return }
         didSetup = true
@@ -65,6 +63,7 @@ final class EmojiJarScene: SKScene {
     private func rebuildJar() {
         outlineNode?.removeFromParent()
         physicsNode?.removeFromParent()
+        
         let W = size.width  * jarWidthRatio
         let H = size.height * jarHeightRatio
         let cx = size.width / 2
@@ -136,12 +135,8 @@ final class EmojiJarScene: SKScene {
                     to:   CGPoint(x: cx - mouthHalf - 20, y: topY + 20))
         addRimGuide(from: CGPoint(x: cx + mouthHalf, y: topY),
                     to:   CGPoint(x: cx + mouthHalf + 20, y: topY + 20))
-<<<<<<< HEAD
-    
-=======
-        
->>>>>>> main
     }
+    
     private func addRimGuide(from a: CGPoint, to b: CGPoint) {
         let p = CGMutablePath()
         p.move(to: a)
@@ -154,6 +149,7 @@ final class EmojiJarScene: SKScene {
         g.physicsBody?.isDynamic = false
         addChild(g)
     }
+    
     func dropEmoji(_ emoji: String) {
         let label = SKLabelNode(text: emoji)
         label.fontName = "AppleColorEmoji"
@@ -161,30 +157,29 @@ final class EmojiJarScene: SKScene {
         label.verticalAlignmentMode = .center
         label.horizontalAlignmentMode = .center
         label.zPosition = 10
+        
         let cx = size.width / 2
         let band = max(4, (mouthHalf - emojiRadius) * 0.08)
         let spawnX = cx + CGFloat.random(in: -band...band)
         let spawnY = topY - emojiRadius - 4
         label.position = CGPoint(x: spawnX, y: spawnY)
         addChild(label)
+        
         label.physicsBody = SKPhysicsBody(circleOfRadius: emojiRadius)
         label.physicsBody?.allowsRotation = true
         label.physicsBody?.restitution = ballRestitution
         label.physicsBody?.friction = ballFriction
         label.physicsBody?.linearDamping = ballLinDamp
         label.physicsBody?.angularDamping = ballAngDamp
-<<<<<<< HEAD
-
-=======
->>>>>>> main
+        
         label.physicsBody?.applyImpulse(
             CGVector(dx: CGFloat.random(in: -0.3...0.3), dy: -0.5)
         )
     }
-    func clearAll() {
-        for node in children where node is SKLabelNode { node.removeFromParent() }
-    }
     
+    func clearAll() {
+        for node in children where node is SKLabelNode {
+            node.removeFromParent()
+        }
+    }
 }
-
-

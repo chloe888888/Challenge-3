@@ -7,22 +7,16 @@
 
 import SwiftUI
 import SwiftData
+
 struct CalendarView: View {
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     let calendar = Calendar.current
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
-<<<<<<< HEAD
 
     var currentDate: Date {
         Date(timeIntervalSince1970: demoCurrentDate)
     }
-
-=======
-    var currentDate: Date {
-        Date(timeIntervalSince1970: demoCurrentDate)
-    }
->>>>>>> main
     
     private var emojiByDay: [Int: String] {
         var dict: [Int: String] = [:]
@@ -30,7 +24,8 @@ struct CalendarView: View {
             if calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .month),
                calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .year) {
                 let day = calendar.component(.day, from: entry.date)
-                dict[day] = entry.emoji            }
+                dict[day] = entry.emoji
+            }
         }
         return dict
     }
@@ -73,33 +68,27 @@ struct CalendarView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Calendar")
-                        .font(.system(size: 48, weight: .bold))
-                        .fontDesign(.rounded)
                     Text(monthYearString)
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.black.opacity(0.7))
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 30)
-                .padding(.vertical, 25)
+                .padding(.vertical, 16)
                 .background(Color(red: 0.7, green: 0.95, blue: 0.8))
                 
-                
                 VStack(spacing: 0) {
-                    
                     HStack(spacing: 0) {
                         ForEach(daysOfWeek, id: \.self) { day in
                             Text(day)
-                                .font(.system(size: 16, weight: .semibold))
+                                .font(.system(size: 14, weight: .semibold))
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 50)
+                                .frame(height: 40)
                                 .background(Color.white)
                                 .overlay(
                                     Rectangle()
-                                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 2)
+                                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 1)
                                 )
                         }
                     }
@@ -123,46 +112,47 @@ struct CalendarView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(red: 0.95, green: 0.99, blue: 0.97))
+            .navigationTitle("Calendar")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
+
 struct CalendarDayCell: View {
     let day: Int?
     let emoji: String?
     
     var body: some View {
-        VStack(spacing: 4) {
+        ZStack {
+            Rectangle()
+                .fill(Color.white)
+                .overlay(
+                    Rectangle()
+                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 1)
+                )
+            
             if let day = day {
-                Text("\(day)")
-                    .font(.system(size: 20, weight: .medium))
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
-                    .padding(.top, 8)
-                    .padding(.leading, 8)
-                
-                if let emoji = emoji {
-                    Text(emoji)
-                        .font(.system(size: 28))
-                        .padding(.bottom, 8)
-                } else {
+                VStack {
+                    HStack {
+                        Text("\(day)")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.black)
+                        Spacer()
+                    }
                     Spacer()
+                    if let emoji = emoji {
+                        Text(emoji)
+                            .font(.system(size: 24))
+                    }
                 }
-            } else {
-                Spacer()
+                .padding(6)
             }
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 90)
-        .background(Color.white)
-        .overlay(
-            Rectangle()
-                .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 2)
-        )
+        .frame(height: 60)
     }
 }
+
 #Preview {
     CalendarView()
         .modelContainer(for: MoodEntry.self, inMemory: true)
 }
-
-
-

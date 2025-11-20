@@ -5,15 +5,11 @@
 //  Created by La Wun Eain  on 10/11/25.
 //
 
-//
 import SwiftUI
 import Combine
 import SpriteKit
 import SwiftData
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 private let faceEmojis: [String] = [
     // 1️⃣ Happy
     "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡",
@@ -37,24 +33,19 @@ private let faceEmojis: [String] = [
     // 7️⃣ Disgusted
     "🤢","🤮","🤧","🤥",
 ]
+
 struct HomePage: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
-<<<<<<< HEAD
+    
+    // One shared currency key for the whole app
     @AppStorage("jarBucks") private var jarBucks: Int = 100
-
+    
     private var currentDate: Date {
         Date(timeIntervalSince1970: demoCurrentDate)
     }
-
-=======
-    @AppStorage("mojiBucks") private var mojiBucks: Int = 100
-    private var currentDate: Date {
-        Date(timeIntervalSince1970: demoCurrentDate)
-    }
->>>>>>> main
     
     @State private var selectedEmoji: String = ""
     @State private var showEmojiPicker = false
@@ -68,387 +59,400 @@ struct HomePage: View {
     
     @AppStorage("selectedDecoration") private var selectedDecoration: Int = 1
     
+    // Remember which month we’ve already rendered in this scene
+    @State private var lastRenderedMonthStart: Date? = nil
+    
     private var formattedDate: String {
         let f = DateFormatter()
         f.dateFormat = "d MMM yyyy"
         return f.string(from: currentDate)
     }
     
+    private var currentMonthStart: Date {
+        let calendar = Calendar.current
+        return calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate)) ?? currentDate
+    }
+    
+    /// Restore state from history:
+    /// - Always update today's emoji + hasDroppedToday.
+    /// - Only rebuild the jar balls if the month changed (so no waterfall every tab switch).
     private func restoreJarFromHistory() {
         let calendar = Calendar.current
+        let monthStart = currentMonthStart
         
+        let monthEntries = entries.filter {
+            calendar.isDate($0.date, equalTo: currentDate, toGranularity: .month) &&
+            calendar.isDate($0.date, equalTo: currentDate, toGranularity: .year)
+        }
+        
+        // Today state
+        if let todayEntry = monthEntries.first(where: {
+            calendar.isDate($0.date, inSameDayAs: currentDate)
+        }) {
+            hasDroppedToday = true
+            selectedEmoji = todayEntry.emoji
+        } else {
+            hasDroppedToday = false
+            selectedEmoji = ""
+        }
+        
+        // If we've already rendered this month, don't clear/redrop
+        if let last = lastRenderedMonthStart,
+           calendar.isDate(last, equalTo: monthStart, toGranularity: .month) {
+            return
+        }
+        
+        // New month (or first time) → rebuild jar content
         jarScene.clearAll()
+        for entry in monthEntries {
+            jarScene.dropEmoji(entry.emoji)
+        }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            let monthEntries = entries.filter {
-                calendar.isDate($0.date, equalTo: currentDate, toGranularity: .month) &&
-                calendar.isDate($0.date, equalTo: currentDate, toGranularity: .year)
-            }
-            
-            for entry in monthEntries {
-                jarScene.dropEmoji(entry.emoji)
-            }
-            
-            if let todayEntry = monthEntries.first(where: {
-                calendar.isDate($0.date, inSameDayAs: currentDate)
-            }) {
-                hasDroppedToday = true
-                selectedEmoji = todayEntry.emoji
-            } else {
-                hasDroppedToday = false
-                selectedEmoji = ""
-            }
-        }
+        lastRenderedMonthStart = monthStart
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> main
+    
     var body: some View {
-        ZStack(alignment: .top) {
-            Color.white.ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                VStack(spacing: 16) {
-                    Text("How are you feeling?")
-                        .font(.system(size: 40, weight: .medium))
-                        .fontDesign(.rounded)
-                    
-                    HStack(spacing: 24) {
-                        Text(formattedDate)
-                            .font(.system(size: 24, weight: .medium))
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 18)
-                                    .fill(Color.appAccentGreen)
-                            )
-                        
-                        Spacer()
-                        
-                        Text("$\(jarBucks)")
-                            .font(.system(size: 24, weight: .medium))
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 18)
-                                    .fill(Color.appAccentGreen)
-                            )
-                    }
-                    .padding(.horizontal, 30)
-                }
-                .padding(.top, 16)
-                .padding(.bottom, 12)
-                .frame(maxWidth: .infinity)
-                .background(Color.appAccentGreen)
+        NavigationStack {
+            ZStack(alignment: .top) {
+                Color.white.ignoresSafeArea()
                 
-                Spacer()
-            }
-            
-            ZStack {
-                SpriteView(scene: jarScene, options: [.allowsTransparency])
-                    .frame(width: 404, height: 500)
-                
-                GeometryReader { geometry in
-                    Group {
-                        switch selectedDecoration {
-                        case 1:
-                            Image("Decor_1")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.86,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                            Image("Decor_1.2")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.13,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 2:
-                            Image("Decor_2.2")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.85,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                            Image("Decor_2.3")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.10,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 3:
-                            Image("Decor_3.2")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.86,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                            Image("Decor_3.3")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.13,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 4:
-                            Image("Decor_4.2")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.85,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                                .rotationEffect(.degrees(3))
-                            Image("Decor_4.3")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.15,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                                .rotationEffect(.degrees(-3))
-                        case 5:
-                            Image("Decor_5.3")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.83,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                                .rotationEffect(.degrees(3))
-                            Image("Decor_5.2")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.16,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                                .rotationEffect(.degrees(-3))
-                        case 6:
-                            Image("Decor_6")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.86,
-                                    y: geometry.size.height * 0.53
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 7:
-                            Image("Decor_7.2")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.87,
-                                    y: geometry.size.height * 0.48
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                            Image("Decor_7.3")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.13,
-                                    y: geometry.size.height * 0.46
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 8:
-                            Image("Decor_8.2")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.84,
-                                    y: geometry.size.height * 0.53
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                            Image("Decor_8.3")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.15,
-                                    y: geometry.size.height * 0.53
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 9:
-                            Image("Decor 9")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.86,
-                                    y: geometry.size.height * 0.50
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 10:
-                            Image("Decor 10")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.80,
-                                    y: geometry.size.height * 0.75
-                                )
-                                .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
-                        case 11:
-                            Image("Decor 11")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.23,
-                                    y: geometry.size.height * 0.35
-                                )
-                                .frame(maxWidth: .maximum(100, 100), maxHeight: .maximum(100, 100))
-                        case 12:
-                            Image("Decor 12")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.23,
-                                    y: geometry.size.height * 0.65
-                                )
-                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
-                        case 13:
-                            Image("Decor 13")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.50,
-                                    y: geometry.size.height * 0.84
-                                )
-                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
-                        case 14:
-                            Image("Decor 14")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.78,
-                                    y: geometry.size.height * 0.33
-                                )
-                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
-                        case 15:
-                            Image("Decor 15")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.20,
-                                    y: geometry.size.height * 0.72
-                                )
-                                .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
-                        case 16:
-                            Image("Decor 16")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.25,
-                                    y: geometry.size.height * 0.74
-                                )
-                                .frame(maxWidth: .maximum(160, 160), maxHeight: .maximum(170, 170))
-                        case 17:
-                            Image("Decor 17")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.86,
-                                    y: geometry.size.height *  0.32
-                                )
-                                .frame(maxWidth: .maximum(140, 140), maxHeight: .maximum(150, 150))
-                        case 18:
-                            Image("Decor 18")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.74,
-                                    y: geometry.size.height *  0.74
-                                )
-                                .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(170, 170))
-                        case 19:
-                            Image("Decor 19")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.76,
-                                    y: geometry.size.height *  0.74
-                                )
-                                .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(170, 170))
-                        case 20:
-                            Image("Decor 20")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.25,
-                                    y: geometry.size.height * 0.76
-                                )
-                                .frame(maxWidth: .maximum(120, 120), maxHeight: .maximum(130, 130))
-                        case 21:
-                            Image("Decor 21")
-                                .resizable()
-                                .position(
-                                    x: geometry.size.width * 0.40,
-                                    y: geometry.size.height * 0.76
-                                )
-                                .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(120, 120))
-                        default:
-                            EmptyView()
-                        }
-                    }
-                }
-            }
-            .frame(width: 404, height: 500)
-            .padding(.top, 220)
-            
-            if !hasDroppedToday {
-                VStack(spacing: 16) {
-                    Text("What face emoji best describes how you are feeling today?")
-                        .font(.system(size: 20, weight: .medium))
-                        .multilineTextAlignment(.center)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.horizontal, 32)
-                    
-                    Button {
-                        showEmojiPicker = true
-                    } label: {
-                        HStack(spacing: 8) {
-                            Text("Choose face emoji")
-                                .font(.system(size: 18))
-                                .foregroundColor(.primary)
+                VStack(spacing: 0) {
+                    // HEADER AREA
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("How are you feeling?")
+                            .font(.system(size: 34, weight: .bold))
+                            .fontDesign(.rounded)
+                        
+                        HStack {
+                            Text(formattedDate)
+                                .font(.system(size: 18, weight: .medium))
                             
-                            Text(selectedEmoji)
-                                .font(.system(size: 22))
+                            Spacer()
+                            
+                            Text("$\(jarBucks)")
+                                .font(.system(size: 18, weight: .semibold))
                         }
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 10)
-                        .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
                     }
-                    .buttonStyle(.plain)
+                    .padding(.horizontal, 24)
+                    .padding(.top, 8)
+                    .padding(.bottom, 18)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(red: 0.7, green: 0.95, blue: 0.8))
                     
-                    Button {
-                        guard !selectedEmoji.isEmpty else { return }
-                        
-                        let entry = MoodEntry(date: currentDate, emoji: selectedEmoji)
-                        modelContext.insert(entry)
-                        try? modelContext.save()
-                        
-                        jarBucks += 5
-                        
-                        jarScene.dropEmoji(selectedEmoji)
-                        hasDroppedToday = true
-                    } label: {
-                        Text(selectedEmoji)
-                            .font(.system(size: 55))
-                            .background(
-                                RoundedRectangle(cornerRadius: 100)
-                                    .fill(Color(.systemGray6))
-                            )
+                    Spacer()
+                }
+                
+                // JAR + DECORATIONS
+                ZStack {
+                    SpriteView(scene: jarScene, options: [.allowsTransparency])
+                        .frame(width: 404, height: 500)
+                    
+                    GeometryReader { geometry in
+                        Group {
+                            switch selectedDecoration {
+                            case 1:
+                                Image("Decor_1")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.86,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_1.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.13,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 2:
+                                Image("Decor_2.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.85,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_2.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.10,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 3:
+                                Image("Decor_3.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.86,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_3.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.13,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 4:
+                                Image("Decor_4.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.85,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                    .rotationEffect(.degrees(3))
+                                Image("Decor_4.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.15,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                    .rotationEffect(.degrees(-3))
+                            case 5:
+                                Image("Decor_5.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.83,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                    .rotationEffect(.degrees(3))
+                                Image("Decor_5.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.16,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                    .rotationEffect(.degrees(-3))
+                            case 6:
+                                Image("Decor_6")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.86,
+                                        y: geometry.size.height * 0.53
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 7:
+                                Image("Decor_7.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.87,
+                                        y: geometry.size.height * 0.48
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_7.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.13,
+                                        y: geometry.size.height * 0.46
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 8:
+                                Image("Decor_8.2")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.84,
+                                        y: geometry.size.height * 0.53
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                                Image("Decor_8.3")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.15,
+                                        y: geometry.size.height * 0.53
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 9:
+                                Image("Decor 9")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.86,
+                                        y: geometry.size.height * 0.50
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 10:
+                                Image("Decor 10")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.80,
+                                        y: geometry.size.height * 0.75
+                                    )
+                                    .frame(maxWidth: .maximum(220, 220), maxHeight: .maximum(250, 250))
+                            case 11:
+                                Image("Decor 11")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.23,
+                                        y: geometry.size.height * 0.35
+                                    )
+                                    .frame(maxWidth: .maximum(100, 100), maxHeight: .maximum(100, 100))
+                            case 12:
+                                Image("Decor 12")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.23,
+                                        y: geometry.size.height * 0.65
+                                    )
+                                    .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
+                            case 13:
+                                Image("Decor 13")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.50,
+                                        y: geometry.size.height * 0.84
+                                    )
+                                    .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
+                            case 14:
+                                Image("Decor 14")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.78,
+                                        y: geometry.size.height * 0.33
+                                    )
+                                    .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
+                            case 15:
+                                Image("Decor 15")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.20,
+                                        y: geometry.size.height * 0.72
+                                    )
+                                    .frame(maxWidth: .maximum(150, 150), maxHeight: .maximum(150, 150))
+                            case 16:
+                                Image("Decor 16")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.25,
+                                        y: geometry.size.height * 0.74
+                                    )
+                                    .frame(maxWidth: .maximum(160, 160), maxHeight: .maximum(170, 170))
+                            case 17:
+                                Image("Decor 17")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.86,
+                                        y: geometry.size.height *  0.32
+                                    )
+                                    .frame(maxWidth: .maximum(140, 140), maxHeight: .maximum(150, 150))
+                            case 18:
+                                Image("Decor 18")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.74,
+                                        y: geometry.size.height *  0.74
+                                    )
+                                    .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(170, 170))
+                            case 19:
+                                Image("Decor 19")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.76,
+                                        y: geometry.size.height *  0.74
+                                    )
+                                    .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(170, 170))
+                            case 20:
+                                Image("Decor 20")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.25,
+                                        y: geometry.size.height * 0.76
+                                    )
+                                    .frame(maxWidth: .maximum(120, 120), maxHeight: .maximum(130, 130))
+                            case 21:
+                                Image("Decor 21")
+                                    .resizable()
+                                    .position(
+                                        x: geometry.size.width * 0.40,
+                                        y: geometry.size.height * 0.76
+                                    )
+                                    .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(120, 120))
+                            default:
+                                EmptyView()
+                            }
+                        }
                     }
                 }
+                // slightly closer to header than before
+                .frame(width: 404, height: 500)
                 .padding(.top, 190)
+                
+                // OVERLAY WHEN USER HASN'T DROPPED TODAY
+                if !hasDroppedToday {
+                    VStack(spacing: 16) {
+                        Text("What face emoji best describes how you are feeling today?")
+                            .font(.system(size: 20, weight: .medium))
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.horizontal, 32)
+                        
+                        Button {
+                            showEmojiPicker = true
+                        } label: {
+                            HStack(spacing: 8) {
+                                Text("Choose face emoji")
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.primary)
+                                
+                                Text(selectedEmoji)
+                                    .font(.system(size: 22))
+                            }
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 10)
+                            .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 10))
+                        }
+                        .buttonStyle(.plain)
+                        
+                        Button {
+                            guard !selectedEmoji.isEmpty else { return }
+                            
+                            let entry = MoodEntry(date: currentDate, emoji: selectedEmoji)
+                            modelContext.insert(entry)
+                            try? modelContext.save()
+                            
+                            jarBucks += 5
+                            
+                            jarScene.dropEmoji(selectedEmoji)
+                            hasDroppedToday = true
+                        } label: {
+                            Text(selectedEmoji)
+                                .font(.system(size: 55))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 100)
+                                        .fill(Color(.systemGray6))
+                                )
+                        }
+                    }
+                    // bring it closer to the jar / header so there isn't a huge gap
+                    .padding(.top, 150)
+                }
             }
-        }
-        .fullScreenCover(isPresented: $showEmojiPicker) {
-            EmojiGridPicker(selection: $selectedEmoji) { emoji in
-                selectedEmoji = emoji
+            .fullScreenCover(isPresented: $showEmojiPicker) {
+                EmojiGridPicker(selection: $selectedEmoji) { emoji in
+                    selectedEmoji = emoji
+                }
+                .interactiveDismissDisabled(true)
             }
-            .interactiveDismissDisabled(true)
-        }
-        .onAppear {
-            restoreJarFromHistory()
-        }
-        .onChange(of: entries) { _ in
-            restoreJarFromHistory()
-        }
-        .onChange(of: demoCurrentDate) { _ in
-            restoreJarFromHistory()
+            .onAppear {
+                restoreJarFromHistory()
+            }
+            .onChange(of: entries) { _ in
+                restoreJarFromHistory()
+            }
+            .onChange(of: demoCurrentDate) { _ in
+                restoreJarFromHistory()
+            }
+            .navigationTitle("Home")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
+
 struct EmojiGridPicker: View {
     @Binding var selection: String
     var onSelect: (String) -> Void
@@ -494,10 +498,8 @@ struct EmojiGridPicker: View {
         }
     }
 }
+
 #Preview {
     HomePage()
         .modelContainer(for: MoodEntry.self, inMemory: true)
 }
-
-
-

@@ -44,7 +44,8 @@ enum DecorButtonState {
 }
 
 struct Decor: View {
-    @AppStorage("mojiBucks") private var mojiBucks: Int = 100
+    // 🔹 use same currency as HomePage
+    @AppStorage("jarBucks") private var jarBucks: Int = 100
     @AppStorage("selectedDecoration") private var selectedDecoration: Int = 1
     @AppStorage("ownedDecorations") private var ownedDecorationsRaw: String = "1"
 
@@ -62,12 +63,14 @@ struct Decor: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20)
                 
-                Text("Balance: $\(mojiBucks)")
+                Text("Balance: $\(jarBucks)")
                     .font(.subheadline)
                     .foregroundColor(.black.opacity(0.7))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20)
+                    
             }
+            .background(Color(red: 0.7, green: 0.95, blue: 0.8))
             ZStack {
                 Color(red: 0.95, green: 0.99, blue: 0.97)
                     .ignoresSafeArea()
@@ -93,7 +96,6 @@ struct Decor: View {
         }
     }
 
-
     private func isOwned(_ id: Int) -> Bool {
         let ids = ownedDecorationsRaw.split(separator: ",").compactMap { Int($0) }
         return ids.contains(id)
@@ -118,8 +120,8 @@ struct Decor: View {
     private func handleTap(on decoration: Decoration, state: DecorButtonState) {
         switch state {
         case .buy:
-            guard mojiBucks >= decoration.price else { return }
-            mojiBucks -= decoration.price
+            guard jarBucks >= decoration.price else { return }
+            jarBucks -= decoration.price
             markOwned(decoration.id)
 
         case .equip:
