@@ -41,11 +41,15 @@ struct GalleryView: View {
                 VStack(spacing: 0) {
                     // Header
                     ZStack(alignment: .bottomLeading) {
-                        Color(red: 0.7, green: 0.95, blue: 0.8)
-                            .ignoresSafeArea(edges: .top)
+                        Text("Find your past jars!")
+                            .font(.system(size: 24, weight: .medium))
+                            .foregroundColor(.black.opacity(0.6))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 15)
+                            .background(Color(red: 0.7, green: 0.95, blue: 0.8))
                             .padding(.bottom, 50)
                     }
-                    .frame(height: 120)
                     // Search + grid card
                     VStack {
                         // Search bar
@@ -60,7 +64,7 @@ struct GalleryView: View {
                                 
                         )
                         .padding(.horizontal, 16)
-                        .padding(.top, 10)
+                        .padding(.top, 0)
                         // Jars grid
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 24) {
@@ -91,8 +95,9 @@ struct GalleryView: View {
                             .stroke(Color(red: 0.7, green: 0.95, blue: 0.8), lineWidth: 3)
                     )
                     .padding(.horizontal, 16)
-                    .padding(.bottom, 50)
+                    .padding(.bottom, 30)
                     Spacer()
+                    
                 }
             }
             .navigationBarTitle("Gallery")

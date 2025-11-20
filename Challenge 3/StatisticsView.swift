@@ -165,7 +165,7 @@ struct StatisticsView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     Text(monthYearString)
                         .font(.system(size: 24, weight: .medium))
-                        .foregroundColor(.black.opacity(0.7))
+                        .foregroundColor(.black.opacity(0.6))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 15)
