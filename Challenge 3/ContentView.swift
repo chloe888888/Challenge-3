@@ -11,28 +11,28 @@ struct ContentView: View {
             HomePage()
                 .tabItem {
                     ZStack{
-                        Image("house.fill")
+                        Image(systemName: "house.fill")
                         Text("Home")
                     }
                 }
             CalendarView()
                 .tabItem {
-                    Image("calendar")
+                    Image(systemName: "calendar")
                     Text("Calendar")
                 }
             Decor()
                 .tabItem {
-                    Image("app.gift.fill")
+                    Image(systemName: "app.gift.fill")
                     Text("Decorations")
                 }
             GalleryView()
                     .tabItem {
-                    Image("photo.on.rectangle.angled.fill")
+                        Image(systemName: "photo.on.rectangle.angled.fill")
                     Text("Gallery")
                 }
             StatisticsView(month: Date())
                 .tabItem {
-                    Image("chart.bar.xaxis")
+                    Image(systemName: "chart.bar.xaxis")
                     Text("Statistics")
                 }
         }
