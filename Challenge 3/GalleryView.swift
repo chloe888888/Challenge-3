@@ -61,12 +61,13 @@ struct GalleryView: View {
                             Image(systemName: "magnifyingglass")
                             TextField("Search…", text: $searchText)
                         }
-                        .padding(10)
+                        
                         .background(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                         )
                         .padding(.horizontal, 16)
+                        .padding(.top, 10)
                         
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 24) {

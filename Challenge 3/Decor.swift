@@ -14,7 +14,7 @@ struct Decoration: Identifiable {
 }
 
 private let allDecorations: [Decoration] = [
-    .init(id: 1,  imageName: "Decor_1.3", price: 30),
+    .init(id: 1,  imageName: "Decor_1.3", price: 0),
     .init(id: 2,  imageName: "Decor_2",   price: 30),
     .init(id: 3,  imageName: "Decor_3",   price: 30),
     .init(id: 4,  imageName: "Decor_4",   price: 50),
@@ -55,7 +55,11 @@ struct Decor: View {
     ]
 
     var body: some View {
+        
+        Color(red: 0.95, green: 0.99, blue: 0.97)
+
         NavigationStack {
+
             VStack(alignment: .trailing, spacing: 2) {
                 Text("Jarmoji Store")
                     .font(.subheadline)
@@ -72,8 +76,7 @@ struct Decor: View {
             }
             .background(Color(red: 0.7, green: 0.95, blue: 0.8))
             ZStack {
-                Color(red: 0.95, green: 0.99, blue: 0.97)
-                    .ignoresSafeArea()
+
 
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 24) {
@@ -93,7 +96,11 @@ struct Decor: View {
                 }
             }
             .navigationTitle("Decorations")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbarBackground(.hidden, for: .navigationBar)
         }
+
+
     }
 
     private func isOwned(_ id: Int) -> Bool {

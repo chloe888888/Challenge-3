@@ -56,6 +56,7 @@ struct HomePage: View {
         scene.scaleMode = .resizeFill
         return scene
     }()
+
     
     @AppStorage("selectedDecoration") private var selectedDecoration: Int = 1
     
@@ -119,10 +120,6 @@ struct HomePage: View {
                 VStack(spacing: 0) {
                     // HEADER AREA
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("How are you feeling?")
-                            .font(.system(size: 34, weight: .bold))
-                            .fontDesign(.rounded)
-                        
                         HStack {
                             Text(formattedDate)
                                 .font(.system(size: 18, weight: .medium))
@@ -447,8 +444,8 @@ struct HomePage: View {
             .onChange(of: demoCurrentDate) { _ in
                 restoreJarFromHistory()
             }
-            .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("How are you feeling?")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
 }
