@@ -4,47 +4,43 @@
 //
 //  Created by La Wun Eain on 7/11/25.
 //
-
 import SwiftUI
-
 struct ContentView: View {
     var body: some View {
         TabView {
             HomePage()
                 .tabItem {
                     ZStack{
-                        Image("tab1")
+                        Image("house.fill")
                         Text("Home")
                     }
                 }
-
             CalendarView()
                 .tabItem {
-                    Image("tab2")
+                    Image("calendar")
                     Text("Calendar")
                 }
-
             Decor()
                 .tabItem {
-                    Image("tab3")
+                    Image("app.gift.fill")
                     Text("Decorations")
                 }
-
             GalleryView()
                     .tabItem {
-                    Image("tab4")
+                    Image("photo.on.rectangle.angled.fill")
                     Text("Gallery")
                 }
-
             StatisticsView(month: Date())
                 .tabItem {
-                    Image("tab5")
+                    Image("chart.bar.xaxis")
                     Text("Statistics")
                 }
         }
     }
 }
-
 #Preview {
     ContentView()
 }
+
+
+

@@ -7,19 +7,22 @@
 
 import SwiftUI
 import SwiftData
-
 struct CalendarView: View {
-
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
-
     let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
     let calendar = Calendar.current
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
+<<<<<<< HEAD
 
     var currentDate: Date {
         Date(timeIntervalSince1970: demoCurrentDate)
     }
 
+=======
+    var currentDate: Date {
+        Date(timeIntervalSince1970: demoCurrentDate)
+    }
+>>>>>>> main
     
     private var emojiByDay: [Int: String] {
         var dict: [Int: String] = [:]
@@ -58,7 +61,6 @@ struct CalendarView: View {
             }
             days.append(week)
         }
-        
         return days
     }
     
@@ -124,7 +126,6 @@ struct CalendarView: View {
         }
     }
 }
-
 struct CalendarDayCell: View {
     let day: Int?
     let emoji: String?
@@ -158,8 +159,10 @@ struct CalendarDayCell: View {
         )
     }
 }
-
 #Preview {
     CalendarView()
         .modelContainer(for: MoodEntry.self, inMemory: true)
 }
+
+
+

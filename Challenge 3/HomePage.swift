@@ -5,11 +5,15 @@
 //  Created by La Wun Eain  on 10/11/25.
 //
 
+//
 import SwiftUI
 import Combine
 import SpriteKit
 import SwiftData
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 private let faceEmojis: [String] = [
     // 1️⃣ Happy
     "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡",
@@ -33,18 +37,24 @@ private let faceEmojis: [String] = [
     // 7️⃣ Disgusted
     "🤢","🤮","🤧","🤥",
 ]
-
 struct HomePage: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
+<<<<<<< HEAD
     @AppStorage("jarBucks") private var jarBucks: Int = 100
 
     private var currentDate: Date {
         Date(timeIntervalSince1970: demoCurrentDate)
     }
 
+=======
+    @AppStorage("mojiBucks") private var mojiBucks: Int = 100
+    private var currentDate: Date {
+        Date(timeIntervalSince1970: demoCurrentDate)
+    }
+>>>>>>> main
     
     @State private var selectedEmoji: String = ""
     @State private var showEmojiPicker = false
@@ -90,7 +100,10 @@ struct HomePage: View {
             }
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
     var body: some View {
         ZStack(alignment: .top) {
             Color.white.ignoresSafeArea()
@@ -352,6 +365,14 @@ struct HomePage: View {
                                     y: geometry.size.height * 0.76
                                 )
                                 .frame(maxWidth: .maximum(120, 120), maxHeight: .maximum(130, 130))
+                        case 21:
+                            Image("Decor 21")
+                                .resizable()
+                                .position(
+                                    x: geometry.size.width * 0.40,
+                                    y: geometry.size.height * 0.76
+                                )
+                                .frame(maxWidth: .maximum(170, 170), maxHeight: .maximum(120, 120))
                         default:
                             EmptyView()
                         }
@@ -428,7 +449,6 @@ struct HomePage: View {
         }
     }
 }
-
 struct EmojiGridPicker: View {
     @Binding var selection: String
     var onSelect: (String) -> Void
@@ -474,8 +494,10 @@ struct EmojiGridPicker: View {
         }
     }
 }
-
 #Preview {
     HomePage()
         .modelContainer(for: MoodEntry.self, inMemory: true)
 }
+
+
+

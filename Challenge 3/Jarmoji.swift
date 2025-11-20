@@ -7,9 +7,8 @@
 
 import SwiftUI
 import SwiftData
-
 @main
-struct Challenge_3App: App {
+struct Jarmoji: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -17,3 +16,5 @@ struct Challenge_3App: App {
         .modelContainer(for: [MoodEntry.self, MonthlyJar.self])
     }
 }
+
+
