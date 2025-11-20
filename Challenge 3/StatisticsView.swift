@@ -1,18 +1,17 @@
+//
+//  StatisticsView.swift
+//  Challenge 3
+//
+//  Created by Shivanishri on 14/11/25.
+//
+
 import SwiftUI
 import SwiftData
 struct StatisticsView: View {
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     @Environment(\.modelContext) private var modelContext
-<<<<<<< HEAD
-
-    @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
-
-    @State var month: Date
-
-=======
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
     @State var month: Date
->>>>>>> main
     // happy
     private let happyEmojis: Set<String> = [
         "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇"
@@ -42,13 +41,7 @@ struct StatisticsView: View {
     private let disgustedEmojis: Set<String> = [
         "🤢","🤮","🤧","💩","🤥","🤡"
     ]
-<<<<<<< HEAD
-
     // MARK: - Stats for this month
-
-=======
-    // MARK: - Stats for this month
->>>>>>> main
     private var monthlyCounts: [(category: String, count: Int, emoji: String)] {
         let calendar = Calendar.current
         let monthEntries = entries.filter {
@@ -104,45 +97,22 @@ struct StatisticsView: View {
         formatter.dateFormat = "MMM yyyy"
         return formatter.string(from: month).uppercased()
     }
-<<<<<<< HEAD
-
     // MARK: - Demo helpers
-
-=======
-    // MARK: - Demo helpers
->>>>>>> main
     /// Fills this month with fake MoodEntry rows (1 per day up to today).
     private func seedDemoEntriesForCurrentMonth() {
         let calendar = Calendar.current
         guard let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: month)) else { return }
-<<<<<<< HEAD
-
-=======
->>>>>>> main
         // simple pool of all emojis
         let allEmojiPools: [Set<String>] = [
             happyEmojis, sadEmojis, angryEmojis, loveEmojis, calmEmojis, fearEmojis, disgustedEmojis
         ]
         let allEmojis: [String] = allEmojiPools.flatMap { Array($0) }
-<<<<<<< HEAD
-
-        guard !allEmojis.isEmpty else { return }
-
-        // days in this month
-        guard let dayRange = calendar.range(of: .day, in: .month, for: monthStart) else { return }
-
-        for day in dayRange {
-            guard let date = calendar.date(byAdding: .day, value: day - 1, to: monthStart) else { continue }
-            if date > Date() { break } // stop at today for realism
-
-=======
         guard !allEmojis.isEmpty else { return }
         // days in this month
         guard let dayRange = calendar.range(of: .day, in: .month, for: monthStart) else { return }
         for day in dayRange {
             guard let date = calendar.date(byAdding: .day, value: day - 1, to: monthStart) else { continue }
             if date > Date() { break } // stop at today for realism
->>>>>>> main
             // If you already have an entry that day, skip (so you don't duplicate)
             let alreadyExists = entries.contains { entry in
                 calendar.isDate(entry.date, inSameDayAs: date)
@@ -188,26 +158,14 @@ struct StatisticsView: View {
             _ = existing
             return
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> main
         let jar = MonthlyJar(
             month: monthStart,
             label: monthYearString,
             dominantCategory: best.category
         )
-<<<<<<< HEAD
-
         modelContext.insert(jar)
         try? modelContext.save()
     }
-
-=======
-        modelContext.insert(jar)
-        try? modelContext.save()
-    }
->>>>>>> main
     private func goToNextMonth() {
         let calendar = Calendar.current
         
@@ -218,84 +176,64 @@ struct StatisticsView: View {
             demoCurrentDate = startOfNext.timeIntervalSince1970
         }
     }
-<<<<<<< HEAD
-
-
     // MARK: - UI
-
-=======
-    // MARK: - UI
->>>>>>> main
     var body: some View {
-        VStack(spacing: 0) {
-            // Header
-            VStack(alignment: .leading, spacing: 16) {
-                Text("STATISTICS:")
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundColor(.black)
-                Text(monthYearString)
-                    .font(.system(size: 24, weight: .medium))
-                    .foregroundColor(.black.opacity(0.7))
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 30)
-            .padding(.vertical, 25)
-            .background(Color(red: 0.7, green: 0.95, blue: 0.8))
-            .padding(.bottom, 10)
-<<<<<<< HEAD
-
-=======
->>>>>>> main
-            // STATS box
-            VStack(spacing: 40) {
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("STATS")
-                        .font(.system(size: 28, weight: .bold))
+        NavigationStack {
+            VStack(spacing: 0) {
+                // Header
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(monthYearString)
+                        .font(.system(size: 24, weight: .medium))
+                        .foregroundColor(.black.opacity(0.6))
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
-                        .padding(.top, 20)
-                        .padding(.bottom, 15)
-                    ForEach(monthlyCounts, id: \.category) { item in
-                        StatRow(label: item.category,
-                                emoji: item.emoji,
-                                count: item.count)
-                    }
-                    .padding(.horizontal, 20)
-                    if let best = dominantEmotion {
-<<<<<<< HEAD
-                        StatRow(label: "appears most: \(best.category)",
-=======
-                        StatRow(label: "Most: \(best.category)",
->>>>>>> main
-                                emoji: best.emoji,
-                                count: best.count)
-                        .padding(.horizontal, 20)
-                        .padding(.top, 8)
-                        .padding(.bottom, 20)
-                    } else {
-                        HStack {
-                            Text("Most")
-                                .font(.system(size: 22))
-                                .foregroundColor(.gray)
-                            Spacer()
-                            Text("—")
-                                .font(.system(size: 22))
-                                .foregroundColor(.gray)
+                        .padding(.vertical, 15)
+                        .background(Color(red: 0.7, green: 0.95, blue: 0.8))
+                        .padding(.bottom, 50)
+                }
+                // STATS box
+                VStack(spacing: 40) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Text("STATS")
+                            .font(.system(size: 28, weight: .bold))
+                            .padding(.horizontal, 20)
+                            .padding(.top, 20)
+                            .padding(.bottom, 15)
+                        ForEach(monthlyCounts, id: \.category) { item in
+                            StatRow(label: item.category,
+                                    emoji: item.emoji,
+                                    count: item.count)
                         }
                         .padding(.horizontal, 20)
-                        .padding(.top, 8)
-                        .padding(.bottom, 20)
+                        if let best = dominantEmotion {
+                            StatRow(label: "Most: \(best.category)",
+                                    emoji: best.emoji,
+                                    count: best.count)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 8)
+                            .padding(.bottom, 20)
+                        } else {
+                            HStack {
+                                Text("Most")
+                                    .font(.system(size: 22))
+                                    .foregroundColor(.gray)
+                                Spacer()
+                                Text("—")
+                                    .font(.system(size: 22))
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.top, 8)
+                            .padding(.bottom, 20)
+                        }
                     }
+                    .background(Color.white)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
+                    )
+                    .padding(.horizontal, 30)
                 }
-                .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
-                )
-                .padding(.horizontal, 30)
-            }
-<<<<<<< HEAD
-
-
                 Button {
                     saveCurrentMonthJarIfNeeded()
                     goToNextMonth()
@@ -310,29 +248,13 @@ struct StatisticsView: View {
                         )
                         .foregroundColor(.black)
                 }
-            .padding(.top, 24)
-
-=======
-            Button {
-                saveCurrentMonthJarIfNeeded()
-                goToNextMonth()
-            } label: {
-                Text("Go to next month")
-                    .font(.system(size: 16, weight: .semibold))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color(red: 0.7, green: 0.95, blue: 0.8))
-                    )
-                    .foregroundColor(.black)
+                .padding(.top, 24)
+                Spacer()
             }
-            .padding(.top, 24)
->>>>>>> main
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(red: 0.95, green: 0.99, blue: 0.97))
+            .navigationBarTitle("Statistics")
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(red: 0.95, green: 0.99, blue: 0.97))
     }
 }
 struct StatRow: View {
