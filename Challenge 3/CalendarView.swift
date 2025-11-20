@@ -61,6 +61,7 @@ struct CalendarView: View {
     
     var monthYearString: String {
         let formatter = DateFormatter()
+        //only show month and yr, me thinks
         formatter.dateFormat = "MMMM yyyy"
         return formatter.string(from: currentDate)
     }
@@ -79,6 +80,7 @@ struct CalendarView: View {
                 .background(Color(red: 0.7, green: 0.95, blue: 0.8))
                 
                 VStack(spacing: 0) {
+                    //Mon-Sun
                     HStack(spacing: 0) {
                         ForEach(daysOfWeek, id: \.self) { day in
                             Text(day)
@@ -92,7 +94,7 @@ struct CalendarView: View {
                                 )
                         }
                     }
-                    
+                    //calendar dates
                     ForEach(0..<daysInMonth.count, id: \.self) { weekIndex in
                         HStack(spacing: 0) {
                             ForEach(0..<7) { dayIndex in
@@ -140,6 +142,7 @@ struct CalendarDayCell: View {
                         Spacer()
                     }
                     Spacer()
+                    //add emoji on date
                     if let emoji = emoji {
                         Text(emoji)
                             .font(.system(size: 24))

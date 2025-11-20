@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-
-    // 🔹 Share the same stored date as the rest of the app
+    //date sync
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
 
     var body: some View {
@@ -39,7 +38,7 @@ struct ContentView: View {
                     Text("Gallery")
                 }
 
-            // ✅ Use the stored demoCurrentDate instead of plain Date()
+            // here's the actual current date
             StatisticsView(month: Date(timeIntervalSince1970: demoCurrentDate))
                 .tabItem {
                     Image(systemName: "chart.bar.xaxis")
