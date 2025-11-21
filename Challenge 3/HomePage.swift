@@ -268,6 +268,7 @@ struct HomePage: View {
                             )
                             .labelsHidden()
                             .datePickerStyle(.compact)
+                            .padding(.top, 40)
                             
                             Text(headerEmoji)
                                 .font(.system(size: 28))
@@ -276,18 +277,20 @@ struct HomePage: View {
                                     Circle()
                                         .fill(Color.white.opacity(0.6))
                                 )
+                                .padding(.top, 40)
                             
                             Spacer()
                             
                             Text("$\(jarBucks)")
                                 .font(.system(size: 20, weight: .semibold))
                                 .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
+                                .padding(.vertical, 15)
                                 .background(
                                     Capsule()
                                         .fill(Color.white)
                                         .shadow(radius: 5)
                                 )
+                                .padding(.top, 40)
                         }
                     }
                     .padding(.horizontal, 24)
@@ -353,8 +356,7 @@ struct HomePage: View {
                             refreshForSelection(forceJarRebuild: false)
                         } label: {
                             HStack(spacing: 8) {
-                                Text(hasEntryForSelectedDay ? "Save emoji" : "Drop emoji")
-                                    .font(.system(size: 18, weight: .semibold))
+                                Image(systemName: hasEntryForSelectedDay ? "checkmark.circle" : "arrow.down.circle")
                                 Text(selectedEmoji.isEmpty ? "🙂" : selectedEmoji)
                                     .font(.system(size: 24))
                             }
@@ -367,8 +369,7 @@ struct HomePage: View {
                                           : Color.white)
                             )
                             .foregroundColor(.black)
-                            .shadow(color: .black.opacity(selectedEmoji.isEmpty ? 0 : 0.08),
-                                    radius: 4, x: 0, y: 2)
+                            .shadow(radius: 5)
                         }
                         .disabled(selectedEmoji.isEmpty)
                         .buttonStyle(.plain)

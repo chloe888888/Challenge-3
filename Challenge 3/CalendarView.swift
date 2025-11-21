@@ -1,4 +1,3 @@
-
 import SwiftUI
 import SwiftData
 struct CalendarView: View {
@@ -64,6 +63,7 @@ struct CalendarView: View {
                     Text(monthYearString)
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.black.opacity(0.7))
+                        .padding(.horizontal, -10)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 30)
@@ -106,8 +106,7 @@ struct CalendarView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(red: 0.95, green: 0.99, blue: 0.97))
-            .navigationTitle("Calendar")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarTitle("Calendar")
         }
     }
 }
@@ -148,6 +147,3 @@ struct CalendarDayCell: View {
     CalendarView()
         .modelContainer(for: MoodEntry.self, inMemory: true)
 }
-
-
-

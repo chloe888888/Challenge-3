@@ -151,7 +151,7 @@ final class EmojiJarScene: SKScene {
         // Visual outline
         let outline = SKShapeNode(path: path)
         outline.strokeColor = .black
-        outline.lineWidth = 10
+        outline.lineWidth = 8
         outline.lineJoin = .round
         outline.zPosition = 4
         addChild(outline)

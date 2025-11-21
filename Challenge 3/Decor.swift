@@ -67,9 +67,9 @@ struct Decor: View {
                                 .foregroundColor(.black.opacity (0.6))
                         }
                         .padding(.horizontal, 24)
-                        .padding(.bottom, 50)
+                        .padding(.bottom, 18)
                     }
-                    .frame(height: 100)
+                    .frame(height: 70)
                     
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 24) {
