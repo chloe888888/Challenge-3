@@ -647,6 +647,7 @@ struct HomePage: View {
                 refreshForSelection(forceJarRebuild: false)
             }
             .navigationBarTitle("How are you feeling?")
+            .padding()
         }
     }
 }
