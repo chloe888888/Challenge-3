@@ -165,7 +165,8 @@ struct HomePage: View {
     }
     
     private var headerEmoji: String {
-        hasEntryForSelectedDay ? selectedEmoji : "❓"
+        hasEntryForSelectedDay ? selectedEmoji : "😶"
+        
     }
     
     private func refreshForSelection(forceJarRebuild: Bool) {
@@ -258,10 +259,6 @@ struct HomePage: View {
                 VStack(spacing: 0) {
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("How are you feeling?")
-                            .font(.system(size: 32, weight: .bold))
-                            .fontDesign(.rounded)
-                        
                         HStack(alignment: .center, spacing: 16) {
                             DatePicker(
                                 "",
@@ -288,7 +285,8 @@ struct HomePage: View {
                                 .padding(.vertical, 8)
                                 .background(
                                     Capsule()
-                                        .fill(Color.white.opacity(0.8))
+                                        .fill(Color.white)
+                                        .shadow(radius: 5)
                                 )
                         }
                     }
@@ -316,6 +314,8 @@ struct HomePage: View {
                             .padding(.vertical, 10)
                             .background(Color.appAccentGreen, in: RoundedRectangle(cornerRadius: 12))
                             .foregroundColor(.black)
+                            .shadow(radius: 5)
+                            
                         }
                         .buttonStyle(.plain)
                         
@@ -646,8 +646,7 @@ struct HomePage: View {
             .onChange(of: selectedDate) { _ in
                 refreshForSelection(forceJarRebuild: false)
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarHidden(true)
+            .navigationBarTitle("How are you feeling?")
         }
     }
 }

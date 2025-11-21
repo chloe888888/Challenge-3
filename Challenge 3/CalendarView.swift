@@ -61,9 +61,6 @@ struct CalendarView: View {
             VStack(spacing: 0) {
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Calendar")
-                        .font(.system(size: 48, weight: .bold))
-                        .fontDesign(.rounded)
                     Text(monthYearString)
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.black.opacity(0.7))
@@ -109,6 +106,8 @@ struct CalendarView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(red: 0.95, green: 0.99, blue: 0.97))
+            .navigationTitle("Calendar")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

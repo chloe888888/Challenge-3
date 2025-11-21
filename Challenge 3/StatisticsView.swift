@@ -175,6 +175,8 @@ struct StatisticsView: View {
                 Spacer()
             }
             .background(Color(red: 0.95, green: 0.99, blue: 0.97))
+            .navigationTitle("Statistics")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear { syncIfNeeded() }
         .onChange(of: demoCurrentDate) { _ in syncIfNeeded() }
@@ -202,3 +204,4 @@ struct StatRow: View {
         }
     }
 }
+

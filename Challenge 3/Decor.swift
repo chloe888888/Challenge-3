@@ -58,22 +58,18 @@ struct Decor: View {
                             .ignoresSafeArea(edges: .top)
                         
                         VStack(alignment: .leading, spacing: 8) {
-                            Text("Decorations!")
-                                .font(.system(size: 40, weight: .bold))
-                                .foregroundColor(.black)
-                            
                             Text("Jarmoji Store")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.black.opacity(0.7))
+                                .foregroundColor(.black.opacity(0.6))
                             
                             Text("Balance: $\(jarBucks)")
                                 .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.black)
+                                .foregroundColor(.black.opacity (0.6))
                         }
                         .padding(.horizontal, 24)
-                        .padding(.bottom, 18)
+                        .padding(.bottom, 50)
                     }
-                    .frame(height: 150)
+                    .frame(height: 100)
                     
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 24) {
@@ -95,8 +91,7 @@ struct Decor: View {
                     }
                 }
             }
-            .navigationTitle("")
-            .navigationBarHidden(true)
+            .navigationTitle("Decoration")
         }
     }
     

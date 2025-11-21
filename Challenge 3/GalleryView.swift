@@ -46,18 +46,11 @@ struct GalleryView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
-
-
                     ZStack(alignment: .bottomLeading) {
                         Color.appAccentGreen.opacity(0.5)
                             .ignoresSafeArea(edges: .top)
-
-                        Text("Gallery of Jar")
-                            .font(.system(size: 36, weight: .bold))
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, 14)
                     }
-                    .frame(height: 120)
+                    .frame(height: 20)
 
 
                     VStack(spacing: 16) {
@@ -100,9 +93,12 @@ struct GalleryView: View {
                         }
                     }
                     .background(Color.white)
+                               .cornerRadius(25)
+                               .shadow(radius: 5)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.appAccentGreen.opacity(0.4), lineWidth: 3)
+                            .shadow(radius: 3)
                     )
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
@@ -110,6 +106,10 @@ struct GalleryView: View {
                     Spacer()
                 }
             }
+            .navigationBarTitle("Gallery of Jars")
         }
     }
+}
+#Preview{
+    GalleryView()
 }
