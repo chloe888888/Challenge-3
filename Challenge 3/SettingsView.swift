@@ -85,7 +85,7 @@ struct SettingsView: View {
                 
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Reset data")
-                        .font(.system(size: 28, weight: .bold))
+                        .font(.system(size: 20, weight: .bold))
                         .padding(.top, 16)
                     
                     Text("Choose what you want to delete from Jarmoji.")
@@ -97,7 +97,7 @@ struct SettingsView: View {
                             Text("Delete everything")
                                 .font(.system(size: 18, weight: .semibold))
                         }
-                        .tint(Color.appAccentGreen)
+                        .tint(Color.green)
                         
                         if !availableMonths.isEmpty {
                             Text("Or choose specific months:")
@@ -118,7 +118,7 @@ struct SettingsView: View {
                                         } label: {
                                             HStack {
                                                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                                                    .foregroundColor(isSelected ? .appAccentGreen : .gray)
+                                                    .foregroundColor(isSelected ? .green : .gray)
                                                 Text(monthLabel(for: month))
                                                 Spacer()
                                             }
@@ -162,7 +162,6 @@ struct SettingsView: View {
                 .padding(.horizontal, 24)
             }
             .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.inline)
             .alert("Delete data?",
                    isPresented: $showConfirm) {
                 Button("Cancel", role: .cancel) {}

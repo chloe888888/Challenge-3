@@ -121,3 +121,6 @@ struct ResetView: View {
         selectedMonths.removeAll()
     }
 }
+#Preview{
+    ResetView()
+}

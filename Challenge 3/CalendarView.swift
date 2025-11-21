@@ -1,148 +1,174 @@
 import SwiftUI
 import SwiftData
+import UIKit
+
+// -------------------------------------------------------
+// MARK: - MAIN CALENDAR VIEW
+// -------------------------------------------------------
+
 struct CalendarView: View {
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
-    let daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    let calendar = Calendar.current
-    @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
-    var currentDate: Date {
-        Date(timeIntervalSince1970: demoCurrentDate)
-    }
-    
-    private var emojiByDay: [Int: String] {
-        var dict: [Int: String] = [:]
+
+    @State private var selectedDate = Date()
+
+    private let cal = Calendar.current
+
+    // Convert entries → [Date: Emoji]
+    private var emojiByDate: [Date: String] {
+        var map: [Date: String] = [:]
+
         for entry in entries {
-            if calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .month),
-               calendar.isDate(entry.date, equalTo: currentDate, toGranularity: .year) {
-                let day = calendar.component(.day, from: entry.date)
-                dict[day] = entry.emoji            }
+            let day = cal.startOfDay(for: entry.date)
+            map[day] = entry.emoji
         }
-        return dict
+        return map
     }
-    
-    var daysInMonth: [[Int?]] {
-        let components = calendar.dateComponents([.year, .month], from: currentDate)
-        let firstOfMonth = calendar.date(from: components)!
-        let range = calendar.range(of: .day, in: .month, for: firstOfMonth)!
-        let numDays = range.count
-        
-        let firstWeekday = calendar.component(.weekday, from: firstOfMonth)
-        let startingSpaces = (firstWeekday == 1) ? 6 : firstWeekday - 2
-        
-        var days: [[Int?]] = []
-        var week: [Int?] = Array(repeating: nil, count: startingSpaces)
-        
-        for day in 1...numDays {
-            week.append(day)
-            if week.count == 7 {
-                days.append(week)
-                week = []
-            }
-        }
-        
-        if !week.isEmpty {
-            while week.count < 7 {
-                week.append(nil)
-            }
-            days.append(week)
-        }
-        return days
+
+    private var selectedEmoji: String? {
+        emojiByDate[cal.startOfDay(for: selectedDate)]
     }
-    
-    var monthYearString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: currentDate)
+
+    private var monthTitle: String {
+        let df = DateFormatter()
+        df.dateFormat = "MMMM yyyy"
+        return df.string(from: selectedDate)
     }
-    
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(monthYearString)
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(.black.opacity(0.7))
-                        .padding(.horizontal, -10)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 30)
-                .padding(.vertical, 25)
-                .background(Color(red: 0.7, green: 0.95, blue: 0.8))
-                
-                
-                VStack(spacing: 0) {
+                Color.appAccentGreen
+                    .ignoresSafeArea(edges: .top)
+                    .frame(height: 35)
                     
-                    HStack(spacing: 0) {
-                        ForEach(daysOfWeek, id: \.self) { day in
-                            Text(day)
-                                .font(.system(size: 16, weight: .semibold))
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 50)
-                                .background(Color.white)
-                                .overlay(
-                                    Rectangle()
-                                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 2)
-                                )
-                        }
-                    }
-                    
-                    ForEach(0..<daysInMonth.count, id: \.self) { weekIndex in
-                        HStack(spacing: 0) {
-                            ForEach(0..<7) { dayIndex in
-                                let day = daysInMonth[weekIndex][dayIndex]
-                                CalendarDayCell(
-                                    day: day,
-                                    emoji: day.flatMap { emojiByDay[$0] }
-                                )
-                            }
-                        }
-                    }
+                // HEADER
+    
+
+                // BUILT-IN APPLE CALENDAR
+                EmojiCalendarUIKit(
+                    selectedDate: $selectedDate,
+                    emojiByDate: emojiByDate
+                )
+                .frame(height: 450)
+                .padding(.horizontal)
+                .padding(.top, 16)
+
+                // SELECTED-DAY DETAILS
+                if let emoji = selectedEmoji {
+                    Text("Your mood on this day: \(emoji)")
+                        .font(.title3)
+                        .padding(.top, 12)
+                } else {
+                    Text("No emoji saved for this day.")
+                        .foregroundColor(.gray)
+                        .padding(.top, 12)
                 }
-                .background(Color.white)
-                .padding(20)
-                
+
                 Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(red: 0.95, green: 0.99, blue: 0.97))
             .navigationBarTitle("Calendar")
         }
     }
 }
-struct CalendarDayCell: View {
-    let day: Int?
-    let emoji: String?
-    
-    var body: some View {
-        VStack(spacing: 4) {
-            if let day = day {
-                Text("\(day)")
-                    .font(.system(size: 20, weight: .medium))
-                    .frame(maxWidth: .infinity, alignment: .topLeading)
-                    .padding(.top, 8)
-                    .padding(.leading, 8)
-                
-                if let emoji = emoji {
-                    Text(emoji)
-                        .font(.system(size: 28))
-                        .padding(.bottom, 8)
-                } else {
-                    Spacer()
-                }
-            } else {
-                Spacer()
-            }
+
+
+// -------------------------------------------------------
+// MARK: - UIKit Calendar Wrapper (Inside Same File!)
+// -------------------------------------------------------
+
+struct EmojiCalendarUIKit: UIViewRepresentable {
+
+    @Binding var selectedDate: Date
+    let emojiByDate: [Date: String]
+    let cal = Calendar.current
+
+    func makeUIView(context: Context) -> UICalendarView {
+        let view = UICalendarView()
+        view.delegate = context.coordinator
+
+        // selection
+        view.selectionBehavior = UICalendarSelectionSingleDate(delegate: context.coordinator)
+
+        // disable selecting future dates
+        view.availableDateRange = DateInterval(start: .distantPast, end: Date())
+
+        return view
+    }
+
+    func updateUIView(_ uiView:
+                      UICalendarView, context: Context){
+        uiView.reloadDecorations(forDateComponents: [], animated: false)
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(parent: self)
+    }
+
+    class Coordinator: NSObject,
+                       UICalendarViewDelegate,
+                       UICalendarSelectionSingleDateDelegate {
+
+        let parent: EmojiCalendarUIKit
+        let cal = Calendar.current
+
+        init(parent: EmojiCalendarUIKit) {
+            self.parent = parent
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 90)
-        .background(Color.white)
-        .overlay(
-            Rectangle()
-                .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 2)
-        )
+
+        // show emoji decoration
+        func calendarView(
+            _ calendarView: UICalendarView,
+            decorationFor dateComponents: DateComponents
+        ) -> UICalendarView.Decoration? {
+
+            guard let date = dateComponents.date else { return nil }
+
+            // find matching emoji
+            if let emoji = parent.emojiByDate.first(where: {
+                cal.isDate($0.key, inSameDayAs: date)
+            })?.value {
+
+                let label = UILabel()
+                label.text = emoji
+                label.font = UIFont.systemFont(ofSize: 18)
+                label.textAlignment = .center
+
+                return .customView {
+                    let container = UIView()
+                    let label = UILabel()
+
+                    label.text = emoji
+                    label.font = .systemFont(ofSize: 15)
+
+                    label.translatesAutoresizingMaskIntoConstraints = false
+                    container.addSubview(label)
+
+                    // Center it and push it *down* slightly
+                    NSLayoutConstraint.activate([
+                        label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                        label.centerYAnchor.constraint(equalTo: container.centerYAnchor, constant: -2)  // 👈 padding
+                    ])
+
+                    return container
+                }
+            }
+
+            return nil
+        }
+
+        // handle selecting date
+        func dateSelection(
+            _ selection: UICalendarSelectionSingleDate,
+            didSelectDate dateComponents: DateComponents?
+        ) {
+
+            guard let date = dateComponents?.date else { return }
+            parent.selectedDate = date
+        }
     }
 }
+
 #Preview {
     CalendarView()
         .modelContainer(for: MoodEntry.self, inMemory: true)

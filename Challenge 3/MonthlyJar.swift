@@ -1,5 +1,5 @@
 //
-//  MonthlyJarHelpers.swift
+//  MonthlyJar.swift
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ final class MonthlyJar {
     var month: Date
     var label: String
     var dominantCategory: String
-    
+
     init(month: Date, label: String, dominantCategory: String) {
         self.month = month
         self.label = label
@@ -20,54 +20,53 @@ final class MonthlyJar {
 }
 
 extension ModelContext {
-    func monthlyJar(for month: Date) -> MonthlyJar? {
-        (try? fetch(FetchDescriptor<MonthlyJar>(
-            predicate: #Predicate { $0.month == month }
-        )))?.first
-    }
 
-  
-    func saveMonthlyJar(for month: Date,
-                        entries: [MoodEntry],
-                        calendar: Calendar = .current) {
+    func createOrUpdateMonthlyJar(for monthStart: Date, entries: [MoodEntry]) {
+        let cal = Calendar.current
 
-        guard !entries.isEmpty else { return }
+        let existingJar = try? fetch(FetchDescriptor<MonthlyJar>())
+            .first(where: { cal.isDate($0.month, equalTo: monthStart, toGranularity: .month) })
 
-        let f = DateFormatter()
-        f.dateFormat = "MMM yyyy"
-        let label = f.string(from: month).uppercased()
+        // Categorize
+        let category: [String: String] = [
+            "😀":"happy","😃":"happy","😄":"happy","😁":"happy","😆":"happy","😅":"happy","😂":"happy","🤣":"happy",
+            "🙂":"happy","🙃":"happy","😉":"happy","😊":"happy","😇":"happy","🤠":"happy","😎":"happy","🤡":"happy",
 
-      
-        let groups: [String: Set<String>] = [
-            "happy": ["😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡"],
-            "sad": ["😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕","😶‍🌫️"],
-            "angry": ["😤","😠","😡","🤬","😒","🙄","🤨","😑","😐","🫤","😬","🫨"],
-            "love": ["🥰","😍","🤩","😘","😗","☺️","😙","😚","🥲","🤗","😋","😛","😝","😜","🤪","🥸","🤓","🧐"],
-            "calm": ["😶","😴","😪","😮‍💨","😌","🫥","😑","😐","🫤"],
-            "fear": ["😱","😨","😰","😳","😵","😵‍💫","🫢","🫣","🤐","🤫"],
-            "disgusted": ["🤢","🤮","🤧","🤥"]
+            "😞":"sad","😔":"sad","😟":"sad","🙁":"sad","☹️":"sad","😣":"sad","😖":"sad","😫":"sad","😩":"sad",
+            "🥺":"sad","🥹":"sad","😢":"sad","😭":"sad","😥":"sad","😓":"sad","😕":"sad","😶‍🌫️":"sad",
+
+            "😤":"angry","😠":"angry","😡":"angry","🤬":"angry","😒":"angry","🙄":"angry","🤨":"angry","😬":"angry",
+
+            "🥰":"love","😍":"love","🤩":"love","😘":"love","☺️":"love","🤗":"love","😙":"love","😚":"love",
+
+            "😶":"calm","😴":"calm","😪":"calm","😌":"calm","🫥":"calm","😑":"calm","😐":"calm","🫤":"calm",
+
+            "😱":"fear","😨":"fear","😰":"fear","😳":"fear","😵":"fear","😵‍💫":"fear","🫢":"fear","🫣":"fear",
+
+            "🤢":"disgusted","🤮":"disgusted","🤧":"disgusted","🤥":"disgusted"
         ]
 
-        var counts = ["happy":0,"sad":0,"angry":0,"love":0,"calm":0,"fear":0,"disgusted":0]
-        for e in entries {
-            for (cat, set) in groups {
-                if set.contains(e.emoji) { counts[cat]! += 1 }
-            }
-        }
+        let categoryCount = Dictionary(grouping: entries.map { category[$0.emoji] ?? "happy" }) { $0 }
+            .mapValues { $0.count }
 
-        let dominant = counts.max { $0.value < $1.value }?.key ?? "happy"
+        let dominant = categoryCount.max(by: { $0.value < $1.value })?.key ?? "happy"
 
-     
-        if let jar = monthlyJar(for: month) {
-            jar.label = label
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM yyyy"
+        let newLabel = formatter.string(from: monthStart).uppercased()
+
+        if let jar = existingJar {
+            jar.label = newLabel
             jar.dominantCategory = dominant
-            try? save()
         } else {
-            let jar = MonthlyJar(month: month,
-                                 label: label,
-                                 dominantCategory: dominant)
+            let jar = MonthlyJar(
+                month: monthStart,
+                label: newLabel,
+                dominantCategory: dominant
+            )
             insert(jar)
-            try? save()
         }
+
+        try? save()
     }
 }

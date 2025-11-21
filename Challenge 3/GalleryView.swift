@@ -1,8 +1,5 @@
 //
 //  GalleryView.swift
-//  Challenge 3
-//
-//  Created by La Wun Eain on 17/11/25.
 //
 
 import SwiftUI
@@ -21,7 +18,7 @@ struct GalleryView: View {
         GridItem(.flexible())
     ]
 
-    private func jarImageName(for cat: String) -> String {
+    private func jarImage(for cat: String) -> String {
         switch cat {
         case "happy": return "Jar_Happy"
         case "sad": return "Jar_Sad"
@@ -34,8 +31,8 @@ struct GalleryView: View {
         }
     }
 
-    private var filteredJars: [MonthlyJar] {
-        guard !searchText.isEmpty else { return jars }
+    private var filtered: [MonthlyJar] {
+        if searchText.isEmpty { return jars }
         return jars.filter { $0.label.lowercased().contains(searchText.lowercased()) }
     }
 
@@ -46,13 +43,15 @@ struct GalleryView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
+
+                    // HEADER
                     ZStack(alignment: .bottomLeading) {
-                        Color.appAccentGreen.opacity(0.5)
+                        Color.appAccentGreen
                             .ignoresSafeArea(edges: .top)
                     }
-                    .frame(height: 20)
+                    .frame(height: 35)
 
-
+                    // MAIN
                     VStack(spacing: 16) {
 
                         HStack {
@@ -60,32 +59,31 @@ struct GalleryView: View {
                             TextField("Search…", text: $searchText)
                         }
                         .padding(10)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
+                        .background(RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.gray.opacity(0.3)))
                         .padding(.horizontal, 16)
                         .padding(.top, 10)
 
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 24) {
-                                ForEach(filteredJars) { jar in
+                                ForEach(filtered) { jar in
                                     NavigationLink {
-                                        StatisticsView(month: jar.month,
-                                                       followDemoDate: false)
+                                        StatisticsView(
+                                            month: jar.month,
+                                            followDemoDate: false
+                                        )
                                     } label: {
                                         VStack(spacing: 6) {
-                                            Image(jarImageName(for: jar.dominantCategory))
+                                            Image(jarImage(for: jar.dominantCategory))
                                                 .resizable()
                                                 .scaledToFit()
                                                 .frame(width: 80, height: 80)
 
                                             Text(jar.label)
-                                                .font(.system(size: 12, weight: .medium))
+                                                .font(.system(size: 12))
                                                 .foregroundColor(.black)
                                         }
                                     }
-                                    .buttonStyle(.plain)
                                 }
                             }
                             .padding(.horizontal, 16)
@@ -93,17 +91,16 @@ struct GalleryView: View {
                         }
                     }
                     .background(Color.white)
-                               .cornerRadius(25)
-                               .shadow(radius: 5)
+                    .cornerRadius(25)
+                    .shadow(radius: 5)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(Color.appAccentGreen.opacity(0.4), lineWidth: 3)
-                            .shadow(radius: 3)
                     )
+                    
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
-
-                    Spacer()
+                    .padding(.bottom, 50)
                 }
             }
             .navigationBarTitle("Gallery of Jars")
