@@ -163,12 +163,6 @@ struct HomePage: View {
         f.dateFormat = "d MMM yyyy"
         return f.string(from: selectedDate)
     }
-    
-    private var headerEmoji: String {
-        hasEntryForSelectedDay ? selectedEmoji : "😶"
-        
-    }
-    
     private func refreshForSelection(forceJarRebuild: Bool) {
         let monthStart = currentMonthStart
         
@@ -269,18 +263,7 @@ struct HomePage: View {
                             .labelsHidden()
                             .datePickerStyle(.compact)
                             .padding(.top, 40)
-                            
-                            Text(headerEmoji)
-                                .font(.system(size: 28))
-                                .frame(width: 40, height: 40)
-                                .background(
-                                    Circle()
-                                        .fill(Color.white.opacity(0.6))
-                                )
-                                .padding(.top, 40)
-                            
                             Spacer()
-                            
                             Text("$\(jarBucks)")
                                 .font(.system(size: 20, weight: .semibold))
                                 .padding(.horizontal, 16)
@@ -299,11 +282,6 @@ struct HomePage: View {
                     .background(Color.appAccentGreen)
 
                     VStack(spacing: 12) {
-                        Text("What face emoji describes how you feel??")
-                            .font(.system(size: 18, weight: .medium))
-                            .multilineTextAlignment(.center)
-                            .padding(.horizontal, 24)
-                        
                         Button {
                             showEmojiPicker = true
                         } label: {
@@ -357,13 +335,13 @@ struct HomePage: View {
                         } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: hasEntryForSelectedDay ? "checkmark.circle" : "arrow.down.circle")
-                                Text(selectedEmoji.isEmpty ? "🙂" : selectedEmoji)
-                                    .font(.system(size: 24))
+                                Text( hasEntryForSelectedDay ? "Save" : "Drop")
+                                    .font(.system(size: 18))
                             }
-                            .padding(.horizontal, 24)
-                            .padding(.vertical, 10)
+                            .padding(.horizontal, 50)
+                            .padding(.vertical, 12)
                             .background(
-                                RoundedRectangle(cornerRadius: 14)
+                                RoundedRectangle(cornerRadius: 12)
                                     .fill(selectedEmoji.isEmpty
                                           ? Color.gray.opacity(0.25)
                                           : Color.white)

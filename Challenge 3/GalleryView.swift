@@ -23,14 +23,14 @@ struct GalleryView: View {
 
     private func jarImageName(for cat: String) -> String {
         switch cat {
-        case "happy": return "jar_happy"
-        case "sad": return "jar_sad"
-        case "angry": return "jar_angry"
-        case "love": return "jar_love"
-        case "calm": return "jar_calm"
-        case "fear": return "jar_fear"
-        case "disgusted": return "jar_disgust"
-        default: return "jar_happy"
+        case "happy": return "Jar_Happy"
+        case "sad": return "Jar_Sad"
+        case "angry": return "Jar_Angry"
+        case "love": return "Jar_Love"
+        case "calm": return "Jar_Calm"
+        case "fear": return "Jar_Fear"
+        case "disgusted": return "Jar_Disgust"
+        default: return "Jar_Happy"
         }
     }
 
