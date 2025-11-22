@@ -198,23 +198,29 @@ struct HomePage: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    HStack(spacing: 6) {
-
-                        Text("𝐉")
-                            .font(.system(size: 18, weight: .bold))
-                            .padding(10)                   // controls circle size naturally
-                            .background(
-                                Circle()
-                                    .fill(Color.yellow)
-                            )
-
-                        Text("\(jarBucks)")
-                            .font(.system(size: 20, weight: .semibold))
+                    ZStack {
+                       Capsule()
+                        .fill(Color.white)
+                        .frame(width: 105)
+                        HStack(spacing: 6) {
+                            Text("𝐉")
+                                .font(.system(size: 18, weight: .bold))
+                                .padding(10)                   // controls circle size naturally
+                                .background(
+                                    Circle()
+                                        .fill(Color.yellow)
+                                )
+                            
+                            Text("\(jarBucks)")
+                                .font(.system(size: 20, weight: .semibold))
+                            
+                        }
+                        //                    .padding(.horizontal, 16)
+                        //                    .padding(.vertical, 10)
+//                        .background(Capsule().fill(Color.white))
+//                        .frame(width: 105)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 11)
-                    .background(Capsule().fill(Color.white))
-                    .frame(width: 110)
+                    .padding()
                 }
             }
         }
