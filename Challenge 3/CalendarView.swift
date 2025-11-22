@@ -52,15 +52,7 @@ struct CalendarView: View {
                 .frame(height: 420)
                 .padding(.top, 16)
                 // SELECTED-DAY DETAILS
-                if let emoji = selectedEmoji {
-                    Text("Your mood on this day: \(emoji)")
-                        .font(.title3)
-                        .padding(.top, 12)
-                } else {
-                    Text("No emoji saved for this day.")
-                        .foregroundColor(.gray)
-                        .padding(.top, 12)
-                }
+                
 
                 Spacer()
             }
