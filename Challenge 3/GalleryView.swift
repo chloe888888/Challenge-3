@@ -2,126 +2,303 @@
 //  GalleryView.swift
 //
 
+//
+//  StatisticsView.swift
+//  Challenge 3
+//
+//  Created by La Wun Eain on 18/11/25.
+//
+
 import SwiftUI
 import SwiftData
+import SpriteKit
 
-struct GalleryView: View {
-    @State private var isNewItemSheetPresented = false
 
-    @Query(sort: \MonthlyJar.month, order: .reverse)
-    private var jars: [MonthlyJar]
+struct MonthYearPicker: View {
+    @Environment(\.dismiss) private var dismiss
+    @Binding var selectedDate: Date
+    
+    private var calendar: Calendar { Calendar.current }
 
-    @State private var searchText = ""
-
-    private let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-
-    private func jarImage(for cat: String) -> String {
-        switch cat {
-        case "happy": return "Jar_Happy"
-        case "sad": return "Jar_Sad"
-        case "angry": return "Jar_Angry"
-        case "love": return "Jar_Love"
-        case "calm": return "Jar_Calm"
-        case "fear": return "Jar_Fear"
-        case "disgusted": return "Jar_Disgust"
-        default: return "Jar_Happy"
-        }
-    }
-
-    private var filtered: [MonthlyJar] {
-        if searchText.isEmpty { return jars }
-        return jars.filter { $0.label.lowercased().contains(searchText.lowercased()) }
-    }
+    @State private var month: Int = 1
+    @State private var year: Int = 2024
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color(red: 0.95, green: 0.99, blue: 0.97)
-                    .ignoresSafeArea()
+        VStack {
+            Text("Select Month")
+                .font(.title2)
+                .padding(.top, 20)
 
-                VStack(spacing: 0) {
-
-                    // HEADER
-                    ZStack(alignment: .bottomLeading) {
-                        Color.appAccentGreen
-                            .ignoresSafeArea(edges: .top)
+            HStack {
+                Picker("Month", selection: $month) {
+                    ForEach(1...12, id: \.self) { m in
+                        Text(calendar.monthSymbols[m-1]).tag(m)
                     }
-                    .frame(height: 35)
-
-                    // MAIN
-                    VStack(spacing: 16) {
-
-                        HStack {
-                            Image(systemName: "magnifyingglass")
-                            TextField("Search…", text: $searchText)
-                        }
-                        .padding(10)
-                        .background(RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray.opacity(0.3)))
-                        .padding(.horizontal, 16)
-                        .padding(.top, 10)
-
-                        ScrollView {
-                            LazyVGrid(columns: columns, spacing: 24) {
-                                ForEach(filtered) { jar in
-                                    NavigationLink {
-                                        StatisticsView(
-                                            month: jar.month,
-                                            followDemoDate: false
-                                        )
-                                    } label: {
-                                        VStack(spacing: 6) {
-                                            Image(jarImage(for: jar.dominantCategory))
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 80, height: 80)
-
-                                            Text(jar.label)
-                                                .font(.system(size: 12))
-                                                .foregroundColor(.black)
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 16)
-                        }
-                    }
-                    .background(Color.white)
-                    .cornerRadius(25)
-                    .shadow(radius: 5)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.appAccentGreen.opacity(0.4), lineWidth: 3)
-                    )
-                    
-                    .padding(.horizontal, 16)
-                    .padding(.top, 16)
-                    .padding(.bottom, 50)
                 }
-            }
-            .navigationBarTitle("Gallery of Jars")
-            .toolbarTitleDisplayMode(.inlineLarge)
-            .toolbar {
-                            Button {
-                                isNewItemSheetPresented = true
-                            } label: {
-                                Image(systemName: "info.circle")
-                                    .font(.system(size: 24))
-                            }
-                            .sheet(isPresented: $isNewItemSheetPresented) {
-                                info()
-                            }
-                            .foregroundStyle(.black)
+                .pickerStyle(.wheel)
 
-                                }
+                Picker("Year", selection: $year) {
+                    ForEach(2000...2100, id: \.self) { y in
+                        Text(y.formatted(.number.grouping(.never)))
+                    }
+                }
+                .pickerStyle(.wheel)
+            }
+
+            Button("Done") {
+                let comps = DateComponents(year: year, month: month)
+                if let newDate = calendar.date(from: comps) {
+                    selectedDate = newDate
+                }
+                dismiss()
+            }
+            .font(.title3)
+            .padding(.top, 10)
+
+            Spacer()
+        }
+        .onAppear {
+            let comps = calendar.dateComponents([.year, .month], from: selectedDate)
+            month = comps.month ?? 1
+            year = comps.year ?? 2023
         }
     }
 }
-#Preview{
-    GalleryView()
+
+struct GalleryView: View {
+    
+    @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
+    @Environment(\.modelContext) private var modelContext
+    
+    @State var month: Date
+    let followDemoDate: Bool
+    
+    @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
+    
+    @State private var showMonthPicker = false
+    
+    @State private var jarScene: EmojiJarScene = {
+        let s = EmojiJarScene(size: CGSize(width: 404, height: 420))
+        s.scaleMode = .resizeFill
+        return s
+    }()
+
+    
+    private var calendar: Calendar { Calendar.current }
+    
+    private var demoMonthStart: Date {
+        let d = Date(timeIntervalSince1970: demoCurrentDate)
+        return calendar.date(from: calendar.dateComponents([.year, .month], from: d)) ?? d
+    }
+    
+    private var previousDemoMonthStart: Date {
+        calendar.date(byAdding: .month, value: -1, to: demoMonthStart)!
+    }
+    
+    private var currentMonthStart: Date {
+        calendar.date(from: calendar.dateComponents([.year, .month], from: month)) ?? month
+    }
+    
+    private var monthTitle: String {
+        let f = DateFormatter()
+        f.dateFormat = "MMM yyyy"
+        return f.string(from: currentMonthStart).uppercased()
+    }
+    
+    private var canGoLeft: Bool {
+        currentMonthStart > previousDemoMonthStart
+    }
+    
+    private var canGoRight: Bool {
+        currentMonthStart < demoMonthStart
+    }
+    
+    private func syncIfNeeded() {
+        guard followDemoDate else { return }
+        let demo = demoMonthStart
+        if !calendar.isDate(demo, equalTo: month, toGranularity: .month) {
+            month = demo
+        }
+    }
+    
+    private var monthEntries: [MoodEntry] {
+        entries.filter {
+            calendar.isDate($0.date, equalTo: currentMonthStart, toGranularity: .month)
+        }
+    }
+    
+    private let groups: [String: Set<String>] = [
+        "happy": ["😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡"],
+        "sad": ["😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕","😶‍🌫️"],
+        "angry": ["😤","😠","😡","🤬","😒","🙄","🤨","😑","😐","🫤","😬","🫨"],
+        "love": ["🥰","😍","🤩","😘","😗","☺️","😙","😚","🥲","🤗","😋","😛","😝","😜","🤪","🥸","🤓","🧐"],
+        "calm": ["😶","😴","😪","😮‍💨","😌","🫥","😑","😐","🫤"],
+        "fear": ["😱","😨","😰","😳","😵","😵‍💫","🫢","🫣","🤐","🤫"],
+        "disgusted": ["🤢","🤮","🤧","🤥"]
+    ]
+    
+    private var counts: [String: Int] {
+        var c = ["happy":0,"sad":0,"angry":0,"love":0,"calm":0,"fear":0,"disgusted":0]
+        
+        for entry in monthEntries {
+            for (cat, set) in groups {
+                if set.contains(entry.emoji) { c[cat]! += 1 }
+            }
+        }
+        return c
+    }
+    
+    private var dominant: (String, Int, String)? {
+        let icons: [String: String] = [
+            "happy":"😊","sad":"😢","angry":"😠","love":"🥰",
+            "calm":"😌","fear":"😨","disgusted":"🤢"
+        ]
+        
+        let best = counts.max(by: {$0.value < $1.value})
+        if let (category, count) = best, count > 0 {
+            return (category, count, icons[category]!)
+        }
+        return nil
+    }
+
+    private func reloadJarForCurrentMonth() {
+        jarScene.clearAll()
+        
+        for entry in monthEntries {
+            jarScene.dropEmoji(entry.emoji)
+        }
+    }
+
+
+    
+
+    var body: some View {
+            NavigationStack {
+                VStack(spacing: 0) {
+                    
+                    Color.appAccentGreen
+                        .ignoresSafeArea(edges: .top)
+                        .frame(height: 35)
+
+                    HStack {
+                        Spacer()
+                        
+                        Button {
+                            showMonthPicker = true
+                        } label: {
+                            HStack(spacing: 6) {
+                                Text(monthTitle)
+                                    .font(.system(size: 22, weight: .semibold))
+                                Image(systemName: "chevron.down")
+                                    .font(.system(size: 18, weight: .bold))
+                            }
+                        }
+                        
+                        Spacer()
+                    }
+                    .padding(.vertical, 30)
+                    
+                    // ---------------------------------------------------------
+                    // MARK: Jar + Stats (scrollable)
+                    // ---------------------------------------------------------
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            
+                            // 🫙 JAR WITH EMOJIS FOR THIS MONTH
+                            ZStack {
+                                SpriteView(scene: jarScene, options: [.allowsTransparency])
+                                    .frame(width: 404, height: 420)
+
+                                // If you want the same decorations as HomePage, uncomment this:
+                                // DecorationOverlay(selectedDecoration: selectedDecoration)
+                            }
+                            .onAppear {
+                                DispatchQueue.main.async {
+                                    reloadJarForCurrentMonth()
+                                }
+                            }
+
+
+
+
+                            
+                            // STATS CARD
+                            VStack(alignment: .leading, spacing: 18) {
+                                
+                                Text("STATS")
+                                    .font(.system(size: 28, weight: .bold))
+                                    .padding(.bottom, 4)
+                                
+                                StatRow(label: "happy",     emoji: "😊", count: counts["happy"]!)
+                                StatRow(label: "sad",       emoji: "😢", count: counts["sad"]!)
+                                StatRow(label: "angry",     emoji: "😠", count: counts["angry"]!)
+                                StatRow(label: "love",      emoji: "🥰", count: counts["love"]!)
+                                StatRow(label: "calm",      emoji: "😌", count: counts["calm"]!)
+                                StatRow(label: "fear",      emoji: "😨", count: counts["fear"]!)
+                                StatRow(label: "disgusted", emoji: "🤢", count: counts["disgusted"]!)
+                                
+                                if let best = dominant {
+                                    StatRow(label: "Most: \(best.0)", emoji: best.2, count: best.1)
+                                        .padding(.top, 8)
+                                }
+                            }
+                            .padding(20)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 18))
+                            .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
+                            .padding(.horizontal, 24)
+                            .padding(.top, 10)
+                        }
+                        .padding(.bottom, 20)
+                    }
+                }
+                .background(Color(red: 0.96, green: 0.99, blue: 0.97))
+                .onAppear {
+                    syncIfNeeded()
+                    reloadJarForCurrentMonth()
+                }
+                .onChange(of: demoCurrentDate) { _ in
+                    syncIfNeeded()
+                    reloadJarForCurrentMonth()
+                }
+                .onChange(of: month) { _ in
+                    reloadJarForCurrentMonth()
+                }
+                .navigationBarTitle("Statistics")
+                .toolbarTitleDisplayMode(.inlineLarge)
+                
+                // ---------------------------------------------------------
+                // MARK: Sheet for Month Picker
+                // ---------------------------------------------------------
+                .sheet(isPresented: $showMonthPicker) {
+                    MonthYearPicker(selectedDate: $month)
+                        .presentationDetents([.height(350)])
+                }
+            }
+        }
+}
+
+
+struct StatRow: View {
+    let label: String
+    let emoji: String
+    let count: Int
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(.system(size: 22))
+                .frame(width: 150, alignment: .leading)
+            Spacer()
+
+            Text("\(count)")
+                .font(.system(size: 24, weight: .bold))
+                .frame(width: 40)
+        }
+    }
+}
+
+#Preview {
+    GalleryView(month: Date(), followDemoDate: true)
+        .modelContainer(for: MoodEntry.self, inMemory: true)
 }

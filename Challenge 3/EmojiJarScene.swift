@@ -5,6 +5,13 @@
 //  Created by La Wun Eain on 14/11/25.
 //
 
+//
+//  EmojiJarScene.swift
+//  Challenge 3
+//
+//  Created by La Wun Eain on 14/11/25.
+//
+
 import SpriteKit
 import CoreGraphics
 import SwiftUI
@@ -45,8 +52,18 @@ final class EmojiJarScene: SKScene {
 
     override func didMove(to view: SKView) {
         super.didMove(to: view)
+
+        // Make the SKView transparent instead of black
+        view.allowsTransparency = true
+        view.backgroundColor = .clear
+
+        // Scene background also transparent
+        backgroundColor = .clear
+
         configureIfNeeded()
     }
+
+
 
     override func didChangeSize(_ oldSize: CGSize) {
         super.didChangeSize(oldSize)

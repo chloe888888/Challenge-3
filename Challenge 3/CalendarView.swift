@@ -2,6 +2,9 @@ import SwiftUI
 import SwiftData
 import UIKit
 
+// -------------------------------------------------------
+// MARK: - MAIN CALENDAR VIEW
+// -------------------------------------------------------
 
 struct CalendarView: View {
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
@@ -10,7 +13,7 @@ struct CalendarView: View {
 
     private let cal = Calendar.current
 
-
+    // Convert entries → [Date: Emoji]
     private var emojiByDate: [Date: String] {
         var map: [Date: String] = [:]
 
@@ -38,15 +41,17 @@ struct CalendarView: View {
                     .ignoresSafeArea(edges: .top)
                     .frame(height: 35)
                     
+                // HEADER
+    
 
-                EmojiCalendarUIKit(
+                // BUILT-IN APPLE CALENDAR
+                CalendarMonthView(
                     selectedDate: $selectedDate,
                     emojiByDate: emojiByDate
                 )
-                .frame(height: 450)
-                .padding(.horizontal)
+                .frame(height: 420)
                 .padding(.top, 16)
-
+                // SELECTED-DAY DETAILS
                 if let emoji = selectedEmoji {
                     Text("Your mood on this day: \(emoji)")
                         .font(.title3)
@@ -67,7 +72,9 @@ struct CalendarView: View {
 }
 
 
-
+// -------------------------------------------------------
+// MARK: - UIKit Calendar Wrapper (Inside Same File!)
+// -------------------------------------------------------
 
 struct EmojiCalendarUIKit: UIViewRepresentable {
 
@@ -77,29 +84,30 @@ struct EmojiCalendarUIKit: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UICalendarView {
         let view = UICalendarView()
+        view.calendar = .current
+        view.fontDesign = .default   // IMPORTANT
+
         view.delegate = context.coordinator
-
-
         view.selectionBehavior = UICalendarSelectionSingleDate(delegate: context.coordinator)
-
 
         view.availableDateRange = DateInterval(start: .distantPast, end: Date())
 
         return view
     }
 
-    func updateUIView(_ uiView:
-                      UICalendarView, context: Context){
-        uiView.reloadDecorations(forDateComponents: [], animated: false)
+    func updateUIView(_ uiView: UICalendarView, context: Context) {
+        // Reload ALL emoji days
+        let dates = emojiByDate.keys.map {
+            cal.dateComponents([.year, .month, .day], from: $0)
+        }
+        uiView.reloadDecorations(forDateComponents: dates, animated: false)
     }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(parent: self)
     }
 
-    class Coordinator: NSObject,
-                       UICalendarViewDelegate,
-                       UICalendarSelectionSingleDateDelegate {
+    class Coordinator: NSObject, UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate {
 
         let parent: EmojiCalendarUIKit
         let cal = Calendar.current
@@ -108,7 +116,6 @@ struct EmojiCalendarUIKit: UIViewRepresentable {
             self.parent = parent
         }
 
-
         func calendarView(
             _ calendarView: UICalendarView,
             decorationFor dateComponents: DateComponents
@@ -116,66 +123,32 @@ struct EmojiCalendarUIKit: UIViewRepresentable {
 
             guard let date = dateComponents.date else { return nil }
 
-
             if let emoji = parent.emojiByDate.first(where: {
                 cal.isDate($0.key, inSameDayAs: date)
             })?.value {
 
-                let label = UILabel()
-                label.text = emoji
-                label.font = UIFont.systemFont(ofSize: 18)
-                label.textAlignment = .center
-
                 return .customView {
-                    let container = UIView()
-
-                    let number = UILabel()
-                    let emojiLabel = UILabel()
-
- 
-                    let day = Calendar.current.component(.day, from: date)
-                    number.text = "\(day)"
-                    number.font = UIFont.systemFont(ofSize: 9)
-
-
-                    emojiLabel.text = emoji
-                    emojiLabel.font = UIFont.systemFont(ofSize: 16)
-
-                    number.translatesAutoresizingMaskIntoConstraints = false
-                    emojiLabel.translatesAutoresizingMaskIntoConstraints = false
-
-                    container.addSubview(number)
-                    container.addSubview(emojiLabel)
-
-                    NSLayoutConstraint.activate([
-                        number.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                        number.topAnchor.constraint(equalTo: container.topAnchor, constant: 3),
-
-                        emojiLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                        emojiLabel.topAnchor.constraint(equalTo: number.bottomAnchor, constant: -1)
-                    ])
-
-                    return container
+                    let label = UILabel()
+                    label.text = emoji
+                    label.font = .systemFont(ofSize: 16)
+                    label.textAlignment = .center
+                    return label
                 }
-
             }
 
             return nil
         }
 
-
         func dateSelection(
             _ selection: UICalendarSelectionSingleDate,
             didSelectDate dateComponents: DateComponents?
         ) {
-
-            guard let date = dateComponents?.date else { return }
-            parent.selectedDate = date
+            if let date = dateComponents?.date {
+                parent.selectedDate = date
+            }
         }
     }
 }
-
-#Preview {
+#Preview{
     CalendarView()
-        .modelContainer(for: MoodEntry.self, inMemory: true)
 }

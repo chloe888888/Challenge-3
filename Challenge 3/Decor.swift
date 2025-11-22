@@ -188,12 +188,21 @@ struct DecorItemCard: View {
                               .frame(width: 90, height: 90, alignment: .center)
                       }
                       
-                      Text("$\(decoration.price)")
-                          .font(.system(size: 20, weight: .semibold))
-                          .foregroundColor(.black)
-                          .frame(alignment: .center)
+            HStack(spacing: 6) {
 
-            
+                Text("𝐉")
+                    .font(.system(size: 18, weight: .bold))
+                    .padding(10)                   // controls circle size naturally
+                    .background(
+                        Circle()
+                            .fill(Color.yellow)
+                    )
+
+                Text("\(decoration.price)")
+                    .font(.system(size: 20, weight: .semibold))
+                                            .foregroundColor(.black)
+                                            .frame(alignment: .center)
+            }
             Button(action: onTap) {
                 Text(buttonTitle)
                     .font(.system(size: 18, weight: .semibold))

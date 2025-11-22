@@ -21,7 +21,7 @@ struct ContentView: View {
                     Text("Decorations")
                 }
             
-            GalleryView()
+            GalleryView(month: Date(), followDemoDate: true)
                 .tabItem {
                     Image(systemName: "photo.on.rectangle.angled.fill")
                     Text("Gallery")

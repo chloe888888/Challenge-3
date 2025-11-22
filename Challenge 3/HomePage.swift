@@ -198,12 +198,23 @@ struct HomePage: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Text("𝐉 \(jarBucks)")
-                        .font(.system(size: 20, weight: .semibold))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 11)
-                        .background(Capsule().fill(Color.white))
-                        .frame(width: 90)
+                    HStack(spacing: 6) {
+
+                        Text("𝐉")
+                            .font(.system(size: 18, weight: .bold))
+                            .padding(10)                   // controls circle size naturally
+                            .background(
+                                Circle()
+                                    .fill(Color.yellow)
+                            )
+
+                        Text("\(jarBucks)")
+                            .font(.system(size: 20, weight: .semibold))
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 11)
+                    .background(Capsule().fill(Color.white))
+                    .frame(width: 110)
                 }
             }
         }
@@ -219,10 +230,12 @@ struct DecorationOverlay: View {
             case 1:
                 Image("Decor_5.3").resizable()
                     .frame(maxWidth: 220, maxHeight: 250)
-                    .position(x: geo.size.width*0.82, y: geo.size.height*0.50)
+                    .position(x: geo.size.width*0.83, y: geo.size.height*0.50)
+                    .rotationEffect(.degrees(3))
                 Image("Decor_5.2").resizable()
                     .frame(maxWidth: 220, maxHeight: 250)
-                    .position(x: geo.size.width*0.17, y: geo.size.height*0.50)
+                    .position(x: geo.size.width*0.16, y: geo.size.height*0.50)
+                    .rotationEffect(.degrees(-3))
             case 2:
                 Image("Decor_2.2")
                     .resizable()
@@ -274,7 +287,7 @@ struct DecorationOverlay: View {
                 Image("Decor_1")
                     .resizable()
                     .position(
-                        x: geo.size.width * 0.83,
+                        x: geo.size.width * 0.87,
                         y: geo.size.height * 0.46
                     )
                     .frame(maxWidth: 220, maxHeight: 250)
@@ -282,7 +295,7 @@ struct DecorationOverlay: View {
                 Image("Decor_1.2")
                     .resizable()
                     .position(
-                        x: geo.size.width * 0.16,
+                        x: geo.size.width * 0.12,
                         y: geo.size.height * 0.46
                     )
                     .frame(maxWidth: 220, maxHeight: 250)
