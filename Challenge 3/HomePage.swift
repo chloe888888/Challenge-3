@@ -77,7 +77,7 @@ struct HomePage: View {
         }
     }
 
-    private func saveEmoji() {
+    func saveEmoji() {
         guard !selectedEmoji.isEmpty else { return }
 
         if let existing = entries.first(where: { calendar.isDate($0.date, inSameDayAs: selectedDate) }) {
@@ -386,7 +386,7 @@ struct DecorationOverlay: View {
                     .resizable()
                     .position(
                         x: geo.size.width * 0.50,
-                        y: geo.size.height * 0.73
+                        y: geo.size.height * 0.75
                     )
                     .frame(maxWidth: 150, maxHeight: 150)
             case 14:
