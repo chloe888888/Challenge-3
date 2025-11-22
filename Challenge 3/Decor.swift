@@ -57,14 +57,12 @@ struct Decor: View {
                         Color.appAccentGreen
                             .ignoresSafeArea(edges: .top)
                         
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Jarmoji Store")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.black.opacity(0.6))
+                        VStack(alignment: .leading) {
                             
                             Text("Balance: $\(jarBucks)")
                                 .font(.system(size: 18, weight: .medium))
                                 .foregroundColor(.black.opacity (0.6))
+                            Spacer()
                         }
                         .padding(.horizontal, 24)
                         .padding(.bottom, 1)

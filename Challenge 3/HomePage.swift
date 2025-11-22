@@ -2,6 +2,10 @@
 //  HomePage.swift
 //
 
+//
+//  HomePage.swift
+//
+
 import SwiftUI
 import SpriteKit
 import SwiftData
@@ -213,6 +217,212 @@ struct DecorationOverlay: View {
                 Image("Decor_1.2").resizable()
                     .frame(maxWidth: 220, maxHeight: 250)
                     .position(x: geo.size.width*0.13, y: geo.size.height*0.46)
+            case 2:
+                Image("Decor_2.2")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.85,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                Image("Decor_2.3")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.10,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+            case 3:
+                Image("Decor_3.2")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.86,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                Image("Decor_3.3")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.13,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+            case 4:
+                Image("Decor_4.2")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.85,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                    .rotationEffect(.degrees(3))
+                Image("Decor_4.3")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.15,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                    .rotationEffect(.degrees(-3))
+            case 5:
+                Image("Decor_5.3")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.83,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                    .rotationEffect(.degrees(3))
+                Image("Decor_5.2")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.16,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                    .rotationEffect(.degrees(-3))
+            case 6:
+                Image("Decor_6")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.86,
+                        y: geo.size.height * 0.53
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+            case 7:
+                Image("Decor_7.2")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.87,
+                        y: geo.size.height * 0.48
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                Image("Decor_7.3")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.13,
+                        y: geo.size.height * 0.46
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+            case 8:
+                Image("Decor_8.2")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.84,
+                        y: geo.size.height * 0.53
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+                Image("Decor_8.3")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.15,
+                        y: geo.size.height * 0.53
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+            case 9:
+                Image("Decor 9")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.86,
+                        y: geo.size.height * 0.50
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+            case 10:
+                Image("Decor 10")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.80,
+                        y: geo.size.height * 0.75
+                    )
+                    .frame(maxWidth: 220, maxHeight: 250)
+            case 11:
+                Image("Decor 11")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.23,
+                        y: geo.size.height * 0.35
+                    )
+                    .frame(maxWidth: 100, maxHeight: 100)
+            case 12:
+                Image("Decor 12")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.23,
+                        y: geo.size.height * 0.65
+                    )
+                    .frame(maxWidth: 150, maxHeight: 150)
+            case 13:
+                Image("Decor 13")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.50,
+                        y: geo.size.height * 0.84
+                    )
+                    .frame(maxWidth: 150, maxHeight: 150)
+            case 14:
+                Image("Decor 14")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.78,
+                        y: geo.size.height * 0.33
+                    )
+                    .frame(maxWidth: 150, maxHeight: 150)
+            case 15:
+                Image("Decor 15")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.20,
+                        y: geo.size.height * 0.72
+                    )
+                    .frame(maxWidth: 150, maxHeight: 150)
+            case 16:
+                Image("Decor 16")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.25,
+                        y: geo.size.height * 0.74
+                    )
+                    .frame(maxWidth: 160, maxHeight: 170)
+            case 17:
+                Image("Decor 17")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.86,
+                        y: geo.size.height * 0.32
+                    )
+                    .frame(maxWidth: 140, maxHeight: 150)
+            case 18:
+                Image("Decor 18")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.74,
+                        y: geo.size.height * 0.74
+                    )
+                    .frame(maxWidth: 170, maxHeight: 170)
+            case 19:
+                Image("Decor 19")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.76,
+                        y: geo.size.height * 0.74
+                    )
+                    .frame(maxWidth: 170, maxHeight: 170)
+            case 20:
+                Image("Decor 20")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.25,
+                        y: geo.size.height * 0.76
+                    )
+                    .frame(maxWidth: 120, maxHeight: 130)
+            case 21:
+                Image("Decor 21")
+                    .resizable()
+                    .position(
+                        x: geo.size.width * 0.40,
+                        y: geo.size.height * 0.76
+                    )
+                    .frame(maxWidth: 170, maxHeight: 120)
             default:
                 EmptyView()
             }
