@@ -27,11 +27,11 @@ struct ContentView: View {
                     Text("Gallery")
                 }
             
-            StatisticsView(month: Date(), followDemoDate: true)
-                .tabItem {
-                    Image(systemName: "chart.bar.xaxis")
-                    Text("Statistics")
-                }
+          //  StatisticsView(month: Date(), followDemoDate: true)
+            //    .tabItem {
+              //      Image(systemName: "chart.bar.xaxis")
+                //    Text("Statistics")
+               // }
             
 
         }
