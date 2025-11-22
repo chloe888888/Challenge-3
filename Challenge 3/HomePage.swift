@@ -81,7 +81,10 @@ struct HomePage: View {
         } else {
             let new = MoodEntry(date: selectedDate, emoji: selectedEmoji)
             modelContext.insert(new)
-            jarBucks += 5
+            if selectedDate==currentDate{
+                jarBucks += 5
+            }
+
             try? modelContext.save()
             jarScene.dropEmoji(selectedEmoji)
         }

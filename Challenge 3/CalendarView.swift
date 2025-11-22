@@ -68,6 +68,7 @@ struct CalendarView: View {
             }
             .background(Color(red: 0.95, green: 0.99, blue: 0.97))
             .navigationBarTitle("Calendar")
+            .toolbarTitleDisplayMode(.inlineLarge)
         }
     }
 }
