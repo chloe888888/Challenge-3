@@ -41,11 +41,13 @@ struct EmojiPicker: View {
                     ForEach(emojis, id: \.self) { emoji in
                         Text(emoji)
                             .font(.system(size: 40))
-                            .padding(10)
+                            .padding(9)
+                            .frame(alignment: .center)
                             .background(
                                 RoundedRectangle(cornerRadius: 12)
                                     .fill(emoji == selectedEmoji
-                                          ? Color.appAccentGreen.opacity(0.3)
+                                          ? Color.black
+                                        .opacity(0.3)
                                           : Color.white)
                             )
                             .onTapGesture {

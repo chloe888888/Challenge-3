@@ -2,9 +2,6 @@ import SwiftUI
 import SwiftData
 import UIKit
 
-// -------------------------------------------------------
-// MARK: - MAIN CALENDAR VIEW
-// -------------------------------------------------------
 
 struct CalendarView: View {
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
@@ -13,7 +10,7 @@ struct CalendarView: View {
 
     private let cal = Calendar.current
 
-    // Convert entries → [Date: Emoji]
+
     private var emojiByDate: [Date: String] {
         var map: [Date: String] = [:]
 
@@ -41,10 +38,7 @@ struct CalendarView: View {
                     .ignoresSafeArea(edges: .top)
                     .frame(height: 35)
                     
-                // HEADER
-    
 
-                // BUILT-IN APPLE CALENDAR
                 EmojiCalendarUIKit(
                     selectedDate: $selectedDate,
                     emojiByDate: emojiByDate
@@ -53,7 +47,6 @@ struct CalendarView: View {
                 .padding(.horizontal)
                 .padding(.top, 16)
 
-                // SELECTED-DAY DETAILS
                 if let emoji = selectedEmoji {
                     Text("Your mood on this day: \(emoji)")
                         .font(.title3)
@@ -74,9 +67,7 @@ struct CalendarView: View {
 }
 
 
-// -------------------------------------------------------
-// MARK: - UIKit Calendar Wrapper (Inside Same File!)
-// -------------------------------------------------------
+
 
 struct EmojiCalendarUIKit: UIViewRepresentable {
 
@@ -88,10 +79,10 @@ struct EmojiCalendarUIKit: UIViewRepresentable {
         let view = UICalendarView()
         view.delegate = context.coordinator
 
-        // selection
+
         view.selectionBehavior = UICalendarSelectionSingleDate(delegate: context.coordinator)
 
-        // disable selecting future dates
+
         view.availableDateRange = DateInterval(start: .distantPast, end: Date())
 
         return view
@@ -117,7 +108,7 @@ struct EmojiCalendarUIKit: UIViewRepresentable {
             self.parent = parent
         }
 
-        // show emoji decoration
+
         func calendarView(
             _ calendarView: UICalendarView,
             decorationFor dateComponents: DateComponents
@@ -125,7 +116,7 @@ struct EmojiCalendarUIKit: UIViewRepresentable {
 
             guard let date = dateComponents.date else { return nil }
 
-            // find matching emoji
+
             if let emoji = parent.emojiByDate.first(where: {
                 cal.isDate($0.key, inSameDayAs: date)
             })?.value {
@@ -137,28 +128,42 @@ struct EmojiCalendarUIKit: UIViewRepresentable {
 
                 return .customView {
                     let container = UIView()
-                    let label = UILabel()
 
-                    label.text = emoji
-                    label.font = .systemFont(ofSize: 15)
+                    let number = UILabel()
+                    let emojiLabel = UILabel()
 
-                    label.translatesAutoresizingMaskIntoConstraints = false
-                    container.addSubview(label)
+ 
+                    let day = Calendar.current.component(.day, from: date)
+                    number.text = "\(day)"
+                    number.font = UIFont.systemFont(ofSize: 9)
 
-                    // Center it and push it *down* slightly
+
+                    emojiLabel.text = emoji
+                    emojiLabel.font = UIFont.systemFont(ofSize: 16)
+
+                    number.translatesAutoresizingMaskIntoConstraints = false
+                    emojiLabel.translatesAutoresizingMaskIntoConstraints = false
+
+                    container.addSubview(number)
+                    container.addSubview(emojiLabel)
+
                     NSLayoutConstraint.activate([
-                        label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                        label.centerYAnchor.constraint(equalTo: container.centerYAnchor, constant: -2)  // 👈 padding
+                        number.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                        number.topAnchor.constraint(equalTo: container.topAnchor, constant: 3),
+
+                        emojiLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                        emojiLabel.topAnchor.constraint(equalTo: number.bottomAnchor, constant: -1)
                     ])
 
                     return container
                 }
+
             }
 
             return nil
         }
 
-        // handle selecting date
+
         func dateSelection(
             _ selection: UICalendarSelectionSingleDate,
             didSelectDate dateComponents: DateComponents?

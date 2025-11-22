@@ -217,12 +217,12 @@ struct DecorationOverlay: View {
         GeometryReader { geo in
             switch selectedDecoration {
             case 1:
-                Image("Decor_1").resizable()
+                Image("Decor_5.3").resizable()
                     .frame(maxWidth: 220, maxHeight: 250)
-                    .position(x: geo.size.width*0.86, y: geo.size.height*0.46)
-                Image("Decor_1.2").resizable()
+                    .position(x: geo.size.width*0.82, y: geo.size.height*0.50)
+                Image("Decor_5.2").resizable()
                     .frame(maxWidth: 220, maxHeight: 250)
-                    .position(x: geo.size.width*0.13, y: geo.size.height*0.46)
+                    .position(x: geo.size.width*0.17, y: geo.size.height*0.50)
             case 2:
                 Image("Decor_2.2")
                     .resizable()
@@ -257,7 +257,7 @@ struct DecorationOverlay: View {
                 Image("Decor_4.2")
                     .resizable()
                     .position(
-                        x: geo.size.width * 0.85,
+                        x: geo.size.width * 0.86,
                         y: geo.size.height * 0.46
                     )
                     .frame(maxWidth: 220, maxHeight: 250)
@@ -265,13 +265,13 @@ struct DecorationOverlay: View {
                 Image("Decor_4.3")
                     .resizable()
                     .position(
-                        x: geo.size.width * 0.15,
+                        x: geo.size.width * 0.14,
                         y: geo.size.height * 0.46
                     )
                     .frame(maxWidth: 220, maxHeight: 250)
                     .rotationEffect(.degrees(-3))
             case 5:
-                Image("Decor_5.3")
+                Image("Decor_1")
                     .resizable()
                     .position(
                         x: geo.size.width * 0.83,
@@ -279,7 +279,7 @@ struct DecorationOverlay: View {
                     )
                     .frame(maxWidth: 220, maxHeight: 250)
                     .rotationEffect(.degrees(3))
-                Image("Decor_5.2")
+                Image("Decor_1.2")
                     .resizable()
                     .position(
                         x: geo.size.width * 0.16,
@@ -338,7 +338,7 @@ struct DecorationOverlay: View {
                     .resizable()
                     .position(
                         x: geo.size.width * 0.80,
-                        y: geo.size.height * 0.75
+                        y: geo.size.height * 0.70
                     )
                     .frame(maxWidth: 220, maxHeight: 250)
             case 11:
@@ -362,7 +362,7 @@ struct DecorationOverlay: View {
                     .resizable()
                     .position(
                         x: geo.size.width * 0.50,
-                        y: geo.size.height * 0.84
+                        y: geo.size.height * 0.73
                     )
                     .frame(maxWidth: 150, maxHeight: 150)
             case 14:
@@ -425,10 +425,11 @@ struct DecorationOverlay: View {
                 Image("Decor 21")
                     .resizable()
                     .position(
-                        x: geo.size.width * 0.40,
-                        y: geo.size.height * 0.76
+                        x: geo.size.width * -0.4,
+                        y: geo.size.height * 0.05
                     )
-                    .frame(maxWidth: 170, maxHeight: 120)
+                    .rotationEffect(Angle(degrees:270))
+                    .frame(maxWidth: 150, maxHeight: 100)
             default:
                 EmptyView()
             }

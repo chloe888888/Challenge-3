@@ -183,14 +183,16 @@ struct DecorItemCard: View {
                     .frame(width: 120, height: 120)
                 
                 Image(decoration.imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 90, height: 90)
-            }
-            
-            Text("$\(decoration.price)")
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundColor(.black)
+                              .resizable()
+                              .scaledToFit()
+                              .frame(width: 90, height: 90, alignment: .center)
+                      }
+                      
+                      Text("$\(decoration.price)")
+                          .font(.system(size: 20, weight: .semibold))
+                          .foregroundColor(.black)
+                          .frame(alignment: .center)
+
             
             Button(action: onTap) {
                 Text(buttonTitle)
