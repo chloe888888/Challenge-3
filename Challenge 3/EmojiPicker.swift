@@ -5,6 +5,8 @@ struct EmojiPicker: View {
     @Binding var selectedEmoji: String
     @Binding var isPresented: Bool
 
+    var home = HomePage()
+    
     private let emojis: [String] = [
         // HAPPY
         "😀","😃","😄","😁","😆","😅","😂","🤣",
@@ -35,7 +37,7 @@ struct EmojiPicker: View {
     ]
 
     var body: some View {
-        NavigationStack {
+       NavigationStack {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 18) {
                     ForEach(emojis, id: \.self) { emoji in
@@ -60,8 +62,14 @@ struct EmojiPicker: View {
             .navigationTitle("Pick an Emoji")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button("Close") {
+                        isPresented = false
+                    }
+                    
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
                         isPresented = false
                     }
                     .font(.system(size: 18, weight: .semibold))
@@ -69,6 +77,7 @@ struct EmojiPicker: View {
             }
         }
     }
+    
 }
 
 #Preview {
