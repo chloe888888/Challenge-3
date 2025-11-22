@@ -23,19 +23,9 @@ struct MonthYearPicker: View {
     @State private var month: Int = 1
     @State private var year: Int = 2024
 
-    private var headerTitle: String {
-        let comps = DateComponents(year: year, month: month)
-        if let date = calendar.date(from: comps) {
-            let f = DateFormatter()
-            f.dateFormat = "MMM yyyy"
-            return f.string(from: date).uppercased()
-        }
-        return "SELECT MONTH"
-    }
-
     var body: some View {
         VStack {
-            Text(headerTitle)
+            Text("Select Month")
                 .font(.title2)
                 .padding(.top, 20)
 
@@ -50,11 +40,20 @@ struct MonthYearPicker: View {
                 Picker("Year", selection: $year) {
                     ForEach(2000...2100, id: \.self) { y in
                         Text(y.formatted(.number.grouping(.never)))
-                            .tag(y)
                     }
                 }
                 .pickerStyle(.wheel)
             }
+
+            Button("Done") {
+                let comps = DateComponents(year: year, month: month)
+                if let newDate = calendar.date(from: comps) {
+                    selectedDate = newDate
+                }
+                dismiss()
+            }
+            .font(.title3)
+            .padding(.top, 10)
 
             Spacer()
         }
@@ -63,24 +62,8 @@ struct MonthYearPicker: View {
             month = comps.month ?? 1
             year = comps.year ?? 2023
         }
-        // Auto-select + auto-dismiss when user changes month or year
-        .onChange(of: month) { _ in
-            updateSelection()
-        }
-        .onChange(of: year) { _ in
-            updateSelection()
-        }
-    }
-
-    private func updateSelection() {
-        let comps = DateComponents(year: year, month: month)
-        if let newDate = calendar.date(from: comps) {
-            selectedDate = newDate
-            dismiss()
-        }
     }
 }
-
 
 struct GalleryView: View {
     
@@ -119,7 +102,7 @@ struct GalleryView: View {
     private var monthTitle: String {
         let f = DateFormatter()
         f.dateFormat = "MMM yyyy"
-        return f.string(from: currentMonthStart).uppercased()
+        return f.string(from: currentMonthStart)
     }
     
     private var canGoLeft: Bool {
@@ -215,19 +198,14 @@ struct GalleryView: View {
                     }
                     .padding(.vertical, 30)
                     
-                    // ---------------------------------------------------------
-                    // MARK: Jar + Stats (scrollable)
-                    // ---------------------------------------------------------
+
                     ScrollView {
-                        VStack(spacing: 20) {
+                        VStack(spacing: 0) {          // ← no extra spacing between jar & stats
                             
                             // 🫙 JAR WITH EMOJIS FOR THIS MONTH
                             ZStack {
                                 SpriteView(scene: jarScene, options: [.allowsTransparency])
-                                    .frame(width: 404, height: 420)
-
-                                // If you want the same decorations as HomePage, uncomment this:
-                                // DecorationOverlay(selectedDecoration: selectedDecoration)
+                                    .frame(width: 404, height: 400)   // ← slightly shorter jar (optional)
                             }
                             .onAppear {
                                 DispatchQueue.main.async {
@@ -235,17 +213,13 @@ struct GalleryView: View {
                                 }
                             }
 
-
-
-
-                            
                             // STATS CARD
-                            VStack(alignment: .leading, spacing: 18) {
-                                
-                                Text("STATS")
+                            VStack(alignment: .leading, spacing: 10) {
+
+                                Text("Statistics")
                                     .font(.system(size: 28, weight: .bold))
                                     .padding(.bottom, 4)
-                                
+
                                 StatRow(label: "happy",     emoji: "😊", count: counts["happy"]!)
                                 StatRow(label: "sad",       emoji: "😢", count: counts["sad"]!)
                                 StatRow(label: "angry",     emoji: "😠", count: counts["angry"]!)
@@ -253,7 +227,7 @@ struct GalleryView: View {
                                 StatRow(label: "calm",      emoji: "😌", count: counts["calm"]!)
                                 StatRow(label: "fear",      emoji: "😨", count: counts["fear"]!)
                                 StatRow(label: "disgusted", emoji: "🤢", count: counts["disgusted"]!)
-                                
+
                                 if let best = dominant {
                                     StatRow(label: "Most: \(best.0)", emoji: best.2, count: best.1)
                                         .padding(.top, 8)
@@ -264,10 +238,11 @@ struct GalleryView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 18))
                             .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
                             .padding(.horizontal, 24)
-                            .padding(.top, 10)
+                            .padding(.top, -8)          // ← pulls the stats card up closer to the jar
                         }
                         .padding(.bottom, 20)
                     }
+
                 }
                 .background(Color(red: 0.96, green: 0.99, blue: 0.97))
                 .onAppear {

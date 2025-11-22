@@ -81,13 +81,16 @@ struct HomePage: View {
         } else {
             let new = MoodEntry(date: selectedDate, emoji: selectedEmoji)
             modelContext.insert(new)
-            if selectedDate==currentDate{
+
+            // ✅ Only add JarBucks when the entry is for "today" (demo current day)
+            if calendar.isDate(selectedDate, inSameDayAs: currentDate) {
                 jarBucks += 5
             }
 
             try? modelContext.save()
             jarScene.dropEmoji(selectedEmoji)
         }
+
 
         // 🔥 ALWAYS update the jar model
         let monthEntries = entries.filter { calendar.isDate($0.date, equalTo: monthStart, toGranularity: .month) }
