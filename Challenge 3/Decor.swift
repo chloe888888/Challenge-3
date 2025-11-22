@@ -89,7 +89,8 @@ struct Decor: View {
                     }
                 }
             }
-            .navigationTitle("Decoration")
+            .navigationBarTitle("Decorations")
+
         }
     }
     

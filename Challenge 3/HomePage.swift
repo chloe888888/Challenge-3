@@ -107,40 +107,15 @@ struct HomePage: View {
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
-                
+                Color.appAccentGreen
+                    .ignoresSafeArea(edges: .top)
+                    .frame(height: 35)
               //  Color(red: 0.95, green: 0.99, blue: 0.97)
                  //   .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    
-                    // HEADER
-                    VStack {
-                        HStack {
-                            DatePicker("", selection: $selectedDate, in: dateRange, displayedComponents: .date)
-                                .datePickerStyle(.compact)
-                                .labelsHidden()
-                            
-                            Text(selectedEmoji.isEmpty ? "😶" : selectedEmoji)
-                                .font(.system(size: 28))
-                                .frame(width: 40, height: 40)
-                                .background(Circle().fill(Color.white.opacity(0.6)))
-                            
-                            Spacer()
-                            
-                            Text("𝐉 \(jarBucks)")
-                                .font(.system(size: 20, weight: .semibold))
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 15)
-                                .background(Capsule().fill(Color.white))
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                    .padding(.vertical, 16)
-                    .background(Color.appAccentGreen)
-                    
-                    // EMOJI BUTTONS
+                    Spacer()
                     HStack(spacing: 12) {
-                        
                         Button {
                             showEmojiPicker = true
                         } label: {
@@ -183,7 +158,7 @@ struct HomePage: View {
                         }
                         .disabled(selectedEmoji.isEmpty)
                     }
-                    .padding(.top, 20)
+                    .padding(.top, 70)
                     
                     // JAR + DECORATIONS
                     ZStack {
@@ -200,6 +175,34 @@ struct HomePage: View {
                 EmojiPicker(selectedEmoji: $selectedEmoji, isPresented: $showEmojiPicker)
             }
             .navigationTitle("How are you feeling?")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    DatePicker(
+                        "",
+                        selection: $selectedDate,
+                        in: dateRange,
+                        displayedComponents: .date
+                    )
+                    .labelsHidden()
+                }
+
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text(selectedEmoji.isEmpty ? "😶" : selectedEmoji)
+                        .font(.system(size: 28))
+                        .padding(6)
+                        .background(Circle().fill(Color.white.opacity(0.6)))
+                        .frame(width: 40)
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Text("𝐉 \(jarBucks)")
+                        .font(.system(size: 20, weight: .semibold))
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 11)
+                        .background(Capsule().fill(Color.white))
+                        .frame(width: 90)
+                }
+            }
         }
     }
 }

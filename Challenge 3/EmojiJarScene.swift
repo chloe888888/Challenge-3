@@ -7,7 +7,7 @@
 
 import SpriteKit
 import CoreGraphics
-import SwiftUICore
+import SwiftUI
 
 final class EmojiJarScene: SKScene {
 
