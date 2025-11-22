@@ -9,61 +9,58 @@ import SwiftUI
 import SwiftData
 
 struct StatisticsView: View {
-
+    
     @Query(sort: \MoodEntry.date) private var entries: [MoodEntry]
     @Environment(\.modelContext) private var modelContext
-
-
+    
     @State var month: Date
     let followDemoDate: Bool
-
+    
     @AppStorage("demoCurrentDate") private var demoCurrentDate: Double = Date().timeIntervalSince1970
-
+    
     private var calendar: Calendar { Calendar.current }
-
-
+    
     private var demoMonthStart: Date {
         let d = Date(timeIntervalSince1970: demoCurrentDate)
         return calendar.date(from: calendar.dateComponents([.year, .month], from: d)) ?? d
     }
-
+    
     private var previousDemoMonthStart: Date {
         calendar.date(byAdding: .month, value: -1, to: demoMonthStart)!
     }
-
+    
     private var currentMonthStart: Date {
         calendar.date(from: calendar.dateComponents([.year, .month], from: month)) ?? month
     }
-
+    
     private var monthTitle: String {
         let f = DateFormatter()
         f.dateFormat = "MMM yyyy"
         return f.string(from: currentMonthStart).uppercased()
     }
-
-
+    
     private var canGoLeft: Bool {
         currentMonthStart > previousDemoMonthStart
     }
-
+    
     private var canGoRight: Bool {
         currentMonthStart < demoMonthStart
     }
-
+    
     private func goLeft() {
         guard canGoLeft else { return }
         if let newMonth = calendar.date(byAdding: .month, value: -1, to: currentMonthStart) {
             month = newMonth
         }
     }
-
+    
     private func goRight() {
         guard canGoRight else { return }
         if let newMonth = calendar.date(byAdding: .month, value: 1, to: currentMonthStart) {
             month = newMonth
         }
     }
-
+    
     private func syncIfNeeded() {
         guard followDemoDate else { return }
         let demo = demoMonthStart
@@ -71,14 +68,13 @@ struct StatisticsView: View {
             month = demo
         }
     }
-
-
+    
     private var monthEntries: [MoodEntry] {
         entries.filter {
             calendar.isDate($0.date, equalTo: currentMonthStart, toGranularity: .month)
         }
     }
-
+    
     private let groups: [String: Set<String>] = [
         "happy": ["😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","😏","🤠","😎","🤡"],
         "sad": ["😞","😔","😟","🙁","☹️","😣","😖","😫","😩","🥺","🥹","😢","😭","😥","😓","😕","😶‍🌫️"],
@@ -88,10 +84,10 @@ struct StatisticsView: View {
         "fear": ["😱","😨","😰","😳","😵","😵‍💫","🫢","🫣","🤐","🤫"],
         "disgusted": ["🤢","🤮","🤧","🤥"]
     ]
-
+    
     private var counts: [String: Int] {
         var c = ["happy":0,"sad":0,"angry":0,"love":0,"calm":0,"fear":0,"disgusted":0]
-
+        
         for entry in monthEntries {
             for (cat, set) in groups {
                 if set.contains(entry.emoji) { c[cat]! += 1 }
@@ -99,25 +95,30 @@ struct StatisticsView: View {
         }
         return c
     }
-
+    
     private var dominant: (String, Int, String)? {
         let icons: [String: String] = [
             "happy":"😊","sad":"😢","angry":"😠","love":"🥰",
             "calm":"😌","fear":"😨","disgusted":"🤢"
         ]
-
+        
         let best = counts.max(by: {$0.value < $1.value})
         if let (category, count) = best, count > 0 {
             return (category, count, icons[category]!)
         }
         return nil
     }
-
-
+    
+    
+    // MARK: BODY
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-
+                
+                Color.appAccentGreen
+                    .ignoresSafeArea(edges: .top)
+                    .frame(height: 35)
+                
                 HStack {
                     Button(action: goLeft) {
                         Image(systemName: "chevron.left")
@@ -125,14 +126,10 @@ struct StatisticsView: View {
                     }
                     .disabled(!canGoLeft)
                     .opacity(canGoLeft ? 1 : 0.2)
-
-                    Spacer()
-
+                    
                     Text(monthTitle)
-                        .font(.system(size: 26, weight: .semibold))
-
-                    Spacer()
-
+                        .font(.system(size: 22, weight: .semibold))
+                    
                     Button(action: goRight) {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 22, weight: .bold))
@@ -140,17 +137,15 @@ struct StatisticsView: View {
                     .disabled(!canGoRight)
                     .opacity(canGoRight ? 1 : 0.2)
                 }
-                .padding(.horizontal, 32)
-                .padding(.vertical, 14)
-                .background(Color(red: 0.7, green: 0.95, blue: 0.8))
-
-                Spacer()
-
-                VStack(alignment: .leading, spacing: 12) {
+                .padding(.horizontal, 30)
+                .padding(.vertical, 30)
+                
+                VStack(alignment: .leading, spacing: 18) {
+                    
                     Text("STATS")
                         .font(.system(size: 28, weight: .bold))
                         .padding(.bottom, 4)
-
+                    
                     StatRow(label: "happy", emoji: "😊", count: counts["happy"]!)
                     StatRow(label: "sad", emoji: "😢", count: counts["sad"]!)
                     StatRow(label: "angry", emoji: "😠", count: counts["angry"]!)
@@ -158,27 +153,26 @@ struct StatisticsView: View {
                     StatRow(label: "calm", emoji: "😌", count: counts["calm"]!)
                     StatRow(label: "fear", emoji: "😨", count: counts["fear"]!)
                     StatRow(label: "disgusted", emoji: "🤢", count: counts["disgusted"]!)
-
+                    
                     if let best = dominant {
                         StatRow(label: "Most: \(best.0)", emoji: best.2, count: best.1)
-                            .padding(.top, 6)
+                            .padding(.top, 8)
                     }
                 }
                 .padding(20)
                 .background(Color.white)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color(red: 0.5, green: 0.85, blue: 0.7), lineWidth: 3)
-                )
-                .padding(.horizontal, 32)
-
+                .clipShape(RoundedRectangle(cornerRadius: 18))
+                .shadow(color: .black.opacity(0.06), radius: 4, y: 2)
+                .padding(.horizontal, 24)
+                .padding(.top, 10)
+                
                 Spacer()
             }
-            .background(Color(red: 0.95, green: 0.99, blue: 0.97))
-            .navigationTitle("Statistics")
+            .background(Color(red: 0.96, green: 0.99, blue: 0.97))
+            .onAppear { syncIfNeeded() }
+            .onChange(of: demoCurrentDate) { _ in syncIfNeeded() }
+            .navigationBarTitle("Statistics")
         }
-        .onAppear { syncIfNeeded() }
-        .onChange(of: demoCurrentDate) { _ in syncIfNeeded() }
     }
 }
 
@@ -202,4 +196,9 @@ struct StatRow: View {
                 .frame(width: 40)
         }
     }
+}
+
+#Preview {
+    StatisticsView(month: Date(), followDemoDate: true)
+        .modelContainer(for: MoodEntry.self, inMemory: true)
 }

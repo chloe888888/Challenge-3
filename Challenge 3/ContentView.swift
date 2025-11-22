@@ -33,11 +33,7 @@ struct ContentView: View {
                     Text("Statistics")
                 }
             
-            SettingsView()
-                .tabItem {
-                    Image(systemName: "gearshape.fill")
-                    Text("Settings")
-                }
+
         }
     }
 }
