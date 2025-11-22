@@ -69,12 +69,6 @@ struct EmojiPicker: View {
                     
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Saves") {
-                        home.saveEmoji()
-                    }
-                    .font(.system(size: 18, weight: .semibold))
-                }
-                ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         isPresented = false
                     }
