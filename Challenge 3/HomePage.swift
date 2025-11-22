@@ -190,11 +190,11 @@ struct HomePage: View {
                 }
 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Text(selectedEmoji.isEmpty ? "😶" : selectedEmoji)
-                        .font(.system(size: 28))
-                        .padding(6)
-                        .background(Circle().fill(Color.white.opacity(0.6)))
-                        .frame(width: 40)
+//                    Text(selectedEmoji.isEmpty ? "" : selectedEmoji)
+//                        .font(.system(size: 28))
+//                        .padding(6)
+//                        .background(Circle().fill(Color.white.opacity(0.6)))
+//                        .frame(width: 40)
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
