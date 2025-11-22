@@ -6,6 +6,7 @@ import SwiftUI
 import SwiftData
 
 struct GalleryView: View {
+    @State private var isNewItemSheetPresented = false
 
     @Query(sort: \MonthlyJar.month, order: .reverse)
     private var jars: [MonthlyJar]
@@ -105,6 +106,19 @@ struct GalleryView: View {
             }
             .navigationBarTitle("Gallery of Jars")
             .toolbarTitleDisplayMode(.inlineLarge)
+            .toolbar {
+                            Button {
+                                isNewItemSheetPresented = true
+                            } label: {
+                                Image(systemName: "info.circle")
+                                    .font(.system(size: 24))
+                            }
+                            .sheet(isPresented: $isNewItemSheetPresented) {
+                                info()
+                            }
+                            .foregroundStyle(.black)
+
+                                }
         }
     }
 }
