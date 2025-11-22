@@ -23,9 +23,19 @@ struct MonthYearPicker: View {
     @State private var month: Int = 1
     @State private var year: Int = 2024
 
+    private var headerTitle: String {
+        let comps = DateComponents(year: year, month: month)
+        if let date = calendar.date(from: comps) {
+            let f = DateFormatter()
+            f.dateFormat = "MMM yyyy"
+            return f.string(from: date).uppercased()
+        }
+        return "SELECT MONTH"
+    }
+
     var body: some View {
         VStack {
-            Text("Select Month")
+            Text(headerTitle)
                 .font(.title2)
                 .padding(.top, 20)
 
@@ -40,20 +50,11 @@ struct MonthYearPicker: View {
                 Picker("Year", selection: $year) {
                     ForEach(2000...2100, id: \.self) { y in
                         Text(y.formatted(.number.grouping(.never)))
+                            .tag(y)
                     }
                 }
                 .pickerStyle(.wheel)
             }
-
-            Button("Done") {
-                let comps = DateComponents(year: year, month: month)
-                if let newDate = calendar.date(from: comps) {
-                    selectedDate = newDate
-                }
-                dismiss()
-            }
-            .font(.title3)
-            .padding(.top, 10)
 
             Spacer()
         }
@@ -62,8 +63,24 @@ struct MonthYearPicker: View {
             month = comps.month ?? 1
             year = comps.year ?? 2023
         }
+        // Auto-select + auto-dismiss when user changes month or year
+        .onChange(of: month) { _ in
+            updateSelection()
+        }
+        .onChange(of: year) { _ in
+            updateSelection()
+        }
+    }
+
+    private func updateSelection() {
+        let comps = DateComponents(year: year, month: month)
+        if let newDate = calendar.date(from: comps) {
+            selectedDate = newDate
+            dismiss()
+        }
     }
 }
+
 
 struct GalleryView: View {
     
@@ -264,7 +281,7 @@ struct GalleryView: View {
                 .onChange(of: month) { _ in
                     reloadJarForCurrentMonth()
                 }
-                .navigationBarTitle("Statistics")
+                .navigationBarTitle("Gallery")
                 .toolbarTitleDisplayMode(.inlineLarge)
                 
                 // ---------------------------------------------------------

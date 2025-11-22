@@ -25,9 +25,6 @@ struct CalendarMonthView: View {
 
         VStack(spacing: 12) {
 
-            // --------------------------------------------------
-            // MONTH HEADER + ARROWS
-            // --------------------------------------------------
             HStack {
                 Button {
                     changeMonth(by: -1)
@@ -98,18 +95,13 @@ struct CalendarMonthView: View {
         }
     }
 
-    // --------------------------------------------------
-    // MONTH TITLE FORMATTER
-    // --------------------------------------------------
     private func monthTitle(_ date: Date) -> String {
         let df = DateFormatter()
         df.dateFormat = "MMMM yyyy"
         return df.string(from: date)
     }
 
-    // --------------------------------------------------
-    // CHANGE MONTH (+1 or -1)
-    // --------------------------------------------------
+
     private func changeMonth(by value: Int) {
         if let newMonth = calendar.date(byAdding: .month, value: value, to: selectedDate) {
             selectedDate = newMonth

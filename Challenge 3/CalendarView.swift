@@ -64,9 +64,7 @@ struct CalendarView: View {
 }
 
 
-// -------------------------------------------------------
-// MARK: - UIKit Calendar Wrapper (Inside Same File!)
-// -------------------------------------------------------
+
 
 struct EmojiCalendarUIKit: UIViewRepresentable {
 
