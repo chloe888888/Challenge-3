@@ -172,6 +172,7 @@ struct StatisticsView: View {
             .onAppear { syncIfNeeded() }
             .onChange(of: demoCurrentDate) { _ in syncIfNeeded() }
             .navigationBarTitle("Statistics")
+            .toolbarTitleDisplayMode(.inlineLarge)
         }
     }
 }

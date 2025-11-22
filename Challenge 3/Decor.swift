@@ -90,6 +90,7 @@ struct Decor: View {
                 }
             }
             .navigationBarTitle("Decorations")
+            .toolbarTitleDisplayMode(.inlineLarge)
 
         }
     }

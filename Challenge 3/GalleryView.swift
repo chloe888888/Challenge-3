@@ -104,6 +104,7 @@ struct GalleryView: View {
                 }
             }
             .navigationBarTitle("Gallery of Jars")
+            .toolbarTitleDisplayMode(.inlineLarge)
         }
     }
 }
