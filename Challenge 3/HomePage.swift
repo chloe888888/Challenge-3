@@ -6,6 +6,14 @@
 //  HomePage.swift
 //
 
+//
+//  HomePage.swift
+//
+
+//
+//  HomePage.swift
+//
+
 import SwiftUI
 import SpriteKit
 import SwiftData
@@ -81,13 +89,16 @@ struct HomePage: View {
         } else {
             let new = MoodEntry(date: selectedDate, emoji: selectedEmoji)
             modelContext.insert(new)
-            if selectedDate==currentDate{
+
+            // ✅ Only add JarBucks when the entry is for "today" (demo current day)
+            if calendar.isDate(selectedDate, inSameDayAs: currentDate) {
                 jarBucks += 5
             }
 
             try? modelContext.save()
             jarScene.dropEmoji(selectedEmoji)
         }
+
 
         // 🔥 ALWAYS update the jar model
         let monthEntries = entries.filter { calendar.isDate($0.date, equalTo: monthStart, toGranularity: .month) }
@@ -198,29 +209,23 @@ struct HomePage: View {
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    ZStack {
-                       Capsule()
-                        .fill(Color.white)
-                        .frame(width: 105)
-                        HStack(spacing: 6) {
-                            Text("𝐉")
-                                .font(.system(size: 18, weight: .bold))
-                                .padding(10)                   // controls circle size naturally
-                                .background(
-                                    Circle()
-                                        .fill(Color.yellow)
-                                )
-                            
-                            Text("\(jarBucks)")
-                                .font(.system(size: 20, weight: .semibold))
-                            
-                        }
-                        //                    .padding(.horizontal, 16)
-                        //                    .padding(.vertical, 10)
-//                        .background(Capsule().fill(Color.white))
-//                        .frame(width: 105)
+                    HStack(spacing: 6) {
+
+                        Text("𝐉")
+                            .font(.system(size: 18, weight: .bold))
+                            .padding(10)                   // controls circle size naturally
+                            .background(
+                                Circle()
+                                    .fill(Color.yellow)
+                            )
+
+                        Text("\(jarBucks)")
+                            .font(.system(size: 20, weight: .semibold))
                     }
-                    .padding()
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 11)
+                    .background(Capsule().fill(Color.white))
+                    .frame(width: 110)
                 }
             }
         }

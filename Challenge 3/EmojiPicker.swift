@@ -60,8 +60,14 @@ struct EmojiPicker: View {
             .navigationTitle("Pick an Emoji")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button("Close") {
+                        isPresented = false
+                    }
+                    .font(.system(size: 18, weight: .semibold))
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
                         isPresented = false
                     }
                     .font(.system(size: 18, weight: .semibold))

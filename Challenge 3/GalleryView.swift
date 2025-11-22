@@ -9,6 +9,39 @@
 //  Created by La Wun Eain on 18/11/25.
 //
 
+//
+//  GalleryView.swift
+//
+
+//
+//  StatisticsView.swift
+//  Challenge 3
+//
+//  Created by La Wun Eain on 18/11/25.
+//
+
+//
+//  GalleryView.swift
+//
+
+//
+//  StatisticsView.swift
+//  Challenge 3
+//
+//  Created by La Wun Eain on 18/11/25.
+//
+
+//
+//  GalleryView.swift
+//
+
+//
+//  StatisticsView.swift
+//  Challenge 3
+//
+//  Created by La Wun Eain on 18/11/25.
+//
+
 import SwiftUI
 import SwiftData
 import SpriteKit
@@ -24,43 +57,52 @@ struct MonthYearPicker: View {
     @State private var year: Int = 2024
 
     var body: some View {
-        VStack {
-            Text("Select Month")
-                .font(.title2)
-                .padding(.top, 20)
-
-            HStack {
-                Picker("Month", selection: $month) {
-                    ForEach(1...12, id: \.self) { m in
-                        Text(calendar.monthSymbols[m-1]).tag(m)
+        NavigationStack{
+            VStack {
+                HStack {
+                    Picker("Month", selection: $month) {
+                        ForEach(1...12, id: \.self) { m in
+                            Text(calendar.monthSymbols[m-1]).tag(m)
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                    
+                    Picker("Year", selection: $year) {
+                        ForEach(2000...2100, id: \.self) { y in
+                            Text(y.formatted(.number.grouping(.never)))
+                        }
+                    }
+                    .pickerStyle(.wheel)
+                }
+                        .font(.title3)
+                        .padding(.top, 10)
+                        
+                        Spacer()
+                        
+                            .onAppear {
+                                let comps = calendar.dateComponents([.year, .month], from: selectedDate)
+                                month = comps.month ?? 1
+                                year = comps.year ?? 2023
+                                
+                            }
+                }
+            .navigationBarTitle("Select Month")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        // 👇 this is the action closure
+                        let comps = DateComponents(year: year, month: month)
+                        if let newDate = calendar.date(from: comps) {
+                            selectedDate = newDate
+                        }
+                        dismiss()
+                    } label: {
+                        // 👇 this is the label (what shows on screen)
+                        Image(systemName: "checkmark.circle")
                     }
                 }
-                .pickerStyle(.wheel)
-
-                Picker("Year", selection: $year) {
-                    ForEach(2000...2100, id: \.self) { y in
-                        Text(y.formatted(.number.grouping(.never)))
-                    }
-                }
-                .pickerStyle(.wheel)
             }
-
-            Button("Done") {
-                let comps = DateComponents(year: year, month: month)
-                if let newDate = calendar.date(from: comps) {
-                    selectedDate = newDate
-                }
-                dismiss()
-            }
-            .font(.title3)
-            .padding(.top, 10)
-
-            Spacer()
-        }
-        .onAppear {
-            let comps = calendar.dateComponents([.year, .month], from: selectedDate)
-            month = comps.month ?? 1
-            year = comps.year ?? 2023
         }
     }
 }
@@ -264,7 +306,7 @@ struct GalleryView: View {
                 .onChange(of: month) { _ in
                     reloadJarForCurrentMonth()
                 }
-                .navigationBarTitle("Statistics")
+                .navigationBarTitle("Gallery")
                 .toolbarTitleDisplayMode(.inlineLarge)
                 
                 // ---------------------------------------------------------
