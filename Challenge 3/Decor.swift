@@ -58,16 +58,32 @@ struct Decor: View {
                             .ignoresSafeArea(edges: .top)
                         
                         VStack(alignment: .leading) {
+                            HStack(spacing: 6) {
+                                
+                                Text("Balance:")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(.black.opacity(0.6))
+                                
+                                Text("𝐉")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .padding(5)     // auto-sizes the circle
+                                    .background(
+                                        Circle()
+                                            .fill(Color.yellow)
+                                    )
+                                
+                                Text("\(jarBucks)")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(.black.opacity(0.6))
+                                
+                                Spacer()
+                            }
                             
-                            Text("Balance: $\(jarBucks)")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(.black.opacity (0.6))
-                            Spacer()
                         }
                         .padding(.horizontal, 24)
                         .padding(.bottom, 1)
                     }
-                    .frame(height: 35)
+                            .frame(height: 35)
                     
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 24) {
