@@ -31,9 +31,7 @@ private let allDecorations: [Decoration] = [
 ]
 
 enum DecorButtonState {
-    case buy
-    case equip
-    case equipped
+    case buy, equip, equipped
 }
 
 struct Decor: View {
@@ -45,57 +43,26 @@ struct Decor: View {
         GridItem(.flexible(), spacing: 24),
         GridItem(.flexible(), spacing: 24)
     ]
-    
+
     var body: some View {
         NavigationStack {
+
             ZStack {
                 Color(red: 0.95, green: 0.99, blue: 0.97)
                     .ignoresSafeArea()
-                
+
                 VStack(spacing: 0) {
-                    ZStack(alignment: .bottomLeading) {
-                        Color.appAccentGreen
-                            .ignoresSafeArea(edges: .top)
-                        
-                        VStack(alignment: .leading) {
-                            HStack(spacing: 6) {
-                                
-                                Text("Balance:")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(.black.opacity(0.6))
-                                
-                                Text("𝐉")
-                                    .font(.system(size: 16, weight: .semibold))
-                                    .padding(5)     // auto-sizes the circle
-                                    .background(
-                                        Circle()
-                                            .fill(Color.yellow)
-                                    )
-                                
-                                Text("\(jarBucks)")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(.black.opacity(0.6))
-                                
-                                Spacer()
-                            }
-                            
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.bottom, 1)
-                    }
-                            .frame(height: 35)
-                    
+
+
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 24) {
                             ForEach(allDecorations) { decoration in
                                 let state = buttonState(for: decoration)
-                                
+
                                 DecorItemCard(
                                     decoration: decoration,
                                     state: state,
-                                    onTap: {
-                                        handleTap(on: decoration, state: state)
-                                    }
+                                    onTap: { handleTap(on: decoration, state: state) }
                                 )
                             }
                         }
@@ -105,88 +72,100 @@ struct Decor: View {
                     }
                 }
             }
-            .navigationBarTitle("Decorations")
+
+            .navigationTitle("Decorations")
             .toolbarTitleDisplayMode(.inlineLarge)
 
+            .toolbarBackground(Color.appAccentGreen, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    HStack(spacing: 6) {
+                        Text("𝐉")
+                            .font(.system(size: 14, weight: .bold))
+                            .padding(6)
+                            .background(
+                                Circle().fill(Color.yellow)
+                            )
+
+                        Text("\(jarBucks)")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(
+                        Capsule().fill(Color.white)
+                    )
+                    .shadow(color: .black.opacity(0.08), radius: 4, x: 0, y: 2)
+                }
+            }
         }
     }
-    
+
+    // MARK: - Ownership helpers
     private func isOwned(_ id: Int) -> Bool {
-        let ids = ownedDecorationsRaw
+        ownedDecorationsRaw
             .split(separator: ",")
             .compactMap { Int($0) }
-        return ids.contains(id)
+            .contains(id)
     }
-    
+
     private func markOwned(_ id: Int) {
         var set = Set(
-            ownedDecorationsRaw
-                .split(separator: ",")
-                .compactMap { Int($0) }
+            ownedDecorationsRaw.split(separator: ",").compactMap { Int($0) }
         )
         set.insert(id)
-        let sorted = set.sorted()
-        ownedDecorationsRaw = sorted
-            .map(String.init)
-            .joined(separator: ",")
+        ownedDecorationsRaw = set.sorted().map(String.init).joined(separator: ",")
     }
-    
+
     private func buttonState(for decoration: Decoration) -> DecorButtonState {
-        if decoration.id == selectedDecoration {
-            return .equipped
-        } else if isOwned(decoration.id) {
-            return .equip
-        } else {
-            return .buy
-        }
+        if decoration.id == selectedDecoration { return .equipped }
+        if isOwned(decoration.id) { return .equip }
+        return .buy
     }
-    
+
     private func handleTap(on decoration: Decoration, state: DecorButtonState) {
         switch state {
         case .buy:
             guard jarBucks >= decoration.price else { return }
             jarBucks -= decoration.price
             markOwned(decoration.id)
-    
+
         case .equip:
             selectedDecoration = decoration.id
-            
+
         case .equipped:
             break
         }
     }
 }
 
+// MARK: - Decor Item Card
 struct DecorItemCard: View {
     let decoration: Decoration
     let state: DecorButtonState
     let onTap: () -> Void
-    
+
     private var buttonTitle: String {
         switch state {
-        case .buy:      return "Buy"
-        case .equip:    return "Equip"
+        case .buy: return "Buy"
+        case .equip: return "Equip"
         case .equipped: return "Equipped"
         }
     }
-    
+
     private var buttonColors: (bg: Color, border: Color, text: Color) {
         switch state {
         case .buy:
-            return (bg: Color.white,
-                    border: Color.green.opacity(0.8),
-                    text: Color.green)
+            return (Color.white, Color.green.opacity(0.8), Color.green)
         case .equip:
-            return (bg: Color.yellow.opacity(0.15),
-                    border: Color.yellow.opacity(0.5),
-                    text: Color.orange)
+            return (Color.yellow.opacity(0.15), Color.yellow.opacity(0.5), Color.orange)
         case .equipped:
-            return (bg: Color.appAccentGreen,
-                    border: Color.appAccentGreen,
-                    text: Color.green)
+            return (Color.appAccentGreen, Color.appAccentGreen, Color.green)
         }
     }
-    
+
     var body: some View {
         VStack(spacing: 10) {
             ZStack {
@@ -197,36 +176,24 @@ struct DecorItemCard: View {
                             .stroke(Color.appAccentGreen.opacity(0.4), lineWidth: 4)
                     )
                     .frame(width: 120, height: 120)
-                
+
                 Image(decoration.imageName)
-                              .resizable()
-                              .scaledToFit()
-                              .frame(width: 90, height: 90, alignment: .center)
-                      }
-                      
-            HStack(spacing: 6) {
-
-                Text("𝐉")
-                    .font(.system(size: 18, weight: .bold))
-                    .padding(10)                   // controls circle size naturally
-                    .background(
-                        Circle()
-                            .fill(Color.yellow)
-                    )
-
-                Text("\(decoration.price)")
-                    .font(.system(size: 20, weight: .semibold))
-                                            .foregroundColor(.black)
-                                            .frame(alignment: .center)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 90, height: 90)
             }
+
+            Text("𝐉\(decoration.price)")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.black)
+
             Button(action: onTap) {
                 Text(buttonTitle)
                     .font(.system(size: 18, weight: .semibold))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
                     .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(buttonColors.bg)
+                        RoundedRectangle(cornerRadius: 12).fill(buttonColors.bg)
                     )
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
